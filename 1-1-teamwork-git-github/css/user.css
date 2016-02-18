@@ -1,0 +1,132 @@
+.progress {
+    height: 12px !important;
+}
+
+.slide-number {
+    color: white;
+    font-size: 35px !important;
+}
+
+.author {
+    text-align: center;
+}
+
+.reveal section .fragment.current-visible.init_visible,
+.reveal section .fragment.init_visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.reveal section .fragment.highlight {
+    transition-duration: .3s;
+}
+
+.highlight.fragment.visible.current-visible.current-fragment,
+.highlight.fragment.visible,
+.highlight.static {
+    color: #000;
+}
+
+.highlight.yellow.fragment.visible.current-visible.current-fragment,
+.highlight.yellow.fragment.visible,
+.highlight.yellow.static {
+    background-color: #a0a0f0;
+}
+
+.highlight.red.fragment.visible.current-visible.current-fragment,
+.highlight.red.fragment.visible,
+.highlight.red.static {
+    color: #ab4642;
+}
+
+.highlight.rat.fragment.visible.current-visible.current-fragment,
+.highlight.rat.fragment.visible,
+.highlight.rat.static {
+    color: #ab4642;
+}
+
+.highlight.fragment.visible.current-visible {
+    color: inherit;
+    background-color: inherit;
+}
+
+.column {
+    display:inline-block;
+    margin-bottom: 10px !important;
+    width: 49%;
+    vertical-align: top !important;
+}
+
+.column pre, .pre {
+    font-family: monospace;
+    background: #3f3f3f;
+    padding: 5px !important;
+    margin: 0 !important;
+    width: auto !important;
+}
+
+section.size-XXS,
+section .size-XXS,
+pre.size-XXS {
+    font-size: 28px;
+    line-height: 45px;
+}
+
+.red {
+    color: #ab4642;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.magenta {
+    color: #a0a0f0 !important;
+}
+
+.grey {
+    color: #777;
+}
+
+.hljs-comment {
+    color: #999 !important;
+}
+
+.hljs-string {
+    color: #a1b56c !important;
+}
+
+.left {
+    text-align: left;
+}
+
+pre.command {
+    font-size: 1em;
+    margin-top: 1em;
+}
+
+pre.output {
+    /*visibility: hidden;*/
+    margin-top: 2em;
+}
+
+pre.output span.staged {
+    color: green;
+}
+
+pre.output span.untracked,
+pre.output span.tracked {
+    color: red;
+}
+
+pre.output span.ignored {
+    color: gray;
+}
+
+pre.output span.highlight {
+    color: #a0a0f0;
+}
+
+.reveal .slide-background {
+    background-size: contain;
+}

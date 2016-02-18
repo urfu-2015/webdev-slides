@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Инфраструктура</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="./vendor/css/reveal.css">
+    <link rel="stylesheet" href="./vendor/css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="./vendor/lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<!-- BEGIN -->
+
+<section class="large">
+    <h1><span style="color:red">Git</span>Hub</h1>
+    <p class="author"><small>Роман Парадеев</small></p>
+</section>
+
+<section>
+    <section>
+        <h2>Контроль версий</h2>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "Лекция.md"],
+                ["delay", 2000],
+                ["backspace", 3],
+                ["typetype", "-2.md"],
+                ["delay", 2000],
+                ["backspace", 2],
+                ["typetype", "final.md"],
+                ["delay", 2000],
+                ["backspace", 2],
+                ["typetype", "mokhov.md"],
+                ["delay", 2000],
+                ["backspace", 3],
+                ["typetype", "-2.md"]
+            ]
+        ]</script>
+
+        <h4>copy / paste</h4>
+        <pre class="command"></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Репозиторий, коммит, история</h2>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git init"]
+            ]
+        ]</script>
+
+        <h4>Создание репозитория</h4>
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Initialized empty Git repository in /.git/
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git add --all"],
+                ["typetype", "\n❯ git commit"]
+            ]
+        ]</script>
+
+        <h4>Создание коммита</h4>
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+master (root-commit) 7e665a1] 🦄 add docs
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 README.md
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git log"]
+            ]
+        ]</script>
+
+        <h4>Просмотр истории</h4>
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+commit <span class="highlight">fb5336e419af32d0b0f25de1322e47f332ca4601</span>
+Author: Roman Paradeev &lt;grumpy@yandex-team.ru>
+Date:   Thu Feb 11 03:47:00 2016 +0500
+
+    🦄 testing
+
+commit <span class="highlight">7e665a17b3ce82a4c529999811908b63811e8b9f</span>
+Author: Roman Paradeev &lt;grumpy@yandex-team.ru>
+Date:   Thu Feb 11 03:37:38 2016 +0500
+
+    🔬 add docs
+        </pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Ветки и слияние</h2>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git branch bugFix"],
+                ["typetype", "\n❯ git checkout bugFix"]
+            ],
+            [
+                ["backspace", 35],
+                ["typetype", "checkout -b bugFix"]
+            ]
+        ]</script>
+
+        <h4>Создание ветки</h4>
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section>
+         <script type="x-gitbranching">{
+             "tree":
+             {
+               "branches": {
+                 "master": {
+                   "target": "C1",
+                   "id": "master",
+                   "type": "branch",
+                   "remoteTrackingBranchID": null,
+                   "remote": false
+                 }
+               },
+               "commits": {
+                 "C0": {
+                   "type": "commit",
+                   "parents": [],
+                   "author": "Peter Cottle",
+                   "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                   "commitMessage": "Quick Commit. Go Bears!",
+                   "id": "C0",
+                   "rootCommit": true
+                 },
+                 "C1": {
+                   "type": "commit",
+                   "parents": [
+                     "C0"
+                   ],
+                   "author": "Peter Cottle",
+                   "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                   "commitMessage": "Quick Commit. Go Bears!",
+                   "id": "C1"
+                 }
+               },
+               "tags": {},
+               "HEAD": {
+                 "id": "HEAD",
+                 "target": "master",
+                 "type": "general ref"
+               }
+             },
+             "commands": [
+                "# git branch bugFix",
+                "# git commit",
+                "# git checkout bugFix",
+                "# git commit"
+             ]
+         }</script>
+     </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git checkout master"],
+                ["typetype", "\n❯ git merge bugFix"]
+            ]
+        ]</script>
+    
+        <h4>Слияние веток</h4>
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section>
+        <script type="x-gitbranching">{
+            "tree":
+            {
+              "branches": {
+                "master": {
+                  "target": "C3",
+                  "id": "master",
+                  "type": "branch",
+                  "remoteTrackingBranchID": null,
+                  "remote": false
+                },
+                "bugFix": {
+                  "target": "C2",
+                  "id": "bugFix",
+                  "remoteTrackingBranchID": null,
+                  "remote": false,
+                  "type": "branch"
+                }
+              },
+              "commits": {
+                "C0": {
+                  "type": "commit",
+                  "parents": [],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C0",
+                  "rootCommit": true
+                },
+                "C1": {
+                  "type": "commit",
+                  "parents": [
+                    "C0"
+                  ],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C1"
+                },
+                "C2": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C2",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:05 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                },
+                "C3": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C3",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:12 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                }
+              },
+              "tags": {},
+              "HEAD": {
+                "id": "HEAD",
+                "target": "bugFix",
+                "type": "general ref"
+              }
+            },
+            "commands": [
+                "# git checkout master",
+                "# git merge bugFix",
+                "# git checkout bugFix",
+                "# git merge master"
+            ]
+        }</script>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git checkout bugFix"],
+                ["typetype", "\n❯ git rebase master"]
+            ]
+        ]</script>
+    
+        <h4>Р-р-ребейз</h4>
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section>
+        <script type="x-gitbranching">{
+            "tree":
+            {
+              "branches": {
+                "master": {
+                  "target": "C3",
+                  "id": "master",
+                  "type": "branch",
+                  "remoteTrackingBranchID": null,
+                  "remote": false
+                },
+                "bugFix": {
+                  "target": "C2",
+                  "id": "bugFix",
+                  "remoteTrackingBranchID": null,
+                  "remote": false,
+                  "type": "branch"
+                }
+              },
+              "commits": {
+                "C0": {
+                  "type": "commit",
+                  "parents": [],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C0",
+                  "rootCommit": true
+                },
+                "C1": {
+                  "type": "commit",
+                  "parents": [
+                    "C0"
+                  ],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C1"
+                },
+                "C2": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C2",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:05 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                },
+                "C3": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C3",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:12 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                }
+              },
+              "tags": {},
+              "HEAD": {
+                "id": "HEAD",
+                "target": "bugFix",
+                "type": "general ref"
+              }
+            },
+            "commands": [
+                "# git checkout bugFix",
+                "# git rebase master",
+                "# git checkout master",
+                "# git merge bugFix"
+            ]
+        }</script>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git branch -d bugFix"]
+            ]
+        ]</script>
+    
+        <h4>Удаление ветки</h4>
+        <pre class="command">❯ </pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Рабочая директория</h2>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git status"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+On branch master
+
+Initial commit
+
+nothing to commit
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command"></pre>
+        <pre class="output">
+.
+├── <span class="ignored">.git</span>
+└── README.md
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git status"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Untracked files:
+
+    <span class="untracked">README.md</span>
+
+nothing added to commit
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git add README.md"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Changes to be committed:
+
+    <span class="staged">new file:   README.md</span>
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git commit -m \"🦄 add docs\""]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+master (root-commit) 7e665a1] 🦄 add docs
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 README.md
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command"></pre>
+        <pre class="output">
+.
+├── <span class="ignored">.git</span>
+├── README.md
+├── <span class="untracked">index.js</span>
+└── <span class="untracked">test.js</span>
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git add --all"],
+                ["delay", 2000],
+                ["backspace", 5],
+                ["typetype", "-A"]
+            ],
+            [
+                ["backspace", 2],
+                ["typetype", "\"*.js\""]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Changes to be committed:
+
+    <span class="staged">new file:   index.js</span>
+    <span class="staged">new file:   test.js</span>
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command">❯ git rm – удаление</pre>
+        <pre class="command">❯ git mv – перемещение</pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git commit -m \"🔬 testing\""]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+[master fb5336e] 🔬 testing
+ 2 files changed, 4 insertions(+)
+ create mode 100644 index.js
+ create mode 100644 test.js
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git log"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+commit <span class="highlight">fb5336e419af32d0b0f25de1322e47f332ca4601</span>
+Author: Roman Paradeev &lt;grumpy@yandex-team.ru>
+Date:   Thu Feb 11 03:47:00 2016 +0500
+
+    🦄 testing
+
+commit <span class="highlight">7e665a17b3ce82a4c529999811908b63811e8b9f</span>
+Author: Roman Paradeev &lt;grumpy@yandex-team.ru>
+Date:   Thu Feb 11 03:37:38 2016 +0500
+
+    🔬 add docs
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command"></pre>
+        <pre class="output">
+.
+├── <span class="ignored">.git</span>
+├── README.md
+├── index.js
+├── <span class="untracked">stdout.log</span>
+└── test.js
+        </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git add -A"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Changes to be committed:
+
+    new file:   <span class="staged">stdout.log</span>
+        </pre>
+    </section>
+
+    <!-- <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git diff --staged"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+diff --git a/stdout.log b/stdout.log
+new file mode 100644
+index 0000000..ad6c6c9
+--- /dev/null
++++ b/stdout.log
+@@ -0,0 +1,2 @@
+<span class="staged">+съешь ещё этих мягких французских булок</span>
+<span class="staged">+да выпей чаю</span>
+        </pre>
+    </section> -->
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git reset stdout.log"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Untracked files:
+
+    <span class="untracked">stdout.log</span>
+        </pre>
+    </section>
+
+    <!-- <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git diff"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+diff --git a/stdout.log b/stdout.log
+new file mode 100644
+index 0000000..ad6c6c9
+--- /dev/null
++++ b/stdout.log
+@@ -0,0 +1,2 @@
+<span class="staged">+съешь ещё этих мягких французских булок</span>
+<span class="staged">+да выпей чаю</span>
+        </pre>
+    </section> -->
+
+    <section>
+        <pre class="command">.gitignore</pre>
+        <pre class="output">
+node_modules
+*.log
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command"></pre>
+        <pre class="output">
+.
+├── <span class="ignored">.git</span>
+├── <span class="untracked">.gitignore</span>
+├── README.md
+├── index.js
+├── <span class="ignored">stdout.log</span>
+└── test.js
+        </pre>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>Удалённый репозиторий</h2>
+    </section>
+
+    <section data-background="images/github-create-repo.png"></section>
+    <section data-background="images/github-clone-repo.png"></section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git remote add origin\nhttps://.../git-tutorial.git"],
+                ["typetype", "\n❯ git push origin master"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Username for 'https://github.com':
+        </pre>
+    </section>
+
+    <section data-background="images/git-credentials-manager.png"></section>
+    <section data-background="images/git-wizard-integration.png"></section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git config --global\nuser.name \"Roman Paradeev\""],
+                ["typetype", "\n❯ git config --global\nuser.email test@example.org"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section data-background="images/github-no-readme.png"></section>
+    <section data-background="images/github-markdown-source.png"></section>
+    <section data-background="images/github-markdown-preview.png"></section>
+    <section data-background="images/github-commit-message.png"></section>
+    <section data-background="images/github-with-readme.png"></section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git pull origin master"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+From https://github.com/sameoldmadness/git-tutorial
+   fb5336e..db7dd75  master     -> origin/master
+Updating fb5336e..db7dd75
+Fast-forward
+ README.md | 18 <span class="staged">++++++++++++++++++</span>
+ 1 file changed, 18 insertions(+)
+        </pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Разрешение конфликтов</h2>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git checkout -b addTest"],
+                ["typetype", "\n❯ git add test.js"],
+                ["typetype", "\n❯ git commit"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git checkout master"],
+                ["typetype", "\n❯ git pull origin master"],
+                ["typetype", "\n❯ git merge addTest"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+    </section>
+
+    <section>
+        <pre class="command">❯ git merge addTest</pre>
+        <pre class="output fragment">
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Unmerged paths:
+  (use "git add &lt;file>..." to mark resolution)
+
+    <span class="tracked">both modified:   test.js</span>
+        </pre>
+    </section>
+
+    <section>
+        <pre class="output">
+<span class="tracked"><<<<<<< HEAD</span>
+<span class="tracked">console.log('2 + 3 = 5', test(2 + 3) === 5);</span>
+<span class="tracked">console.log('3 + 4 = 7', test(3 + 4) === 7);</span>
+=======
+<span class="staged">console.log(test(2 + 3) === 5);</span>
+<span class="staged">console.log(test(4 + 3) === 7);</span>
+
+<span class="staged">>>>>>>> addTest</span>
+        </pre>
+    </section>
+
+    <section>
+        <pre class="output">
+<span class="ignored"><<<<<<< HEAD</span>
+<span class="ignored">console.log('2 + 3 = 5', test(2 + 3) === 5);</span>
+<span class="ignored">console.log('3 + 4 = 7', test(3 + 4) === 7);</span>
+<span class="ignored">=======</span>
+<span class="">console.log(test(2 + 3) === 5);</span>
+<span class="">console.log(test(4 + 3) === 7);</span>
+
+<span class="ignored">>>>>>>> addTest</span>
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command">
+❯ git config --global
+merge.tool kdiff3</pre>
+    </section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git mergetool"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+Merging:
+test.js
+
+Normal merge conflict for 'test.js':
+  {local}: modified file
+  {remote}: modified file
+        </pre>
+    </section>
+
+    <section data-background="images/kdiff-window.png"></section>
+    <section data-background="images/kdiff-remote.png"></section>
+    <section data-background="images/kdiff-resolve.png"></section>
+    <section data-background="images/kdiff-edit.png"></section>
+
+    <section>
+        <script type="x-typetype">[
+            [
+                ["typetype", "git commit"]
+            ]
+        ]</script>
+
+        <pre class="command">❯ </pre>
+        <pre class="output fragment">
+[master deaebc7] Merge branch 'addTest'
+        </pre>
+    </section>
+
+    <section>
+        <pre class="command">❯ git log --oneline<br>--graph --decorate</pre>
+        <pre class="output">
+* deaebc7 (HEAD -> master) Merge branch addTest
+|<span class="tracked">\</span>
+| * <span class="tracked">e1d9a96 (addTest) addTest</span>
+* <span class="tracked">|</span> 79b2be6 add test msg
+|<span class="tracked">/</span>
+* f2f5f94 +1 test
+* 8cd0347 add gitignore
+* db7dd75 Добавлено описание проекта
+* fb5336e 🦄 testing
+* 7e665a1 🔬 add docs
+        </pre>
+    </section>
+</section>
+
+<section>
+    <h2>Ссылки</h2>
+
+    <ul>
+        <li><a href="https://github.com/Microsoft/Git-Credential-Manager-for-Windows">Secure Git credential storage for Windows</a></li>
+        <li><a href="http://kdiff3.sourceforge.net/">kdiff3</a></li>
+        <li><a href="https://cdn.rawgit.com/Zhigalov/javascript-slides/master/05-this/index.html#/2">Git + WebStorm = ♡</a></li>
+        <li><a href="https://git-scm.com/book/ru/v2/Введение-О-системе-контроля-версий">ProGit</a></li>
+        <li><a href="http://marklodato.github.io/visual-git-guide/index-ru.html">Git: наглядная справка</a></li>
+        <li><a href="https://try.github.io/">Try Git (англ.)</a></li>
+        <li><a href="http://pcottle.github.io/learnGitBranching/">Learn Git Branching</a></li>
+    </ul>
+</section>
+<!-- END -->
+
+</div></div>
+<script src="./vendor/lib/js/head.min.js"></script>
+<script src="./vendor/js/reveal.js"></script>
+<script src="./vendor/js/jquery/jquery-2.2.0.min.js"></script>
+<script src="./vendor/js/typetype/jquery.typetype.min.js"></script>
+<script>
+    function buildGitBranchingUrl(slide) {
+        // var base = 'http://pcottle.github.io/learnGitBranching/?NODEMO&command=';
+        var base = 'http://localhost:8099/?NODEMO&command=';
+        var commands = [
+            'importTreeNow ' + JSON.stringify(slide.tree),
+            'clear'
+        ].concat(slide.commands);
+
+        return base + commands.map(encodeURIComponent).join(';');
+    }
+
+    $('script[type="x-gitbranching"]').each(function () {
+        var params = JSON.parse(this.textContent);
+        var url = buildGitBranchingUrl(params);
+
+        $('<iframe>')
+            .attr({
+                'data-src': url,
+                width: 1000,
+                height: 700,
+                frameborder: 0,
+                marginwidth: 0,
+                marginheight: 0,
+                scrolling: 'no',
+                style: 'border:3px solid #666; margin-bottom:5px; max-width: 100%;',
+                allowfullscreen: ''
+            })
+            .insertAfter($(this));
+    });
+
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: './vendor/plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+
+    function onPreset(event, delay) {
+        delay = delay || 0;
+        var actionIndex = event.keyCode - 48;
+
+        var slide = Reveal.getCurrentSlide();
+        var $slide = $(slide);
+
+        var $script = $slide.find('script[type="x-typetype"]');
+        if (!$script.length) return;
+
+        var $command = $slide.find('pre.command');
+        if (!$command.length) return;
+
+        var actionsDict = JSON.parse($script.text());
+        var actions = actionsDict[actionIndex];
+        if (!actions) return;
+
+        setTimeout(function () {
+            while (actions.length) {
+                var args = actions.shift();
+                var action = args.shift();
+
+                $command[action].apply($command, args);
+            }
+        }, delay);
+    }
+
+    function onOutput() {
+        var slide = Reveal.getCurrentSlide();
+        var $slide = $(slide);
+        
+        var $output = $slide.find('pre.output');
+        if (!$output.length) return;
+
+        $output.css('visibility', 'visible');
+    }
+
+    Reveal.configure({
+      keyboard: {
+        49 /*1*/: onPreset,
+        50 /*2*/: onPreset
+      }
+    });
+
+    Reveal.addEventListener('slidechanged', function (event) {
+        var $slide = $(event.currentSlide);
+
+        if (!$slide.hasClass('slide_visited')) {
+            onPreset({ keyCode: 48 }, 1000);
+        }
+
+        $slide.addClass('slide_visited');
+    });
+</script>
+</body>
+</html>
