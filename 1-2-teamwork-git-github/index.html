@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Лекция «github». Часть 2: Основы командной разработки</title>
+
+    <meta name="description" content="Лекция «github». Часть 2: Основы командной разработки">
+    <meta name="author" content="Роман Парадеев, Олег Мохов">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../lib/css/animate.css">
+    <link rel="stylesheet" href="../css/theme/night.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <link rel="stylesheet" href="css-custom/custom.css">
+    <!--<script>-->
+        <!--var link = document.createElement('link');-->
+        <!--link.rel = 'stylesheet';-->
+        <!--link.type = 'text/css';-->
+        <!--link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';-->
+        <!--document.getElementsByTagName('head')[0].appendChild(link);-->
+    <!--</script>-->
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <div class="slides">
+        <section style="font-size: 70px;">
+            <div data-transition="none" class="fragment">
+                <h2 style="font-size: 100px; margin-bottom: 50px;">Github и основы командной разработки</h2>
+                <p style="text-align: center;">
+                    <small class="animated"><span style="color: red">М</span>охов Олег</small><br>
+                    <small class="animated" style="margin-top: -20px"><span style="color: red">Р</span>азработчик интерфейсов</small>
+                </p>
+            </div>
+        </section>
+
+        <section data-transition="none">
+            <h2>Командная работа</h2>
+            <img src="images/01.gif"/>
+        </section>
+
+        <section data-transition="none">
+            <h2>git-flow</h2>
+            <img height="600" src="images/02.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>github-flow</h2>
+            <ol>
+                <li class="fragment">Содержимое ветки «master» всегда работоспособно</li>
+                <li class="fragment">Начиная работу – делаем ветку от «master»</li>
+                <li class="fragment">Закоммитив часть работы её нужно отправить на удалённый сервер (push)</li>
+                <li class="fragment">Когда работа закончена – отправляется Pull Request в «master»</li>
+                <li class="fragment">После одобрения Pull Request он вливается в «master»</li>
+                <li class="fragment">Продакшн! PROFIT!</li>
+            </ol>
+            <p class="fragment"><a href="http://scottchacon.com/2011/08/31/github-flow.html">GitHub Flow</a></p>
+        </section>
+        <section data-transition="none" data-background-image="images/03.jpg">
+            <h1 style="color: #fff; text-shadow: #000 0 0 5px; margin-top: 100px;">Стабильный master</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Создание ветки из мастера</h2>
+            <pre class="bash size-xl">
+<code class="fragment">> git checkout -b my-new-branch</code>
+<code class="fragment">> git checkout -b personal-account-page</code>
+<code class="fragment">> git checkout -b issue-78-personal-account-page</code>
+            </pre>
+        </section>
+        <section data-transition="none">
+            <h2>Форки</h2>
+            <img height="600" src="images/04.jpg"/>
+        </section>
+        <section data-transition="none">
+            <h2>Форки</h2>
+            <img style="background: #fff" height="600" src="images/fork.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>Пулл из апстрима</h2>
+            <pre class="bash size-l">
+<code class="fragment">> git remote -v
+origin https://github.com/Lucifer-is-my-pet/verstka-tasks-2.git</code>
+<code class="fragment">> git remote add upstream https://github.com/urfu-2015/javascript-tasks-3.git</code>
+<code class="fragment">> git remote -v
+origin https://github.com/Lucifer-is-my-pet/verstka-tasks-2.git
+upstream https://github.com/urfu-2015/javascript-tasks-3.git</code>
+<code class="fragment">> git pull --rebase upstream master</code>
+            </pre>
+        </section>
+        <section data-transition="none">
+            <h2>Pull Request</h2>
+            <ol>
+                <li class="fragment">В названии PR хорошо бы сослаться на решенную задачу</li>
+                <li class="fragment">Политка «двух ОК»: пока два человека из команды не отсмотрят PR – его вливать нельзя</li>
+                <li class="fragment">Автоматизация назначения Review'ов, пример, <a href="https://github.com/facebook/mention-bot">https://github.com/facebook/mention-bot</a></li>
+            </ol>
+        </section>
+        <section data-transition="none" data-background-image="images/why.jpg">
+            <h1 style="color: #fff; text-shadow: #000 0 0 5px;">Зачем нужно CodeReview?</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Зачем нужно CodeReview?</h2>
+            <ol>
+                <li class="fragment">улучшение качества кода</li>
+                <li style="visibility: hidden;">оптимизация алгоритмов и архитектуры</li>
+            </ol>
+        </section>
+        <section data-transition="none" data-background-image="images/cq.jpg">
+        </section>
+        <section data-transition="none">
+            <h2>Зачем нужно CodeReview?</h2>
+            <ol>
+                <li>улучшение качества кода</li>
+                <li class="fragment">поиск багов</li>
+                <li class="fragment">оптимизация алгоритмов и архитектуры</li>
+                <li class="fragment">консистентность</li>
+                <li class="fragment">распостранение знаний о проекте</li>
+                <li class="fragment">прокачивание скиллов</li>
+            </ol>
+        </section>
+        <section data-transition="none">
+            <h2>Для чего не нужно CodeReview?</h2>
+            <ol class="fragment">
+                <li>code style</li>
+                <li>jshint</li>
+                <li>jscs</li>
+                <li>css lint</li>
+                <li>git hooks</li>
+                <li>и всё что возможно автоматизировать</li>
+            </ol>
+        </section>
+        <section data-transition="none">
+            <h2>Что ещё стоит знать?</h2>
+            <ol>
+                <li class="fragment">CodeReview – это коллективная ответственность за код: если ошибка попала в продакшн, значит её пропустили все</li>
+                <li class="fragment">CodeStyle правки не обсуждаются в PR, а должны проверяться роботами!</li>
+                <li class="fragment">Для новеньких в команде это хорошая возможность как быстро приспособиться, так и смотреть на чужой код <span class="fragment">(вспомним первые задания ;)</span></li>
+                <li class="fragment">Staging-сервера с работающей копией кода PR – это тоже часть CodeReview</li>
+                <li class="fragment">PullRequest – это один из способов CodeReview. Возможно делать его очно при обсуждении, возле доски и т.п</li>
+            </ol>
+        </section>
+        <section data-transition="none" data-background-image="images/05.jpg">
+            <h1 style="color: #000; margin-top: 100px;">rebase</h1>
+        </section>
+
+        <section data-transition="none">
+            <script type="x-gitbranching">{
+            "tree":
+            {
+              "branches": {
+                "master": {
+                  "target": "C3",
+                  "id": "master",
+                  "type": "branch",
+                  "remoteTrackingBranchID": null,
+                  "remote": false
+                },
+                "bugFix": {
+                  "target": "C2",
+                  "id": "bugFix",
+                  "remoteTrackingBranchID": null,
+                  "remote": false,
+                  "type": "branch"
+                }
+              },
+              "commits": {
+                "C0": {
+                  "type": "commit",
+                  "parents": [],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C0",
+                  "rootCommit": true
+                },
+                "C1": {
+                  "type": "commit",
+                  "parents": [
+                    "C0"
+                  ],
+                  "author": "Peter Cottle",
+                  "createTime": "Mon Nov 05 2012 00:56:47 GMT-0800 (PST)",
+                  "commitMessage": "Quick Commit. Go Bears!",
+                  "id": "C1"
+                },
+                "C2": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C2",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:05 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                },
+                "C3": {
+                  "parents": [
+                    "C1"
+                  ],
+                  "id": "C3",
+                  "type": "commit",
+                  "author": "Peter Cottle",
+                  "createTime": "Sun Feb 14 2016 21:05:12 GMT+0500 (YEKT)",
+                  "commitMessage": "Быстрый коммит. А надо!"
+                }
+              },
+              "tags": {},
+              "HEAD": {
+                "id": "HEAD",
+                "target": "bugFix",
+                "type": "general ref"
+              }
+            },
+            "commands": [
+                "# git checkout bugFix",
+                "# git rebase master",
+                "# git checkout master",
+                "# git merge bugFix"
+            ]
+        }</script>
+        </section>
+        <section data-transition="none">
+            <h2>rebase</h2>
+            <pre class="bash size-l">
+<code class="fragment">> git pull --rebase upstream master</code>
+<code class="fragment">> git rebase -i HEAD~20</code>
+<code class="fragment" style="font-size: 12px; line-height: 1">pick c4f8ade Добавлена задача к первой лекции: HTML, I часть
+pick a9d3cb2 Основное сделано осталось навести красоту
+pick 529ff45 Кажись, всё
+pick 38dd958 Больше ссылочек, вынесен style
+pick c5253a6 незакрытый тег, ай-яй-яй
+pick 907ac8d по codestyle
+pick 9743e29 по codestyle[2]
+pick 00e997b по codestyle[3]
+pick 5722e34 по codestyle[4]
+pick 312507b Пофиксено[2] OpenGraph, br'ы, hr'ы, почта, стили
+pick 02848dd по codestyle[4.1]
+pick f2ce4e3 по codestyle[5]
+pick 6644af5 по codestyle[5.1]
+pick 2d744f0 по codestyle[5.2]
+pick 7e73987 Пофиксено
+pick 251cea9 Пофиксено[1.1]
+pick 199eda1 Пофиксено[2]
+pick ea42d38 Пофиксено[2.1]
+pick 9297b84 Пофиксено[2.2]
+pick 159b337 Пофиксено[2.3]
+pick 02d3688 Пофиксено[2.4]
+pick f47b774 Пофиксено[2.5]
+pick 363c23c Пофиксено[2.6]</code>
+<code class="fragment">> git push -f origin task-3</code>
+</pre>
+        </section>
+        <section data-transition="none" data-background-image="images/06.jpg">
+            <h1 style="color: #000">Задача</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Заголовок</h2>
+            <ul>
+                <li class="fragment">Поменять favicon</li>
+                <li class="fragment">Обновление страницы</li>
+                <li class="fragment">Обновление страницы «Контакты»</li>
+                <li class="fragment">Поменять favicon на странице «Контакты»</li>
+                <li class="fragment">Рефакторинг</li>
+            </ul>
+        </section>
+        <section data-transition="none" data-background-image="images/08.jpg">
+            <h1 class="fragment" style="color: #000;">Понятно?</h1>
+        </section>
+        <section data-transition="none" data-background-image="images/08.jpg">
+            <h1 style="color: #000;">Что?</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Хорошая задача</h2>
+            <ul>
+                <li class="fragment">Чётко сформулирована</li>
+                <li class="fragment">Отвечает на вопрос: «Что должно получиться в итоге?»</li>
+                <li class="fragment">Имеет измеримые сроки выполнения</li>
+                <li class="fragment">Реализуема в принципе</li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h2>Плохая задача</h2>
+            <ul>
+                <li>Сформулирована туманно</li>
+                <li>Не отвечает на вопрос: «Что должно получиться в итоге?»</li>
+                <li>Не имеет измеримых сроков выполнения</li>
+                <li>Не реализуема в принципе</li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h2>Плохая задача</h2>
+            <ul>
+                <li>Сформулирована туманно</li>
+                <li>Не отвечает на вопрос: «Что должно получиться в итоге?»</li>
+                <li>Не имеет измеримых сроков выполнения</li>
+                <li style="text-decoration: line-through; color: red;">Не реализуема в принципе</li>
+                <li class="fragment">Можно декомпозировать</li>
+            </ul>
+        </section>
+        <section data-transition="none" data-background-image="images/09.jpg">
+        </section>
+        <section data-transition="none">
+            <h2>Issues</h2>
+            <ul>
+                <li># – для того чтобы сослаться на задачу</li>
+                <li class="fragment"><img src="images/10.jpg"/></li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h2>Issues</h2>
+            <ul>
+                <li># – для того чтобы сослаться на задачу</li>
+                <li>@ – для того чтобы сослаться на юзера</li>
+                <li class="fragment">Markdown разметка</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h1>ДЗ не будет</h1>
+            <p style="text-align: center" class="fragment deadline">Спасибо</p>
+        </section>
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script src="https://yastatic.net/jquery/2.2.0/jquery.min.js"></script>
+
+<script>
+    $('.links a').on('mouseover', function () {
+        var text = $(this).data('content');
+        $('.output-links').text(text);
+
+    });
+    $('.links a').on('blur', function () {
+        $('.output-links').text('');
+
+    });
+
+    function buildGitBranchingUrl(slide) {
+        var base = 'http://pcottle.github.io/learnGitBranching/?NODEMO&command=';
+//        var base = 'http://localhost:8099/?NODEMO&command=';
+        var commands = [
+            'importTreeNow ' + JSON.stringify(slide.tree),
+            'clear'
+        ].concat(slide.commands);
+        return base + commands.map(encodeURIComponent).join(';');
+    }
+    $('script[type="x-gitbranching"]').each(function () {
+        var params = JSON.parse(this.textContent);
+        var url = buildGitBranchingUrl(params);
+        $('<iframe>')
+                .attr({
+                    'data-src': url,
+                    width: 1000,
+                    height: 700,
+                    frameborder: 0,
+                    marginwidth: 0,
+                    marginheight: 0,
+                    scrolling: 'no',
+                    style: 'border:3px solid #666; margin-bottom:5px; max-width: 100%;',
+                    allowfullscreen: ''
+                })
+                .insertAfter($(this));
+    });
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+        if (Reveal.isFirstSlide()) {
+            var root = $(event.fragment);
+            console.log(root);
+            setTimeout(function () {
+                $(root).find('h1').addClass('bounceInDown');
+                $(root).find( 'h4').addClass('bounceInRight');
+                $(root).find('small').eq(0).addClass('bounceInLeft');
+                $(root).find('small').eq(1).addClass('bounceInUp');
+            }, 0);
+        }
+    } );
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: false,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: '../lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: '../plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: '../plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: '../plugin/highlight/highlight.js', async: true, condition: function () {
+                return !!document.querySelector('pre code');
+            }, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            { src: '../plugin/zoom-js/zoom.js', async: true },
+            { src: '../plugin/notes/notes.js', async: true }
+        ]
+    });
+    Reveal.configure({ slideNumber: true });
+
+</script>
+
+</body>
+</html>
