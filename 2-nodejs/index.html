@@ -1,0 +1,1081 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Node.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs"><div class="reveal"><div class="slides">
+
+<section class="large">
+    <h2>Node.js</h2>
+    <p class="author">
+        <small>Мокеев Евгений, </small>
+        <small>Гоголев Сергей</small>
+    </p>
+</section>
+
+<section class="large">
+    <h2>Node.js</h2>
+    <a href="#/3" class="fragment">Программная платформа</a><br>
+    <a href="#/28" class="fragment">Модульная система</a><br>
+    <a href="#/50" class="fragment">Работа с HTTP</a><br>
+    <a href="#/65" class="fragment">Работа с файлами</a><br>
+    <a href="#/78" class="fragment">Потоки</a><br>
+</section>
+
+<section>
+    <h4>Ресурсы</h4>
+    <div class="fragment resources"><img src="images/cpu.png"><br>CPU</div>
+    <div class="fragment resources"><img src="images/mem.png"><br>Memory</div>
+    <div class="fragment resources"><img src="images/hdd.png"><br>Disk</div>
+    <div class="fragment resources"><img src="images/net.png"><br>Network</div>
+    <div class="fragment magenta resources-io">I/O</div>
+</section>
+
+<section>
+    <h4>Сферические операции в вакууме</h4>
+    <p class="left fragment">Вычисление числа Фибоначчи<br><span class="fragment"> – <span class="magenta">CPU bound</span> операция</span></p>
+    <p class="left fragment">Подсчёт количества строк в файле<br><span class="fragment"> – <span class="magenta">I/O bound</span> операция</span></p>
+    <p class="left fragment">Вычисление SHA-1 хеша файла в Git<br><span class="fragment"> – <span class="magenta">CPU bound</span> операция</span></p>
+</section>
+
+<section>
+    <h4>Операции в web-приложении</h4>
+    <table class="operations">
+        <tr><td><div>Чтение HTTP запроса</div></td><td><span class="fragment red">I/O</span></td></tr>
+        <tr><td><div>Парсинг HTTP запроса</div></td><td><span class="fragment green">CPU</span></td></tr>
+        <tr><td><div>Запрос в БД</div></td><td><span class="fragment red">I/O</span></td></tr>
+        <tr><td><div>Запрос к API</div></td><td><span class="fragment red">I/O</span></td></tr>
+        <tr><td><div>Генерация HTML</div></td><td><span class="fragment green">CPU</span></td></tr>
+        <tr><td><div>Отправка HTML</div></td><td><span class="fragment red">I/O</span></td></tr>
+    </table>
+</section>
+
+<section>
+    <h4>Thread</h4>
+    <img src="images/one-thread.png">
+    <p class="fragment">Одновременно выполняется <span class="magenta">только одна</span> операция</p>
+</section>
+
+<section>
+    <h4>Traditional I/O</h4>
+    <img src="images/one-user.png" style="margin-right: 80px">
+</section>
+
+<section>
+    <h4 class="fragment">Blocking I/O</h4>
+    <img src="images/two-users.png" style="margin-right: 80px">
+</section>
+
+<section>
+    <h4>Решение #1: <span>Multithreading</span></h4>
+    <img src="images/two-threads.png">
+</section>
+
+<section>
+    <h4>Решение #1: <span>Multithreading</span></h4>
+    <p class="left fragment"><span class="red">✗</span> Поднятие потока не бесплатная операция</p>
+    <p class="left fragment"><span class="red">✗</span> Переключение между ними не бесплатное</p>
+    <p class="left fragment"><span class="red">✗</span> Есть лимиты на количество</p>
+    <p class="left fragment"><span class="red">✗</span> Каждый требует дополнительной памяти<span class="red fragment"> !</span></p>
+</section>
+
+<section>
+    <h4>Non-blocking I/O</h4>
+    <ul>
+        <li class="left fragment">Приложение запрашивает ресурс <br>с особым флагом <span class="green">O_NONBLOCK</span></li>
+        <li class="left fragment">Поток приложения не блокируется и продолжает работу</li>
+        <li class="left fragment">Запросы складываются <br>в <span class="green">event demultiplexer</span></li>
+        <li class="left fragment">Как только ресурсы готов, <span class="green">event demultiplexer</span> сообщает об этом</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Blocking I/O</h4>
+    <img src="images/two-users.png" style="margin-right: 80px">
+</section>
+
+<section>
+    <h4>Решение #2: <span>Non-blocking I/O</span></h4>
+    <img src="images/non-blocking.png" style="margin-right: 80px">
+</section>
+
+<section>
+    <h4>Паттерн <span>Reactor</span></h4>
+</section>
+
+<section>
+    <img width="100%" src="images/reactor.png" style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <h4><span>Apache</span> vs <span>Nginx</span></h4>
+    <p class="left fragment">Apache использует <span class="red">multithreading</span>. На каждый коннект к нему поднимается thread</p>
+    <p class="left fragment">Nginx использует паттерн <span class="green">Reactor</span></p>
+</section>
+
+<section>
+    <img src="images/nginx.png" height=500 style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <img src="images/nginx-2.png" height=500 style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <h4>2009</h4>
+    <img class="fragment" data-fragment-index=0 width=400 src="images/ryan-dahl.png">
+    <p class="fragment" data-fragment-index=0>Ryan Dahl</p>
+</section>
+
+<section>
+    <h4><span>Event demultiplexer</span></h4>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/linux.png"> epoll</p>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/mac.png"> kqueue</p>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/winxp.png" width=32> I/O Completion Port API</p>
+
+    <p class="fragment"><img src="images/libuv.png"></p>
+    <a class="fragment" href="https://github.com/urfu-2015/javascript-lectures/blob/master/9-async.md">9-async</a>
+</section>
+
+<section>
+    <h4>Операции в web-приложении</h4>
+    <pre class="javascript fragment"><code>
+data = request('http://example.com/api');
+    </code></pre>
+    <pre class="javascript fragment"><code>
+db.insert(data);
+    </code></pre>
+</section>
+
+<section>
+    <img src="images/demultiplexer.png" width=400>
+    <p class="fragment">Для каждого запроса ресурса необходимо указать <span class="green">handler</span></p>
+</section>
+
+<section>
+    <h4>Паттерн <span>Callback</span></h4>
+    <pre class="javascript fragment"><code>
+request('https://...', function (err, data) {
+    db.insert(data, function (err, result) {
+        // Do something else
+    });
+}
+    </code></pre>
+    <p class="left fragment" style="margin-left: 40px">1. Callbacks come last</p>
+    <p class="left fragment" style="margin-left: 40px">2. Error comes first</p>
+</section>
+
+<section>
+    <h4>Паттерн <span>Callback</span></h4>
+    <pre class="javascript fragment"><code>
+JSON.parse(json);
+    </code></pre>
+    <pre class="javascript fragment"><code>
+function parseJSON(json, callback) {
+    try {
+      callback(null, JSON.parse(json));
+    } catch(err) {
+      callback(err);
+    }
+};
+    </code></pre>
+    <pre class="javascript fragment"><code>
+parseJSON('{"foo": "bar"}', function(err, data) {
+    if (!err) console.log(data); //{ foo: 'bar' }
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>Javascript</h4>
+    <p class="left fragment"><span class="green">✓</span> Анонимные функции и замыкания</p>
+    <p class="left fragment"><span class="green">✓</span> Готов к EventLoop (DOM events, timers)</p>
+    <p class="left fragment"><span class="green">✓</span> Большое коммьюнити<span class="fragment green"> !</span></p>
+    <img class="fragment" src="images/v8.png">
+</section>
+
+<section>
+    <p>Готовый набор модулей для работы с фаловой системой – <span class="green">fs</span>, для запросов – <span class="green">http</span>, логирования – <span class="green">console</span></p>
+    <img class="fragment" src="images/core-api.png">
+    <p class="fragment"><a href="https://github.com/nodejs/node/tree/master/lib">github.com/nodejs</a></p>
+</section>
+
+<section>
+    <img src="images/nodejs.png">
+    <p class="fragment">Node.js</p>
+    <p class="fragment"><a href="https://www.youtube.com/watch?v=ztspvPYybIY">Original Node.js presentation</a></p>
+</section>
+
+<section>
+    <h4>Getting started</h4>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/linux.png"> apt-get install nodejs</p>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/mac.png"> brew install node</p>
+    <p class="left fragment"><img style="vertical-align:bottom" src="images/win.png"> Скачать с <a href="https://nodejs.org/en/">nodejs.org</a></p>
+    <pre class="javascript fragment"><code>
+$ node
+> 2 + 2
+4
+    </code></pre>
+    <p class="fragment">Посмотреть <a href="https://nodejs.org/dist/latest-v5.x/docs/api/">документацию</a></p>
+    <span class="fragment">Node.js <span class="green">4 LTS</span></span>
+    <span class="fragment">, Node.js <span class="red">5</span></span>
+</section>
+
+<section>
+    <h4>Модули</h4>
+    <ul>
+        <li class="fragment">Фундаментальная структура кода в платформе Node.js</li>
+        <li class="fragment">Приложения состоят из модулей</li>
+        <li class="fragment">Реиспользуемые модули – <span class="magenta">пакеты</span></li>
+        <li class="fragment">В основе <a href="http://wiki.commonjs.org/wiki/Modules/1.1.1">CommonJS</a></li>
+    </ul>
+    <p class="fragment">Философия Unix</p>
+    <p class="left fragment"><q>Small is beautiful.</q></p>
+    <p class="left fragment"><q>Make each program do one thing well.</q></p>
+</section>
+
+<section>
+    <h4>Модули: <span>Создание</span></h4>
+    <pre class="javascript"><code>// hyp.js
+
+function square(n) {
+    return n * n;
+}
+
+function calculateHypo(a, b) {
+    return Math.sqrt(square(a) + square(b));
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Экспорт</span></h4>
+    <pre class="javascript "><code>// hyp.js
+
+function square(n) {
+    return n * n;
+}
+
+module.exports.calculate = function (a, b) {
+    return Math.sqrt(square(a) + square(b));
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Импорт</span></h4>
+    <pre class="javascript"><code>// app.js
+
+const hyp = require('./hyp.js')
+
+hyp.calculate(3, 4); // 5
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span class="red">Экспорт через global</span></h4>
+    <pre class="fragment javascript"><code>// hyp.js
+
+function square(n) {
+    return n * n;
+}
+
+global.calculateHypo = function (a, b) {
+    return Math.sqrt(square(a) + square(b));
+}
+    </code></pre>
+    <pre class="fragment javascript"><code>// app.js
+
+require('./hyp.js')
+
+calculateHypo(3, 4); // 5
+    </code></pre>
+</section>
+<section>
+    <h4>Модули: <span class="red">Экспорт через global</span></h4>
+    <a href="https://github.com/shelljs/shelljs">github.com/shelljs</a>
+    <pre><code>// evil.js
+
+require('shelljs/global');
+
+rm('-rf', '/home/gogoleff/');
+
+mkdir('-p', '/games');
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Экспорт функции</span></h4>
+    <pre class="fragment javascript"><code>// hyp.js
+
+function square(n) {
+    return n * n;
+}
+
+module.exports = function calculateHypo(a, b) {
+    return Math.sqrt(square(a) + square(b));
+}
+    </code></pre>
+    <pre class="fragment javascript"><code>// app.js
+
+const calculateHypo = require('./hyp.js');
+
+calculateHypo(3, 4); // 5
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Экспорт *</span></h4>
+    <pre class="fragment javascript"><code>
+module.exports = 42;
+    </code></pre>
+    <pre class="fragment javascript"><code>
+function User(name) {
+    this.name = name;
+}
+
+User.prototype.greet = function() {
+    console.log('Hello ' + this.name);
+};
+
+module.exports = User;
+    </code></pre>
+    <pre class="fragment javascript"><code>
+module.exports = new User();
+    </code></pre>
+</section>
+
+<section>
+    <h4><span>module.exports</span> vs <span>exports</span></h4>
+    <pre class="fragment javascript"><code>
+module.exports.calculateHypo = function (a, b) {}
+    </code></pre>
+    <pre class="fragment javascript"><code>
+exports.calculateHypo = function (a, b) {}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span>module.exports</span> vs <span>exports</span></h4>
+    <pre class="fragment javascript"><code>
+exports = function calculateHypo(a, b) {}
+    </code></pre>
+<pre class="fragment javascript"><code>// app.js
+
+const calculateHypo = require('hyp.js');
+
+calculateHypo(3, 4);
+// calculateHypo is not a function
+
+</code></pre>
+<p class="fragment">exports <span class="magenta" style="position: relative; top: 6px"> ⇢ </span>module.exports</p>
+</section>
+
+<section>
+    <h4>Модули: <span>Импорт встроенных</span></h4>
+    <pre class="fragment javascript"><code>
+const url = require('url');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+url.parse('https://yandex.ru');
+    </code></pre>
+    <pre class="fragment javascript">
+{
+    protocol: 'https:',
+    host: 'yandex.ru',
+    port: null,
+    path: '/'
+}
+    </pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Импорт сторонних</span></h4>
+    <pre class="fragment javascript"><code>
+const lodash = require('lodash');
+
+lodash.shuffle([1, 2, 3, 4]);
+// [4, 1, 3, 2]
+
+lodash.uniq([2, 1, 2]);
+// [2, 1]
+    </code></pre>
+</section>
+
+<section>
+    <h4>npm</h4>
+    <p style="color: #444">Node Package Manager</p>
+    <p class="left fragment" data-fragment-index=0>Устанавливается вместе с Node.js</p>
+    <p class="left fragment" data-fragment-index=1>Умеет искать, устанавливать и удалять модули</p>
+    <p class="left fragment" data-fragment-index=2>Модули хранятся глобальном хранилище *</p>
+    <a class="fragment" data-fragment-index=3 href="https://registry.npmjs.org/lodash">registry.npmjs.org/lodash</a>
+    <p class="fragment" data-fragment-index=2 style="color: #444; font-size: 16px;">* существуют приватные хранилища</p>
+</section>
+
+<section>
+    <h4>npm <span>init</span></h4>
+    <p class="left fragment">Создаёт файл-манифест <span class="green">package.json</span> описывающий модуль</p>
+    <p class="left fragment">Модуль + манифест = <span class="green">пакет</span></p>
+    <p class="left fragment">Файл содержит <span class="green">название</span> и <span class="green">версию</span> нашего модуля, его <span class="green">зависимости</span>, ...</p>
+    <p class="left fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <h4>npm <span>search</span></h4>
+    <p class="left fragment">Ищет пакет в хранилище по имени</p>
+    <h4 class="fragment">npm <span>show</span></h4>
+    <p class="left fragment">Выводит информацию о пакете по имени</p>
+    <p class="left fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <h4>npm <span>install</span></h4>
+    <p class="left fragment">Устанавливает пакет в качестве зависимости в директорию <span class="green">node_modules</span></p>
+    <p class="left fragment">Если у зависимости есть подзависимости – установятся в <span class="green">node_modules</span> у зависимости</p>
+    <h4 class="fragment">npm <span>install --save</span></h4>
+    <p class="left fragment">Зависимость зафиксируется в <span class="green">package.json</span></p>
+    <p class="left fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <h4>npm <span>install mathjs@2.7.0</span></h4>
+    <p class="left fragment" data-fragment-index=0>Устанавливает определённую версию пакета</p>
+    <h4 class="fragment" data-fragment-index=1>npm <span>install --save-dev</span> <span class="green fragment" data-fragment-index=3>mocha</span></h4>
+    <p class="left fragment" data-fragment-index=2>Устанавливает пакет в качестве зависимости, которая не требуется для работы модуля. Например, для тестирования</p>
+    <p class="left fragment demo" data-fragment-index=4><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+    <a class="left fragment" data-fragment-index=6 href="https://docs.npmjs.com/files/package.json">docs.npmjs.com/files/package.json</a>
+</section>
+
+<section>
+    <h4>semver</h4>
+    <p style="color: #444">Semantic Versions</p>
+    <p><span class="red">2</span>.<span class="green">7</span>.<span class="magenta">0</span></p>
+    <p class="left fragment"><span class="red">major</span> – ломается обратная совместимость</p>
+    <p class="left fragment"><span class="green">minor</span> – сохраняется обратная совместимость</p>
+    <p class="left fragment"><span class="magenta">patch</span> – исправления ошибок</p>
+    <a class="left fragment" href="http://semver.org/">semver.org</a>
+</section>
+
+<section>
+    <h4>Модули: <span>Импорт</span></h4>
+    <pre class="fragment javascript"><code>
+let counter = 1;
+
+module.exports = function() {
+    return counter++;
+}
+    </code></pre>
+    <pre class="fragment javascript"><code>
+const counter = require('./counter');
+const anotherCounter = require('./counter');
+
+console.log(counter()) // 1
+console.log(counter()) // 2
+    </code></pre>
+    <pre class="fragment javascript"><code>
+console.log(anotherCounter()) // ?
+    </code></pre>
+</section>
+
+<section>
+    <h4>Модули: <span>Импорт</span></h4>
+    <pre class="fragment javascript"><code>
+console.log(anotherCounter()) // 3
+    </code></pre>
+    <p class="left fragment">Модули импортируются <span class="green">один раз</span>, и после первого require, экспорт кешируется</p>
+    <p class="left fragment">Результат хранится в свойстве <span class="green">require.cache</span></p>
+    <p class="left fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <h4>Модули: <span>Поиск</span></h4>
+    <p class="left fragment">Если есть встроенный модуль с таким именем, экспортируется он – <span class="green"> require('url')</span></p>
+    <p class="left fragment">Если имя начинается с <span class="red">./</span>, <span class="red">/</span> или <span class="red">. ./</span>,  экспортируется по указанному пути – <span class="green"> require('./index.js')</span></p>
+    <p class="left fragment">В противном случае пакет ищется в <span class="red">node_modules</span> начиная с текущей директории и поднимаясь вверх – <span class="green"> require('mathjs')</span></p>
+</section>
+
+<section>
+    <h4>Модули: <span>Поиск</span></h4>
+    <p class="left fragment"><span class="green">/home/gogoleff/hypotenuse/</span><span class="red">node_modules</span></p>
+    <p class="left fragment"><span class="green">/home/gogoleff/</span><span class="red">node_modules</span></p>
+    <p class="left fragment"><span class="green">/home/</span><span class="red">node_modules</span></p>
+    <a class="fragment" href="https://nodejs.org/api/modules.html#modules_all_together">Полный алгоритм</a>
+</section>
+
+<section>
+    <h4>Network</h4>
+    <p class="left fragment">Поднять <span class="magenta">HTTP-сервер</span>, который будет обслуживать запросы пользователей</p>
+    <p class="left fragment">Поднять <span class="magenta">HTTP-клиент</span>, который сам будет ходить в другие сервисы<p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'net'</span>);</h4>
+    <p class="fragment">Взаимодействие двух программ по <span class="green">TCP</span></p>
+    <p class="fragment">Межпроцессорное взаимодействие через <span class="green">UNIX domain socket</span></p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <p>Взаимодействия по протоколу <span>HTTP</span></p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <pre class="fragment javascript"><code>
+const http = require('http');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+const server = new http.Server();
+    </code></pre>
+    <pre class="fragment javascript"><code>
+server.listen(8080);
+    </code></pre>
+    <pre class="fragment javascript"><code>
+server.on('request', function (req, res) {
+    res.end('Hello, User!');
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4><span>req</span> instanceof <span class="green">http.IncomingMessage</span></h4>
+    <pre class="fragment javascript"><code>
+server.on('request', function (req, res) {
+    console.log(req.method); // GET
+});
+    </code></pre>
+    <pre class="fragment javascript"><code>
+req.headers; // {'accept-encoding': 'gzip'}
+    </code></pre>
+    <pre class="fragment javascript"><code>
+req.url; // /favicon.ico
+    </code></pre>
+</section>
+
+<section>
+    <h4><span>res</span> instanceof <span class="green">new http.ServerResponse</span></h4>
+    <pre class="fragment javascript"><code>
+server.on('request', function (req, res) {
+    console.log(res.statusCode); // 200
+});
+    </code></pre>
+    <pre class="fragment javascript"><code>
+res.setHeader('content-type', 'text/html');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+res.write('<strong>Hello!</strong>');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+res.end();
+    </code></pre>
+    <p class="fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <pre class="fragment javascript"><code>
+const http = require('http');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+const req = http.request({
+    hostname: 'localhost',
+    port: 8080
+});
+    </code></pre>
+    <pre class="fragment javascript"><code>
+req.end();
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <pre class="fragment javascript"><code>
+req.on('response', function (response) {
+    let str = '';
+
+    response.on('data', function (chunk) {
+    	str += chunk; // res.write
+    });
+
+    response.on('end', function () {
+    	console.log(str);
+    });
+});
+    </code></pre>
+    <p class="fragment demo"><img style="vertical-align:middle" src="images/terminal.png"> Demo</p>
+</section>
+
+<section>
+    <p class="fragment">require(<span class="green">'url'</span>);</p>
+    <p class="fragment">require(<span class="green">'https'</span>);</p>
+    <p class="fragment">require(<span class="green">'querystring'</span>);</p>
+    <pre class="fragment javascript"><code>
+querystring.parse('foo=bar&arr=a&arr=b');
+// { foo: 'bar', arr: ['a', 'b'] }
+    </code></pre>
+    <p class="fragment">require(<span class="green">'dns'</span>);</p>
+    <pre class="fragment javascript"><code>
+dns.lookup('nodejs.org', function (err, address) {
+  console.log(address); // 104.20.22.46
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <pre class="javascript"><code>
+req.on('response', function (response) {
+    let str = '';
+
+    response.on('data', function (chunk) {
+    	str += chunk;
+    });
+
+    response.on('end', function () {
+    	console.log(str);
+    });
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'events'</span>).EventEmitter;</h4>
+    <pre class="fragment javascript"><code>
+var EventEmitter = require('events').EventEmitter;
+var ee = new EventEmitter();
+
+ee.on('log', console.log);
+
+ee.emit('log', 'Hello!'); // Logged 'Hello!'
+    </code></pre>
+    <pre class="fragment javascript"><code>
+ee.emit('unknown event'); // Nothing
+    </code></pre>
+    <pre class="fragment javascript"><code>
+ee.emit('error'); // Uncaught, unspecified "error" event.
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>);</h4>
+    <pre class="javascript"><code>
+req.on('response', function (response) {
+    let str = '';
+
+    response.on('data', function (chunk) {
+    	str += chunk;
+    });
+
+    response.on('end', function () {
+    	console.log(str);
+    });
+});
+    </code></pre>
+</section>
+
+<section>
+    <img src="images/bicycle.png" style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <h4>require(<span class="green">'request'</span>);</h4>
+    <pre class="fragment"><code>
+npm install request
+    </code></pre>
+    <pre class="fragment"><code>
+const request = require('request');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+request('https://registry.npmjs.org/',
+    function (err, res, body) {
+        if (!err && res.statusCode === 200) {
+            const registry = JSON.parse(body);
+
+            console.log(registry.doc_count);
+            // 271820
+        }
+    }
+);
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'request'</span>);</h4>
+    <p class="left fragment">Отправка файлов</p>
+    <p class="left fragment">HTTP-аутентификация</p>
+    <p class="left fragment">Проксирование</p>
+</section>
+
+<section>
+    <h4>Files</h4>
+</section>
+
+<section>
+    <h4>require(<span class="green">'fs'</span>);</h4>
+    <pre class="fragment javascript"><code>
+const fs = require('fs');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+fs.readFile(__filename, function (err, data) {
+    console.log(data);
+});
+    </code></pre>
+    <p class="fragment"><span class="green">__filename</span> – имя текушего файла</p>
+    <pre class="fragment javascript"><code>
+Buffer 63 6f 6e 73 74 20 66 73 20 3d 20 72 65 ...
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'buffer'</span>);</h4>
+    <p class="left fragment">Экспортирует класс для работы<br>с <span class="green">бинарными данными</span></p>
+    <p class="left fragment">Можно рассматривать как массив целых чисел, ограниченных диапазоном <span class="green">0-255</span</p>
+    <p class="left fragment">Каждое число представляет байт</p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'buffer'</span>);</h4>
+    <pre class="fragment javascript"><code>
+const letterB = new Buffer([98]);
+    </code></pre>
+    <pre class="fragment javascript"><code>
+console.log(letterB.toString()); // b
+    </code></pre>
+    <pre class="fragment javascript"><code>
+console.log(letterB.toString('utf-8')); // b
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'buffer'</span>);</h4>
+    <pre class="fragment javascript"><code>
+const msg = new Buffer([0x2f, 0x04, 0x3d, 0x04,
+0x34, 0x04, 0x35, 0x04, 0x3a, 0x04, 0x41, 0x04]);
+    </code></pre>
+    <pre class="fragment javascript"><code>
+msg.toString();
+    </code></pre>
+    <pre class="fragment javascript"><code>
+// \u0004=\u00044\u00045\u0004:\u0004A\u0004
+    </code></pre>
+    <pre class="fragment javascript"><code>
+letterB.toString('ucs2');
+    </code></pre>
+    <pre class="fragment javascript"><code>
+// 'Яндекс'
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'fs'</span>);</h4>
+    <pre class="fragment javascript"><code>
+fs.readFile(__filename, function (err, data) {
+    console.log(data.toString());
+});
+    </code></pre>
+    <pre class="fragment javascript"><code>
+fs.readFile(__filename, 'utf-8', function (err, data) {
+    console.log(data);
+});
+    </code></pre>
+    <pre class="fragment text">
+
+const fs = require('fs');
+
+fs.readFile(__filename, function (err, data) {
+    console.log(data.toString());
+});
+    </pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'fs'</span>);</h4>
+    <pre class="javascript"><code>
+const data = fs.readFileSync(__filename, 'utf-8');
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'fs'</span>);</h4>
+    <pre class="javascript fragment"><code>
+fs.appendFile();
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.writeFile();
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.unlink();
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.mkdir();
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.stat(__filename, function (stats) {
+    console.log(stat.isDirectory()); // false
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'fs'</span>);</h4>
+    <pre class="javascript fragment"><code>
+fs.watch();
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.watch(__filename, function (event, filename) {
+    console.log(event); // change or rename
+});
+    </code></pre>
+    <pre class="javascript fragment"><code>
+fs.watch(__dirname, function (event, filename) {
+    console.log(event); // change or rename
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>Streams</h4>
+</section>
+
+<section>
+    <h4 class="fragment" data-fragment-index=2><span>Buffer Mode</span></h4>
+    <pre class="javascript"><code>
+fs.readFile(__filename, 'utf-8', function (err, data) {
+    console.log(data);
+});
+    </code></pre>
+    <p class="fragment left" data-fragment-index=0>Данные предварительно сохраняются в <span class="green">Buffer</span></p>
+    <p class="fragment left" data-fragment-index=1>Только когда <span class="red">весь</span> файл прочитан, данные передаются в обработчик</p>
+</section>
+
+<section>
+    <img src="images/buffer.png" style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <img src="images/stream.png" style="-webkit-filter: invert(100%);">
+</section>
+
+<section>
+    <h4><span>Stream Mode</span></h4>
+    <p class="fragment">Данные готовы для обработки, как только будет прочитан первый chunk</p>
+    <p class="left fragment"><span class="green">✓</span> Экономия ресурсов</p>
+    <p class="left fragment"><span class="green">✓</span> Экономия времени</p>
+</section>
+
+<section>
+    <h4>Stream. <span>Экономия ресурсов</span></h4>
+    <pre class="javascript fragment"><code>//gzip.js
+const fs = require('fs');
+const zlib = require('zlib');
+const filename = process.argv[2];
+
+   fs.readFile(filename, function(err, buffer) {
+       zlib.gzip(buffer, function(err, buffer) {
+           fs.writeFile(filename + '.gz', buffer, function(err) {
+               console.log('Success!');
+        });
+    });
+});
+    </code></pre>
+    <pre class="bash fragment">
+
+$ node gzip bigfile.doc</pre>
+    <pre class="bash">
+  <span class="green fragment">0</span>    <span class="green fragment">1</span>    <span class="green fragment">2</span>
+    </pre>
+</section>
+
+<section>
+    <h4>Stream. <span>Экономия ресурсов</span></h4>
+    <p class="fragment">Файл считывается в <span class="magenta">Buffer</span>,<br> который хранится в памяти</p>
+    <p class="fragment"><span class="magenta">Buffer</span> в V8 не может быть больше 0x3FFFFFFF bytes <span style="position: relative; top: 15px;">~</span> <span class="red">1 Gb</span> </p>
+    <p class="fragment red">File size is greater than possible Buffer: 0x3FFFFFFF bytes</p>
+    <p class="fragment">Если приложение обрабатывает одновременно несколько пользователей?</p>
+</section>
+
+<section>
+    <h4>Stream. <span>Экономия ресурсов</span></h4>
+    <pre class="javascript fragment"><code>
+fs
+    .createReadStream(filename)
+    .pipe(zlib.createGzip())
+    .pipe(fs.createWriteStream(filename + '.gz'))
+    .on('finish', function() {
+        console.log('Success!);
+    });
+    </code></pre>
+</section>
+
+<section>
+    <h4>Stream. <span>Виды<span></h4>
+    <p class="left fragment"><span class="green">Readable</span> для чтения</p>
+    <p class="left fragment"><span class="green">Writable</span> для записи</p>
+    <p class="left fragment"><span class="green">Duplex</span> для чтения и записи</p>
+    <p class="left fragment"><span class="green">Transform</span> Duplex но с преобразованием/p>
+</section>
+
+<section>
+    <h4>Stream. <span>Readable<span></h4>
+    <p class="fragment"><span class="green">fs.ReadStream</span></p>
+    <pre class="javascript fragment"><code>
+fs.createReadStream(filename);
+    </code></pre>
+    <p class="fragment"><span class="green">http.IncomingMessage</span></p>
+    <pre class="javascript fragment"><code>
+require('http')
+    .request(options)
+    .on('response', function (res) {
+        res.on('data', function (chunk) {});
+        res.on('end', function () {});
+    });
+    </code></pre>
+</section>
+
+<section>
+    <h4>Stream. Readable. <span>Events<span></h4>
+    <p class="left fragment"><span class="green">on('data')</span> при получении чанка данных</p>
+    <p class="left fragment"><span class="green">on('end')</span> при закрытии стрима</p>
+    <p class="left fragment"><span class="green">on('close')</span> для записи</p>
+    <p class="left fragment"><span class="green">on('error')</span> в случае ошибки <span class="red fragment">!</span></p>
+</section>
+
+<section>
+    <h4>Stream. Readable</h4>
+    <pre class="javascript fragment"><code>
+process.stdin
+     .on('data', function(chunk) {
+         process.stdout.write('Hello, ' +
+            chunk.toString());
+     });
+    </code></pre>
+</section>
+
+<section>
+    <h4>Stream. <span>Writable</span></h4>
+    <p class="fragment"><span class="green">process.stdout</span></p>
+    <p class="fragment"><span class="green">fs.WriteStream</span></p>
+    <pre class="javascript fragment"><code>
+fs.createWriteStream(filename);
+    </code></pre>
+    <p class="fragment"><span class="green">http.ServerResponse</span></p>
+    <pre class="fragment javascript"><code>
+server.on('request', function (req, res) {
+    res.write('Hello, ');
+    res.write('World!');
+    res.end();
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>Stream. Writable. <span>Методы</span></h4>
+    <p class="left fragment"><span class="green">.write()</span> отправляет порцию данных в поток</p>
+    <p class="left fragment"><span class="green">.end()</span> завершает запись в поток</p>
+    <h4 class="fragment">Stream. Writable. <span>События</span></h4>
+    <p class="left fragment"><span class="green">on('error')</span> в случае ошибки передачи данных</p>
+</section>
+
+<section>
+    <h4>Stream. Readble. <span>.pipe()</span></h4>
+    <pre class="bash fragment"><code>
+$ cat index.js | grep "function" | wc -l
+2
+    </code></pre>
+
+    <pre class="javascript fragment"><code>
+process.stdin
+     .on('data', function(chunk) {
+         process.stdout.write('Hello, ' +
+            chunk.toString());
+     });
+    </code></pre>
+    <pre class="javascript fragment"><code>
+process.stdin.pipe(process.stdout);
+    </code></pre>
+</section>
+
+<section>
+    <pre class="javascript"><code>//gzip.js
+const fs = require('fs');
+const zlib = require('zlib');
+const filename = process.argv[2];
+
+   fs.readFile(filename, function(err, buffer) {
+       zlib.gzip(buffer, function(err, buffer) {
+           fs.writeFile(filename + '.gz', buffer, function(err) {
+               console.log('Success!');
+        });
+    });
+});
+    </code></pre>
+</section>
+
+<section>
+    <pre class="javascript fragment"><code>
+fs
+    .createReadStream(filename)
+    </code></pre>
+    <pre class="javascript fragment"><code>
+    .pipe(zlib.createGzip()) // Duplex, Transform
+    </code></pre>
+    <pre class="javascript fragment"><code>
+    .pipe(fs.createWriteStream(filename + '.gz'))
+    </code></pre>
+    <pre class="javascript fragment"><code>
+    .on('finish', function() {
+        console.log('Success!);
+    });
+    </code></pre>
+</section>
+
+<section>
+    <p>Пример в <span class="green">2-nodejs/examples</span></p>
+</section>
+
+<section>
+    <h4>To be continued ...</h4>
+</section>
+
+<section>
+    <h4>Домашнее задание</h4>
+    <a class="fragment" href="https://github.com/urfu-2015/webdev-tasks-1">github.com/urfu-2015/webdev-tasks-1</a>
+    <br><br><br>
+    <p style="text-align: center" class="fragment deadline">Время на решение<br> 7 дней</p>
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
