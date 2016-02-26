@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Лекция «Базы данных»</title>
+
+    <meta name="description" content="Лекция «Базы данных»">
+    <meta name="author" content="Олег Мохов">
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../lib/css/animate.css">
+    <link rel="stylesheet" href="../css/theme/night.css" id="theme">
+
+    <!-- Code syntax highlighting -->
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+    <!-- Printing and PDF exports -->
+    <link rel="stylesheet" href="css-custom/custom.css">
+    <!--<script>-->
+        <!--var link = document.createElement('link');-->
+        <!--link.rel = 'stylesheet';-->
+        <!--link.type = 'text/css';-->
+        <!--link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';-->
+        <!--document.getElementsByTagName('head')[0].appendChild(link);-->
+    <!--</script>-->
+    <script type="text/javascript"
+            src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+</head>
+
+<body>
+
+<div class="reveal">
+
+    <div class="slides">
+        <section style="font-size: 70px;">
+            <div data-transition="none" class="fragment">
+                <h2 style="font-size: 100px; margin-bottom: 50px;">Базы данных</h2>
+                <p style="text-align: center;">
+                    <small class="animated"><span style="color: red">М</span>охов Олег</small><br>
+                    <small class="animated" style="margin-top: -20px"><span style="color: red">Р</span>азработчик интерфейсов</small>
+                </p>
+            </div>
+        </section>
+
+        <section data-transition="none" data-background-image="">
+            <h1>SQL</h1>
+        </section>
+        <section data-transition="none" data-background-image="">
+            <h1>Теорема Брюера</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Теорема Брюера</h2>
+            <p class="fragment">эвристическое утверждение о том, что в любой реализации распределённых вычислений возможно обеспечить не более двух из трёх следующих свойств:</p>
+            <ul>
+                <li class="fragment">согласованность данных (англ. consistency) — во всех вычислительных узлах в один момент времени данные не противоречат друг другу;</li>
+                <li class="fragment">доступность (англ. availability) — любой запрос к распределённой системе завершается корректным откликом;</li>
+                <li class="fragment">устойчивость к разделению (англ. partition tolerance) — расщепление распределённой системы на несколько изолированных секций не приводит к некорректности отклика от каждой из секций.</li>
+            </ul>
+            <h2 class="fragment">CAP-теорема</h2>
+        </section>
+
+        <section data-transition="none" data-background-image="img/nosql-triangle.png"></section>
+
+        <section data-transition="none" data-background-image="">
+            <h1 style="color: #fff; text-shadow: #000 0 0 5px; margin-top: 100px;">NoSQL</h1>
+        </section>
+        <section data-transition="none">
+            <h2>MongoDB</h2>
+            <p class="fragment">humongous – огромный</p>
+            <ul>
+                <li class="fragment">документо-ориентированное хранение данных (JSON-подобная схема)</li>
+                <li class="fragment">не требует описания схем данных</li>
+                <li class="fragment">JavaScript в качестве языка запросов к базе данных</li>
+            </ul>
+        </section>
+
+        <section data-transition="none">
+            <h1>Установка</h1>
+            <div><a href="https://www.mongodb.org/downloads">https://www.mongodb.org/downloads</a></div>
+        </section>
+
+        <section data-transition="none">
+            <h2>CRUD</h2>
+            <ul>
+                <li class="fragment">create – insert()</li>
+                <li class="fragment">read – find()</li>
+                <li class="fragment">update – update()</li>
+                <li class="fragment">delete – remove()</li>
+                <li class="fragment">help()</li>
+            </ul>
+        </section>
+
+
+        <section data-transition="none">
+            <h2>Создание таблицы</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code class="fragment">CREATE TABLE students (
+    id MEDIUMINT NOT NULL
+    AUTO_INCREMENT,
+    name Varchar(30),
+    nickname Varchar(30),
+    group Varchar(30),
+    PRIMARY KEY (id)
+)
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.insert({
+    name: 'Дарья',
+    nickname: 'Пиратка',
+    group: 'ПИ-401'
+})</code>
+            </pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code class="fragment">SELECT *
+FROM students
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find()</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>ObjectID</h2>
+            <pre class="bash size-xl">
+<code>db.students.find()</code>
+{
+    "_id" : <mark>ObjectId("56cc30e2e52c943bf62fff72")</mark>,
+    "name" : "Дарья",
+    "nickname" : "Пиратка",
+    "group" : "ПИ-401"
+}
+            </pre>
+        </section>
+
+        <section data-transition="none">
+            <pre class="bash size-xl">
+<span>ObjectId("56cc30e2e52c943bf62fff72")</span>
+<span class="fragment">56cc30e2 – time</span>
+<span class="fragment">e52c94 – mid</span>
+<span class="fragment">3bf6 – pid</span>
+<span class="fragment">2fff72 – inc</span>
+<span class="fragment">
+56cc30e2 e52c94 3bf6 2fff72
+56cc3503 e52c94 3bf6 2fff73</span>
+            </pre>
+            <p class="fragment">Любой процесс на любой машине сам отвечает за генерацию ID'шников и не вступает в конфликты с другими.</p>
+        </section>
+        <section data-transition="none">
+            <h2>MongoDB = JavaScript</h2>
+            <pre class="javascript size-xl">
+<code>db.students.insert</code>
+<span class="fragment">function ( obj , options, _allow_dot ){
+    if ( ! obj )
+        throw "no object passed to insert!";
+
+    var flags = 0;
+
+    var wc = undefined;
+    var allowDottedFields = false;
+    if ( options === undefined ) {
+        // do nothing
+    }
+    /* и ещё куча кода */
+
+    return result;
+}
+    </span>
+</pre>
+        </section>
+        <section data-transition="none">
+            <h2>MongoDB = JavaScript</h2>
+            <pre class="javascript size-xl">
+<code>function insertStudent(name, nickname, group) {
+    var year = group.split('-').pop().slice(0, 1);
+    db.students.insert({
+        name: name,
+        nickname: nickname,
+        group: group,
+        year: year
+    });
+}
+</code>
+        </section>
+        <section data-transition="none">
+            <h2>MongoDB = JavaScript</h2>
+            <pre class="javascript size-xl">
+<span>insertStudent('Пётр', 'petr', 'МТ-204')</span>
+<span class="fragment">db.students.find()
+{
+    "_id" : ObjectId("56cc30e2e52c943bf62fff72"),
+    "name" : "Дарья",
+    "nickname" : "Пиратка",
+    "group" : "ПИ-401"
+}
+{
+    "_id" : ObjectId("56cc3a2ae52c943bf62fff74"),
+    "name" : "Пётр",
+    "nickname" : "petr",
+    "group" : "МТ-204",
+    "year" : "2"
+}</span>
+</pre>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code class="fragment">SELECT *
+FROM students
+WHERE group = "ПИ-301"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find({
+    group: 'ПИ-301'
+})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>SELECT github
+FROM students
+WHERE group = "ПИ-301"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find({
+    group: 'ПИ-301'
+}, {github: 1})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных – операторы</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>SELECT *
+FROM students
+WHERE course < 3
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find({
+    course: { $lt : 3 }
+})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Операторы</h2>
+            <table>
+                <tr>
+                    <td>$ne</td><td>не равно</td>
+                </tr><tr>
+                <td>$lt, $lte, $gt, $gte</td><td><, ≤, >, ≥</td>
+            </tr>
+                <tr>
+                    <td>$exists</td><td>существование поля</td>
+                </tr>
+                <tr>
+                    <td>$all</td><td>соответствие всем элементам массива</td>
+                </tr>
+                <tr>
+                    <td>$in</td><td>соответствие хотя бы одному элементу массива</td>
+                </tr>
+                <tr>
+                    <td>$nin</td><td>соответствие ни одному элементу массива</td>
+                </tr>
+                <tr>
+                    <td>$or</td><td>или</td>
+                </tr>
+                <tr>
+                    <td>$nor</td><td>не или</td>
+                </tr>
+            </table>
+            <div><a href="https://docs.mongodb.org/manual/reference/operator/query/">Документация по операторам</a></div>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных – регулярные выражения</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>SELECT *
+FROM students
+WHERE group like "%КН%"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find({
+    group: /КН/
+})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Выборка данных – булевы операции</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>SELECT *
+FROM students
+WHERE course = "2"
+OR group = "ПИ-401"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.find({
+    $or: [
+        { course: '2' },
+        { group: 'ПИ-301' }
+    ]
+})</code>
+</pre></div>
+        </section>
+
+        <section data-transition="none">
+            <h2>Поиск по вложенным документам</h2>
+            <pre class="javascript size-xl">
+<code>
+{
+    name: 'Дарья',
+    course : 4,
+    group : 'ПИ-401',
+    grades: {
+        javascript: [1,0.5,1,1,1,0.5,1,1,0.5,1],
+        verstka: [1,1,1,1,1,0.5,1,0.5,0.5,0.5]
+    }
+}
+</code>
+<code class="fragment">db.students.find({
+    "grades.javascript.9": 1
+})</code>
+</pre>
+        </section>
+        <section data-transition="none">
+            <h2>Обновление</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>UPDATE students
+SET course = "3"
+WHERE group like "%30%"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.update({
+    group: /3\d{2}/
+}, {
+    $set: {
+        course: "3"
+    }
+}, {
+    multi: true
+})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Обновление – инкремент</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>UPDATE students
+SET course = course + 1
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.update({
+}, {
+    $inc: {
+        course: 1
+    }
+}, {
+    multi: true
+})</code>
+</pre></div>
+        </section>
+        <section data-transition="none">
+            <h2>Удаление</h2>
+            <div style="display: flex; flex-direction: row">
+            <pre class="sql size-l">
+<code>DELETE from students
+WHERE course = "1"
+</code>
+</pre>
+<pre class="javascript size-l">
+<code class="fragment">db.students.remove({
+    course: 1
+})</code>
+</pre></div>
+        </section>
+
+
+        <section data-transition="none">
+            <h2>SQL to MongoDB</h2>
+            <div><a href="https://docs.mongodb.org/manual/reference/sql-comparison/">SQL to MongoDB Mapping Chart</a></div>
+        </section>
+
+
+
+        <section data-transition="none">
+            <h1>Индексы</h1>
+        </section>
+        <section>
+            <h2>Индексы - база телефонов</h2>
+            <pre class="javascript size-l">
+<code>
+db.phones.find({display: “+1 800-5650001”}).explain()</code>
+<span class="fragment">
+{
+    "cursor" : "BasicCursor",
+    "isMultiKey" : false,
+    "n" : 0,
+    "nscannedObjects" : 41974,
+    <mark class="fragment">"nscanned" : 41974,</mark>
+    "nscannedObjectsAllPlans" : 41974,
+    "nscannedAllPlans" : 41974,
+    "scanAndOrder" : false,
+    "indexOnly" : false,
+    "nYields" : 327,
+    "nChunkSkips" : 0,
+    <mark class="fragment">"millis" : 30,</mark>
+    "server" : "130.193.40.246-vpna.dhcp.yndx.net:27017",
+    "filterSet" : false
+}
+</span></pre>
+        </section>
+        <section>
+            <h2>Индексы - база телефонов</h2>
+            <pre class="javascript size-l">
+<code>
+> db.phones.createIndex(
+    { display : 1 },
+    { unique : true }
+)
+</code></pre>
+        </section>
+        <section>
+            <h2>Индексы - база телефонов</h2>
+            <pre class="javascript size-l">
+<code>
+> db.phones.find({display: “+1 800-5650001”}).explain()</code>
+</pre>
+<pre class="javascript size-s">
+<span class="fragment">
+{
+	"cursor" : "BtreeCursor display_1",
+	"isMultiKey" : false,
+	"n" : 0,
+	"nscannedObjects" : 0,
+	<mark class="fragment">"nscanned" : 0,</mark>
+	"nscannedObjectsAllPlans" : 0,
+	"nscannedAllPlans" : 0,
+	"scanAndOrder" : false,
+	"indexOnly" : false,
+	"nYields" : 0,
+	"nChunkSkips" : 0,
+	<mark class="fragment">"millis" : 7,</mark>
+	"indexBounds" : {
+		"display" : [
+			[
+				"+1 800-5650001",
+				"+1 800-5650001"
+			]
+		]
+	},
+	"server" : "130.193.40.246-vpna.dhcp.yndx.net:27017",
+	"filterSet" : false
+}
+</span></pre>
+        </section>
+        <section>
+            <h1>Индексы дорогая операция!</h1>
+            <ul class="fragment">
+                <li><a href="http://jasonwilder.com/blog/2012/02/08/optimizing-mongodb-indexes/">Optimizing MongoDB Indexes</a></li>
+                <li><a href="http://www.jakowicz.com/mongodb-part-3-indexes/">Simon Jakowicz. MongoDB. Part 3.</a></li>
+                <li><a href="https://docs.mongodb.org/manual/applications/indexes/">MongoDB Manual. Indexing strategies.</a></li>
+            </ul>
+        </section>
+
+        <section data-transition="none">
+            <h1>Репликация и шардирование</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Репликация</h2>
+            <img style="background: #fff" src="img/replica_1.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>Репликация</h2>
+            <img style="background: #fff" src="img/replica_2.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>Шардирование</h2>
+            <img style="background: #fff" src="img/shard_1.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>Range Based шардирование</h2>
+            <img style="background: #fff" src="img/shard_2.png"/>
+        </section>
+        <section data-transition="none">
+            <h2>Hash Based шардирование</h2>
+            <img style="background: #fff" src="img/shard_3.png"/>
+        </section>
+
+        <section data-transition="none">
+            <h2>Range Based vs Hash Based</h2>
+            <ul>
+                <li>Range Based проще настроить, но возможно неравномерное распределение данных</li>
+                <li>Hash Based «соседние данные скорее всего будут в разных шардах», зато распределение максимально равномерно</li>
+            </ul>
+        </section>
+
+
+        <section data-transition="none">
+            <h1>JOIN</h1>
+        </section>
+        <section data-transition="none">
+            <h1 style="text-decoration: line-through">JOIN</h1>
+            <h1 class="fragment">Нормализация и денормализация</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Транзакции и конкурентность</h2>
+            <div class="fragment"><a href="https://habrahabr.ru/post/153321/">Транзакции в MongoDB</a></div>
+            <div class="fragment"><a href="https://docs.mongodb.org/manual/tutorial/perform-two-phase-commits/">Perform Two Phase Commits</a></div>
+        </section>
+
+        <section data-transition="none">
+            <h1>MongoDriver</h1>
+        </section>
+        <section data-transition="none">
+            <h2>MongoDriver</h2>
+            <ul>
+                <li>MongoDB Native <a href="https://github.com/mongodb/node-mongodb-native">https://github.com/mongodb/node-mongodb-native</a></li>
+                <li>Mongoose <a href="https://www.npmjs.com/package/mongoose">https://www.npmjs.com/package/mongoose</a></li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h1>Для чего нужно и не нужно использовать?</h1>
+        </section>
+        <section data-transition="none">
+            <h2>Сильные стороны MongoDB</h2>
+            <ul>
+                <li>Большие объемы данных</li>
+                <li class="fragment">Гибкая модель данных (schemeless)</li>
+                <li class="fragment">Простота</li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h2>Слабые стороны MongoDB</h2>
+            <ul>
+                <li>Нормализация</li>
+            </ul>
+        </section>
+        <section data-transition="none">
+            <h2>Так для чего нужно?</h2>
+            <ul>
+                <li>Быстрые прототипы</li>
+                <li class="fragment">Блоги</li>
+                <li class="fragment">Эксперименты</li>
+                <li class="fragment">Ваш проект на хакатоне</li>
+            </ul>
+        </section>
+
+
+
+
+
+
+
+        <section>
+            <h1>ДЗ</h1>
+            <div><a href="https://github.com/urfu-2015/webdev-tasks-2">webdev-tasks-2</a></div>
+            <p style="text-align: center" class="fragment deadline">Спасибо</p>
+        </section>
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script src="https://yastatic.net/jquery/2.2.0/jquery.min.js"></script>
+
+<script>
+    $('.links a').on('mouseover', function () {
+        var text = $(this).data('content');
+        $('.output-links').text(text);
+
+    });
+    $('.links a').on('blur', function () {
+        $('.output-links').text('');
+
+    });
+
+    function buildGitBranchingUrl(slide) {
+        var base = 'http://pcottle.github.io/learnGitBranching/?NODEMO&command=';
+//        var base = 'http://localhost:8099/?NODEMO&command=';
+        var commands = [
+            'importTreeNow ' + JSON.stringify(slide.tree),
+            'clear'
+        ].concat(slide.commands);
+        return base + commands.map(encodeURIComponent).join(';');
+    }
+    $('script[type="x-gitbranching"]').each(function () {
+        var params = JSON.parse(this.textContent);
+        var url = buildGitBranchingUrl(params);
+        $('<iframe>')
+                .attr({
+                    'data-src': url,
+                    width: 1000,
+                    height: 700,
+                    frameborder: 0,
+                    marginwidth: 0,
+                    marginheight: 0,
+                    scrolling: 'no',
+                    style: 'border:3px solid #666; margin-bottom:5px; max-width: 100%;',
+                    allowfullscreen: ''
+                })
+                .insertAfter($(this));
+    });
+
+    Reveal.addEventListener( 'fragmentshown', function( event ) {
+        if (Reveal.isFirstSlide()) {
+            var root = $(event.fragment);
+            console.log(root);
+            setTimeout(function () {
+                $(root).find('h1').addClass('bounceInDown');
+                $(root).find( 'h4').addClass('bounceInRight');
+                $(root).find('small').eq(0).addClass('bounceInLeft');
+                $(root).find('small').eq(1).addClass('bounceInUp');
+            }, 0);
+        }
+    } );
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        history: true,
+        center: false,
+
+        transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+        // Optional reveal.js plugins
+        dependencies: [
+            {
+                src: '../lib/js/classList.js', condition: function () {
+                return !document.body.classList;
+            }
+            },
+            {
+                src: '../plugin/markdown/marked.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: '../plugin/markdown/markdown.js', condition: function () {
+                return !!document.querySelector('[data-markdown]');
+            }
+            },
+            {
+                src: '../plugin/highlight/highlight.js', async: true, condition: function () {
+                return !!document.querySelector('pre code');
+            }, callback: function () {
+                hljs.initHighlightingOnLoad();
+            }
+            },
+            { src: '../plugin/zoom-js/zoom.js', async: true },
+            { src: '../plugin/notes/notes.js', async: true }
+        ]
+    });
+    Reveal.configure({ slideNumber: true });
+
+</script>
+
+</body>
+</html>
