@@ -1,0 +1,140 @@
+.reveal pre code
+{
+    max-height: 650px;
+}
+
+.reveal pre
+{
+    box-shadow: none;
+    font-family: 'sourcecodepro-light', textbook-light, Arial;
+}
+
+.reveal pre.code
+{
+    display: block;
+    padding: 5px;
+    overflow: auto;
+    word-wrap: normal;
+    color: #dcdcdc;
+    background: rgba(63, 63, 63, 0.6);
+}
+
+.green
+{
+    color: green;
+}
+
+.toggle-near-container img
+{
+    display: inline-block;
+}
+
+section.size-L,
+section .size-L,
+pre.size-L
+{
+    font-size: 60px;
+    line-height: 90px;
+}
+
+section.size-M,
+section .size-M,
+pre.size-M,
+.yandex section
+{
+    font-size: 50px;
+    line-height: 75px;
+}
+
+section.size-S,
+section .size-S,
+pre.size-S
+{
+    font-size: 40px;
+    line-height: 60px;
+}
+
+section.size-XS,
+section .size-XS,
+pre.size-XS
+{
+    font-size: 30px;
+    line-height: 45px;
+}
+
+section.size-XXS,
+section .size-XXS,
+pre.size-XXS
+{
+    font-size: 20px;
+    line-height: 30px;
+}
+
+.reveal pre
+{
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+.reveal p.fact
+{
+    background-color: #2a2a2a;
+    text-align: left;
+    padding: 10px;
+}
+
+.magenta
+{
+    color: #a0a0f0 !important;
+}
+
+mark, mark *
+{
+    color: black !important;
+}
+
+.reveal code
+{
+    font-family: monospace, textbook, Arial;
+}
+
+.author small::first-letter
+{
+    color: red;
+}
+
+.shadow
+{
+   color: #808080 !important;
+}
+
+.reveal pre code {
+    font-family: 'sourcecodepro-light', textbook-light, Arial;
+    background: rgba(63, 63, 63, 0.6);
+    padding: 10px;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.grey {
+    color: #777;
+}
+
+.textbook {
+    font-family: 'textbook-light';
+}
+
+.reveal .slide-number {
+    font-size: 1em;
+}
+
+pre.join-bottom code{
+    padding-bottom: 0 !important;
+}
+pre.join-bottom ~ pre:not(:last-child) code {
+    padding-top: 0 !important;;
+    padding-bottom: 0 !important;;
+}

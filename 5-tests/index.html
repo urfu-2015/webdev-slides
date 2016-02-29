@@ -1,0 +1,1359 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Tests. Part I</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs"><div class="reveal"><div class="slides">
+
+<section class="large">
+    <h3>Тесты<br/ ><small>Эпизод 1 — Скрытая угроза</small></h3>
+    <p class="author">
+        <small>Кувалдин Артем, </small>
+        <small>Жигалов Сергей</small>
+    </p>
+</section>
+
+<!-- Мотивация -->
+
+<section>
+    <h3>Зачем нужны тесты?</h3>
+</section>
+
+<section>
+    <section>
+        <h3>Проработать исключительные сценарии</h3>
+    </section>
+
+    <section>
+        <h4>Сервис «Заметки»</h4>
+        <p class="grey">Храним заметки пользователя в виде файлов</p>
+        <pre>
+    <span class="green"> GET</span> /                   <span class="grey textbook">главная</span>
+        </pre>
+        <pre>
+    <span class="green"> GET</span> /notes              <span class="grey textbook">список заметок</span>
+        </pre>
+        <pre>
+    <span class="green">POST</span> /notes              <span class="grey textbook">добавление заметки</span>
+        </pre>
+        <pre>
+    <span class="green"> GET</span> /notes/todo-list    <span class="grey textbook">просмотр заметки</span>
+        </pre>
+    </section>
+
+    <section>
+        <pre>
+    <span class="green">POST</span> /notes          <span class="grey textbook">добавление заметки</span>
+        </pre>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+{
+    createdAt: 1456983804639,
+    content: 'TODO list:
+        1. Проверить домашние задания
+        2. Рассказать лекцию про тесты
+        3. Не забыть выложить слайды'
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h4>Сервис «Заметки»</h4>
+        <p class="grey">Храним заметки пользователя в виде файлов</p>
+        <pre>
+    <span class="green"> GET</span> /                   <span class="grey textbook">главная</span>
+        </pre>
+        <pre>
+    <span class="green"> GET</span> /notes              <span class="grey textbook">список заметок</span>
+        </pre>
+        <pre>
+    <span class="green">POST</span> /notes              <span class="grey textbook">добавление заметки</span>
+        </pre>
+        <pre>
+    <span class="green"> GET</span> /notes/<mark>todo-list</mark>    <span class="grey textbook">просмотр заметки</span>
+        </pre>
+    </section>
+
+    <section>
+        <h3>Задача</h3>
+
+        <blockquote>
+            «На основании первой строки заметки сгенерировать человеко-понятный урл»
+        </blockquote>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+'TODO list:\n1. Проверить...' // 'todo-list'
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/\s/g, '-');
+}
+
+module.exports = generateNoteId;
+        </code></pre>
+    </section>
+
+    <section>
+<pre>
+    app/
+    <span class="grey">└──</span> src
+    <span class="grey"> </span>   <span class="grey">└──</span> generateNoteId.js</span>
+    <span class="grey"> </span>   <span class="grey">└──</span> ...</span>
+    <span class="grey">└──</span> test
+        <span class="grey">└──</span> generateNoteId-test.js</span>
+        <span class="grey">└──</span> ...</span>
+</pre>
+<br />
+        <pre><code class="hljs javascript size-XS" data-trim>
+// generateNoteId-test.js
+
+var generateNoteId = require('../src/generateNoteId');
+var assert = require('assert');
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS">describe('Note id generator', function () {</code></pre>
+
+        <pre><code class="hljs javascript size-XS fragment">    it('should cut first line', function () {
+        var actual = generateNoteId('first\nsecond');
+        assert.equal(actual, 'first');
+    });</code></pre>
+
+        <pre><code class="hljs javascript size-XS fragment">    it('should cast to lower case', function () {
+        var actual = generateNoteId('ToDo');
+        assert.equal(actual, 'todo');
+    });</code></pre>
+
+        <pre><code class="hljs javascript size-XS fragment">    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('todo list');
+        assert.equal(actual, 'todo-list');
+    });
+});</code></pre>
+    </section>
+
+    <section>
+        <h3>А что если</h3>
+        <p>... передать не строку?</p>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/\s/g, '-');
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>А что если</h3>
+        <p>... передать не строку?</p>
+        <p class="fragment">... служебные символы?</p>
+        <p class="fragment">... лишние пробелы?</p>
+        <p class="fragment">... </p>
+    </section>
+
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+
+    return str
+        .split('\n').shift()
+        .replace(/[^a-z0-9\s]/g, '')
+        .toLowerCase()
+        .trim()
+        .replace(/\s+/g, '-');
+}
+</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Правильно организовать код</h3>
+    </section>
+
+    <section>
+        <h3>Код пишем так, чтобы</h3>
+
+        <ul>
+            <li>... удобно передавать параметры</li>
+            <li>... не было дублирования</li>
+        </ul>
+
+        <p class="fragment">
+            ⬇ <br>
+            Модули могут решать несколько задач
+        </p>
+
+        <p class="fragment">
+            ⬇ <br>
+            Сложнее в поддержке
+        </p>
+    </section>
+
+    <section>
+        <h3>Тестируемый код</h3>
+
+        <ul>
+            <li>Изолированные модули</li>
+            <li>Атомарные функции</li>
+        </ul>
+
+        <p class="fragment">
+            ⬇ <br>
+            Легче менять реализацию
+        </p>
+
+        <p class="fragment">
+            ⬇ <br>
+            Легче в поддержке
+        </p>
+    </section>
+
+    <section>
+        <h3>Тестируемый код</h3>
+        <h3>≠</h3>
+        <h3>Код для тестов</h3>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str === 'string') {
+        str = str.split('\n').shift().toLowerCase();
+        return replaceSpaces(str);
+    }
+}</code></pre>
+<pre><code class="hljs javascript size-XS fragment" data-trim>
+function replaceSpaces(str)
+    return str
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+<pre><code class="hljs javascript size-XS fragment" data-trim>
+    module.exports = generateNoteId;</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Изменение кода</h2>
+    </section>
+
+    <section>
+        <h2>Рефакторинг</h2>
+
+        <blockquote>
+             «это процесс улучшения написанного ранее кода путем такого изменения
+             его внутренней структуры, которое не влияет на внешнее поведение»
+        </blockquote>
+    </section>
+
+    <section>
+        <p class="fact">
+            При рефакторинге сохраняется функциональность
+        </p>
+
+        <p class="fragment fact">
+            Тесты проверяют функциональность
+        </p>
+
+        <div class="fragment">
+            ⬇ <br>
+            <p class="fact">
+                Тесты <span class="magenta">помогают рефакторить</span>
+            </p>
+        </div>
+    </section>
+
+    <section>
+        <ul>
+            <li>Версии не всегда обновляются правильно</li>
+            <li class="fragment">Обновление мажорных версий</li>
+        </ul>
+
+        <div class="fragment">
+            ⬇ <br>
+            <p class="fact">
+                Тесты помогают <span class="magenta">обновлять зависимости</span>
+            </p>
+        </div>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Тестовый отчет</h2>
+    </section>
+
+    <section>
+        <pre class="size-XS code">
+  Note id generator
+    <span style="color:green">✓</span> should cut first line
+    <span style="color:green">✓</span> should cast to lower case
+    <span style="color:green">✓</span> should replace spaces to `-`
+    <span style="color:green">✓</span> should return `undefined` when input data ...
+    <span style="color:green">✓</span> should exclude unknown symbols
+    <span style="color:green">✓</span> should exclude extra spaces
+    <span style="color:green">✓</span> should trim string
+    <span style="color:cyan">- should translit</span>
+
+  <span style="color:green">7 passing</span> (17ms)
+  <span style="color:cyan">1 pending</span></pre>
+    </section>
+
+    <section>
+        <ul>
+            <li>«живая» документация</li>
+            <li class="fragment">пример запуска кода</li>
+            <li class="fragment">todo-list</li>
+        </ul>
+    </section>
+</section>
+
+<!-- Как писать тесты -->
+
+<section>
+    <section>
+        <h2>TDD</h2>
+
+        <blockquote class="fragment">
+            «разработка через тестирование»
+        </blockquote>
+    </section>
+
+    <section>
+        <h3>Цикл разработки</h3>
+
+        <ol>
+            <li class="fragment">Тест на желаемое поведение</li>
+            <li class="fragment">Новые тесты не проходят</li>
+            <li class="fragment">Код который чинит тест</li>
+            <li class="fragment">Все тесты проходят</li>
+            <li class="fragment">Рефакторинг</li>
+            <li class="fragment">GOTO 1</li>
+        </ol>
+    </section>
+
+    <section>
+        <h3>Кент Бек</h3>
+
+        <blockquote>
+            «разработка через тестирование поощряет простой дизайн и внушает уверенность»
+        </blockquote>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Тестовые кейсы</h3>
+    </section>
+
+    <section>
+        <ul>
+            <li>+1 тест на каждое действие</li>
+            <li class="fragment">+1 тест на исключение</li>
+            <li class="fragment">+1 тест на ветвление</li>
+        </ul>
+
+        <p class="fragment fact">
+            Тест должен содержать одну логическую проверку которая не повторяется в других тестах*
+        </p>
+
+        <small class="fragment">[*] в идеале ;)</small>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS">
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim data-noescape>
+function generateNoteId(str) {
+    if (<mark>typeof str !== 'string'</mark>) {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS">
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS" data-noescape>
+    return str
+        <mark>.split('\n').shift()</mark>
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS" data-noescape>
+    return str
+        .split('\n').shift()
+        <mark>.toLowerCase()</mark>
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS" data-noescape>
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        <mark>.replace(/[^a-z0-9\s]/g, '')</mark>
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS" data-noescape>
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        <mark>.trim()</mark>
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section data-transition="none">
+        <pre><code class="hljs javascript size-XS" data-trim>
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+<pre><code class="hljs javascript size-XS" data-noescape>
+    return str
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        <mark>.replace(/\s+/g, '-')</mark>;
+}</code></pre>
+    </section>
+
+    <section>
+             <pre class="size-XS code">
+ Note id generator
+   <span style="color:green">✓</span> should cut first line
+   <span style="color:green">✓</span> should cast to lower case
+   <span style="color:green">✓</span> should replace spaces to `-`
+   <span style="color:green">✓</span> should return `undefined` when input data ...
+   <span style="color:green">✓</span> should exclude unknown symbols
+   <span style="color:green">✓</span> should exclude extra spaces
+   <span style="color:green">✓</span> should trim string
+
+   <span style="color:green">7 passing</span> (17ms)</pre>
+         </section>
+</section>
+
+<section>
+    <section>
+        <h3>Организация тестов</h3>
+    </section>
+
+    <section>
+        <h2>три части</h2>
+
+        <ol class="size-M">
+            <li class="fragment">[Подготовка]</li>
+            <li class="fragment">Действие</li>
+            <li class="fragment">Проверка</li>
+        </ol>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+it('should cast to lower case', function () {
+    // действие
+    var actual = generateNoteId('HellO');
+        </code></pre>
+
+        <pre><code class="hljs javascript size-XS fragment">    // проверка
+    actual.should.be.equal('hello');
+});</code></pre>
+    </section>
+</section>
+
+<!-- Инструменты -->
+
+<section>
+    <h2>Инструменты</h2>
+</section>
+
+<section>
+    <section>
+        <h2><a href="https://mochajs.org/">Mocha</a></h2>
+        <blockquote>
+            «это фреймворк для тестирования JavaScript приложений»
+        </blockquote>
+    </section>
+
+    <section>
+        <h2>mocha</h2>
+<pre class="bash size-S"><code>$ npm install mocha --save-dev</code></pre>
+<pre class="bash size-S fragment join-top"><code>$ mocha generateNoteId-test.js</code></pre>
+<br />
+<pre class="size-S fragment code">Note id generator
+  <span class="green">✓</span> should cast to lower case
+  <span class="green">✓</span> should replace spaces to `-`
+
+<span class="green">2 passing</span> (8ms)</pre>
+    </section>
+
+    <section>
+        <h2>package.json</h2>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+{
+    "scripts": {
+        "test": "mocha test"
+    }
+}
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs size-XS" data-trim>$ npm test</code></pre>
+    </section>
+
+    <section>
+        <h2>Cпецификация</h2>
+<pre class="javascript " data-fragment-index="1"><code>describe('Note id generator', function() {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>    it('should cast to lower case', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="3"><code>        var actual = generateNoteId('HellO');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>        assert.equal(actual, 'hello');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>    });</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code> </code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>    it('should replace spaces to `-`', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="6"><code>        var actual = generateNoteId('mu ha ha');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="7"><code>        assert.equal(actual, 'mu-ha-ha');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>    });</code></pre>
+<pre class="javascript join-top" data-fragment-index="1"><code>});</code></pre>
+    </section>
+
+    <section data-background='./img/we-need-to-go-deeper.jpg'>
+    </section>
+
+    <section>
+        <p>
+            describe > describe > ...
+        </p>
+        <pre><code class="hljs javascript size-XS" data-noescape data-trim>
+describe('Note id generator', function () {
+    describe('spaces', function () {
+        it('should replace to `-`', function () {
+            var actual = generateNoteId('mu ha ha');
+            assert.equal(actual, 'mu-ha-ha');
+        });
+
+        it('should exclude extra spaces', function () {
+            var actual = generateNoteId('  hel  lo ');
+            actual.should.be.equal('hel-lo');
+        });
+    });
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="size-S code">Note id generator
+  spaces
+    <span class="green">✓</span> should replace to `-`
+    <span class="green">✓</span> should exclude extra spaces
+
+  <span class="green">2 passing</span> (8ms)</pre>
+    </section>
+
+    <section>
+        <p>
+            Что тестируем?
+        </p>
+        <pre><code class="hljs javascript size-XS" data-noescape data-trim>
+describe(<mark>'Note id generator'</mark>, function () {</code></pre>
+
+        <pre><code class="hljs javascript size-XS">    it('should cast to lower case', function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });</code></pre>
+
+        <pre><code class="hljs javascript size-XS">
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+
+    <section>
+        <p>
+            Что должно произойти?
+        </p>
+        <pre><code class="hljs javascript size-XS"data-trim>
+describe('Note id generator', function () {</code></pre>
+
+        <pre><code class="hljs javascript size-XS" data-noescape >    it(<mark>'should cast to lower case'</mark>, function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });</code></pre>
+
+        <pre><code class="hljs javascript size-XS">
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Hooks</h2>
+    </section>
+
+    <section>
+<pre><code>describe('My favorite module', function() {</code></pre>
+<pre class="javascript fragment join-top"><code>    before(function() {
+        // runs before all tests in this block
+    });</code></pre>
+<pre class="javascript fragment join-top"><code>    after(function() {
+        // runs after all tests in this block
+    });</code></pre>
+<pre class="javascript fragment join-top"><code>    beforeEach(function() {
+        // runs before each test in this block
+    });</code></pre>
+<pre class="javascript fragment join-top"><code>    afterEach(function() {
+        // runs after each test in this block
+    });</code></pre>
+<pre class="javascript join-top"><code>    // ...
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript"><code class="size-S">function createNote(createdAt, content){
+   return MongoClient
+      .connect(url)
+      .then(function (db) {
+         return db.collection('notes')
+           .insert({
+               createdAt,
+               content
+           });
+      });
+};</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-S"><code>before(function (done) {
+    MongoClient.connect(url)
+        .then(function (db) {
+            connect = db;
+        })
+        .then(done, done);
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-S join-top"><code>beforeEach(function (done) {
+    connect
+        .collection('notes')
+        .remove({}, () => done);
+});</code></pre>
+    </section>
+    <section>
+<pre class="javascript size-S join-top"><code>after(function (done) {
+    return connect.close();
+});</code></pre>
+    </section>
+    <section>
+<pre class="javascript size-XS"><code>it('should create note', function (done) {
+   createNote(123, 'myNote')
+      .then(function () {
+         return connect.collection('notes')
+            .find({}).toArray();
+      })
+      .then(function (actual) {
+         assert.equal(actual.length, 1);
+         assert.equal(actual[0].createdAt, 123);
+         assert.equal(actual[0].content, 'myNote');
+      })
+      .then(done, done);
+});</code></pre>
+    </section>
+</section>
+
+<section>
+       <section>
+           <h2><a href="https://nodejs.org/api/assert.html">assert</a></h2>
+       </section>
+
+       <section>
+           <h3>assert.ok</h3>
+           <code class="fragment">? == true</code>
+<pre><code class="hljs javascript size-S fragment" data-trim>
+// Success
+assert(true);
+assert.ok(true);
+assert.ok('mu-ha-ha');
+assert.ok({});
+</code></pre>
+       </section>
+
+       <section>
+           <h3>assert.ok</h3>
+           <code>? == true</code>
+<pre><code class="hljs javascript size-S fragment" data-trim>
+// Throw error
+assert(false);
+assert.ok(false);
+assert.ok('');
+assert.ok(0);
+assert.ok(null);
+</code></pre>
+       </section>
+
+       <section>
+           <h3>assert.equal</h3>
+           <code class="fragment">? == ?</code>
+<pre><code class="hljs javascript size-S fragment" data-trim>
+// Success
+assert.equal(true, true);
+assert.equal('xo', 'x' + 'o');
+assert.equal('1', 1);
+
+// Throw error
+assert.equal({a: 1}, {a: 1});
+</code></pre>
+       </section>
+
+      <section>
+          <h3>assert.strictEqual</h3>
+          <code class="fragment">? === ?</code>
+<pre><code class="hljs javascript size-S fragment" data-trim>
+// Success
+assert.strictEqual(true, true);
+assert.strictEqual('xo', 'x' + 'o');
+
+// Throw error
+assert.strictEqual('1', 1);
+assert.strictEqual({a: 1}, {a: 1});
+</code></pre>
+      </section>
+
+      <section>
+          <h3>assert.deepEqual</h3>
+<pre><code class="hljs javascript size-S fragment" data-trim>
+// Success
+assert.deepEqual(true, true);
+assert.deepEqual('xo', 'x' + 'o');
+assert.deepEqual('1', 1);
+assert.deepEqual({a: 1}, {a: 1});
+</code></pre>
+      </section>
+
+       <section>
+           <blockquote>
+               «Проверить что переменная notes является массивом»
+           </blockquote>
+
+           <pre><code class="hljs javascript size-S fragment" data-trim>
+notes instanceof Array // true
+           </code></pre>
+       </section>
+
+       <section>
+           <pre><code class="hljs javascript size-S" data-trim>
+var notes = '';
+assert.ok(notes instanceof Array);
+           </code></pre>
+           <br>
+           <pre class="size-S fragment code">1) Assert is array:
+
+ <span style="color:red">AssertionError: false == true</span>
+ <span style="color:green">+ expected</span><span style="color:red"> - actual</span>
+
+ <span style="color:red">-false</span>
+ <span style="color:green">+true</span></pre>
+       </section>
+
+       <section>
+           <pre><code class="hljs javascript size-S" data-trim>
+var notes = '';
+assert.ok(notes instanceof Array,
+        'notes is not array');
+           </code></pre>
+           <br>
+           <pre class="size-S fragment code">1) Assert is array:
+
+ <span style="color:red">AssertionError: notes is not array</span>
+ <span style="color:green">+ expected</span><span style="color:red"> - actual</span>
+
+ <span style="color:red">-false</span>
+ <span style="color:green">+true</span></pre>
+       </section>
+
+       <section>
+           <h2><a href="http://chaijs.com/api/">chai</a></h2>
+
+           <pre class="fragment"><code class="size-M">$ npm install chai --save-dev</code></pre>
+       </section>
+
+       <section>
+           <pre><code class="hljs javascript size-S" data-trim>
+require('chai').should();
+           </code></pre>
+
+           <pre><code class="hljs javascript size-S fragment">
+var notes = '';
+notes.should.be.an.instanceof(Array);</code></pre>
+           <br>
+           <pre class="size-S fragment code">1) Assert is array:
+
+ <span style="color:red">AssertionError: expected '' to be an
+                 instance of Array</span></pre>
+       </section>
+   </section>
+
+<section>
+    <section>
+        <h2>Отладка тестов</h2>
+    </section>
+
+    <section>
+        <h2>Только один тест</h2>
+<pre class="javascript"><code data-noescape>describe('Note id generator', function () {
+    it<mark>.only</mark>('should cast to lower case', function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });
+
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+
+    <section>
+        <h2>Только группу тестов</h2>
+<pre class="javascript"><code data-noescape>describe<mark>.only</mark>('Note id generator', function () {
+    it('should cast to lower case', function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });
+
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+
+    <section>
+        <h2>Пропустить тест</h2>
+<pre class="javascript"><code data-noescape>describe('Note id generator', function () {
+    it<mark>.skip</mark>('should cast to lower case', function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });
+
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+
+    <section>
+        <h3>Пропустить группу тестов</h3>
+<pre class="javascript"><code data-noescape>describe<mark>.skip</mark>('Note id generator', function () {
+    it('should cast to lower case', function () {
+        var actual = generateNoteId('HellO');
+        assert.equal(actual, 'hello');
+    });
+
+    it('should replace spaces to `-`', function () {
+        var actual = generateNoteId('mu ha ha');
+        assert.equal(actual, 'mu-ha-ha');
+    });
+});</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2>Запуск тестов на WebStorm</h2>
+    </section>
+
+    <section data-background-video='video/configurate_webstorm.webm'>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2><a href="https://mochajs.org/#reporters">Отчеты</a></h2>
+    </section>
+
+    <section>
+<pre class="bash size-S"><code>$ mocha test -r spec</code></pre>
+        <div class="toggle-zoom-container fragment">
+             <img src="./img/spec.png" width="600">
+        </div>
+    </section>
+
+    <section>
+<pre class="bash size-S"><code>$ mocha test -r dot</code></pre>
+        <div class="toggle-zoom-container fragment">
+             <img src="./img/dot.png" width="600">
+        </div>
+    </section>
+
+    <section>
+<pre class="bash size-S"><code>$ mocha test -r min</code></pre>
+        <div class="toggle-zoom-container fragment">
+             <img src="./img/min.png" width="600">
+        </div>
+    </section>
+
+    <section>
+<pre class="bash size-S"><code>$ mocha test -r nyan</code></pre>
+        <div class="toggle-zoom-container fragment">
+             <img src="./img/nyan.png" width="600">
+        </div>
+    </section>
+</section>
+
+
+
+<section>
+    <section>
+        <h2>Подмена</h2>
+    </section>
+
+    <section>
+        <h3>Задача</h3>
+
+        <blockquote>
+            «На основании первой строки заметки сгенерировать
+            человеко-понятный урл латинскими символами»
+        </blockquote>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+var translit = require('translit');
+
+function generateNoteId(str) {
+    if (typeof str !== 'string') {
+        return;
+    }
+        </code></pre>
+
+        <pre><code class="hljs javascript size-XS">    return translit(str)
+        .split('\n').shift()
+        .toLowerCase()
+        .replace(/[^a-z0-9\s]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+}</code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+it('should translit russian characters', function () {
+    var actual = generateNoteId('привет');
+
+    actual.should.be.equal('privet');
+});
+        </code></pre>
+    </section>
+
+    <section>
+        <h2><a href="https://github.com/mfncooper/mockery">mockery</a></h2>
+        <pre><code class="hljs size-S fragment" data-trim>
+$ npm install mockery --save-dev
+        </code></pre>
+    </section>
+
+    <section>
+        <h2><a href="https://github.com/mfncooper/mockery">mockery</a></h2>
+        <pre><code class="hljs javascript size-S fragment" data-trim>
+var mockery = require('mockery');
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+it('should translit russian characters', function (){
+    function transliteMock (input) {
+        input.should.be.equal('Привет, мир!');
+        return 'Privet, mir!';
+    }</code></pre>
+<pre><code class="hljs javascript size-XS fragment">    mockery.registerMock('translit', transliteMock);</code></pre>
+<pre><code class="hljs javascript size-XS fragment">    mockery.enable();
+    generateNoteId = require('../src/generateNoteId');
+        </code></pre>
+
+    <pre><code class="hljs javascript size-XS fragment">    var actual = generateNoteId('Привет, мир!');
+
+    actual.should.be.equal('privet-mir');
+});</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h2><a href="http://sinonjs.org/docs/">sinon</a></h2>
+
+        <pre><code class="hljs size-M fragment">$ npm install sinon --save-dev</code></pre>
+    </section>
+
+    <section>
+        <h2>Stub</h2>
+    </section>
+
+    <section>
+<pre class="javascript"><code>it('should translit russian characters', function () {</code></pre>
+<pre class="javascript fragment"><code>    var stub = sinon.stub();</code></pre>
+<pre class="javascript fragment"><code>    stub.withArgs('Привет, мир!')
+        .onFirstCall().returns('Privet, mir!');</code></pre>
+<pre class="javascript fragment"><code>    stub.throws(Error('wrong translit argument'));</code></pre>
+<pre class="javascript fragment"><code>    mockery.registerMock('translit', stub);
+    mockery.enable();</code></pre>
+<pre class="javascript fragment"><code>    translit = require('../src/generateNoteId').translit;</code></pre>
+<pre class="javascript fragment"><code>
+    var actual = translit('привет');
+</code></pre>
+
+<pre class="javascript fragment"><code>    actual.should.be.equal('privet-mir');</code></pre>
+<pre class="javascript"><code>});</code></pre>
+    </section>
+
+    <section>
+        <h2>Spy</h2>
+    </section>
+
+    <section>
+        <h2>javascript-tasks-5</h2>
+        <blockquote>
+            «Студента можно подписать на событие, производимое преподавателем»
+        </blockquote>
+    </section>
+
+    <section>
+<pre class="javascript size-S"><code>var getEmitter = require('./emitter');
+var lecturer = getEmitter();
+
+// subscribe daria to event `slide`
+lecturer.on('slide', daria, function (){
+    console.log('Oho!');
+});
+
+// emit event `slide`
+lecturer.emit('slide'); // Oho!</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-XS"><code>var sinon = require('sinon');
+var emitter = require('../src/emitter')();
+
+it('should call handler when', function () {
+    var spy = sinon.spy();
+
+    emitter.on('slide', daria, spy);
+    emitter.emit('slide');
+
+    spy.calledOnce.should.be.true;
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-XS"><code>var sinon = require('sinon');
+var emitter = require('../src/emitter')();
+
+it('should call handler when', function () {
+    var spy = sinon.spy(function () {
+        console.log('Mu-ha-ha!');
+    });
+
+    emitter.on('slide', daria, spy);
+    emitter.emit('slide'); // 'Mu-ha-ha!'
+
+    spy.calledOnce.should.be.true;
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-XS"><code>it('should not call handler', function () {
+    var spy = sinon.spy();
+
+    emitter.on('slide', daria, spy);
+    emitter.emit('funny');
+
+    spy.called.should.be.false;
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-XS"><code>it('should call handler twice', function () {
+    var spy = sinon.spy();
+
+    emitter.on('slide', daria, spy);
+    emitter.emit('slide');
+    emitter.emit('slide');
+
+    spy.callCount.should.equal(2);
+});</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript size-XS"><code>it('should call handler with args', function () {
+    var spy = sinon.spy();
+
+    emitter.on('slide', daria, spy);
+    emitter.emit('slide', 'send data');
+
+    var firstCall = spy.getCall(0);
+    firstCall.args.length.should.equal(1);
+    firstCall.calledWith('send data').should.be.true;
+});</code></pre>
+</section>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Подмена сетевых запросов</h3>
+    </section>
+
+    <section>
+       <pre><code class="hljs javascript size-XS" data-trim>
+it('should translate', function () {
+   return generateNoteId('привет')
+       .then(function (actual) {
+           actual.should.be.equal('hi');
+       });
+});
+       </code></pre>
+   </section>
+
+   <section>
+       <h3><a href="https://github.com/pgte/nock">nock</a></h3>
+   </section>
+
+   <section>
+       <pre><code class="hljs javascript size-XS" data-trim>
+it('should translate', function () {
+   nock('https://translate.yandex.net')
+       .get('/api/v1.5/tr.json/translate')
+       .query(true)
+       .reply(200, {text: ['Hello, world!']});
+           </code></pre>
+
+           <pre><code class="hljs javascript size-XS">    return translate('привет')
+       .then(function (actual) {
+           actual.should.be.equal('hello-world');
+       });
+});</code></pre>
+       </section>
+</section>
+
+    <section>
+        <section>
+            <h2><a href="https://www.npmjs.com/package/supertest">Supertest</a></h2>
+        </section>
+
+        <section>
+            <h2><a target="_blank" href="http://urfu-2015.github.io/webdev-slides/4-expressjs/#/26">Задача</a></h2>
+            <blockquote>
+                Получить данные о заметке, прейдя по урлу '/notes/:name'.
+            </blockquote>
+        </section>
+
+        <section>
+<pre><code>//routes.js
+const pages = require('./controllers/pages');
+const notes = require('./controllers/notes');
+
+module.exports = function(app) {
+    app.post('/notes', notes.create);
+    app.get('/notes/:name', notes.item);
+    app.all('*', pages.error404)
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre class="javascript join-bottom"><code>const request = require('supertest');
+const app = require('../app');
+
+describe('Note page', function () {
+    it('should return note', function (done){
+        request(app)</code></pre>
+<pre class="javascript fragment" data-fragment-index="1"><code>            .get('/notes/films')</code></pre>
+<pre class="javascript fragment" data-fragment-index="2"><code>            .set('Cookie', 'top secret cookie')</code></pre>
+<pre class="javascript fragment" data-fragment-index="3"><code>            .expect('Content-Type', 'text/html')</code></pre>
+<pre class="javascript fragment" data-fragment-index="4"><code>            .expect(200, done)</code></pre>
+<pre class="javascript"><code>    }); </code></pre>
+        </section>
+
+        <section>
+<pre class="javascript"><code>    it('should respond 404', function (done){
+        request(app)
+            .get('/notes/wrongNote')
+            .expect(404, done)
+    }); </code></pre>
+        </section>
+
+        <section>
+<pre class="javascript join-bottom"><code>    it('should create note', function (done){
+        request(app)
+            .post('/notes')
+            .send({...})
+            .expect(200, done)</code></pre>
+<pre class="javascript fragment" data-fragment-index="5"><code>            .end(function (err, res) {</code></pre>
+<pre class="javascript fragment" data-fragment-index="6"><code>                var body = res.body;</code></pre>
+<pre class="javascript fragment" data-fragment-index="7"><code>                var expectedBody = {...};</code></pre>
+
+<pre class="javascript fragment" data-fragment-index="8"><code>                body.should.deep.equal(expectedBody)</code></pre>
+<pre class="javascript fragment" data-fragment-index="9"><code>                done(err);</code></pre>
+<pre class="javascript fragment" data-fragment-index="5"><code>            });</code></pre>
+<pre class="javascript join-bottom"><code>    });
+}); </code></pre>
+        </section>
+    </section>
+
+<section>
+    <section>
+        <h2>Code coverage</h2>
+    </section>
+
+    <section>
+        <blockquote >
+            «мера, которая показывает, на сколько исходный код в проекте был протестирован»
+        </blockquote>
+    </section>
+
+    <section>
+        <h2><a href="https://github.com/gotwarlost/istanbul">istanbul</a></h2>
+
+        <pre class="fragment"><code class="size-M">$ npm install -g istanbul</code></pre>
+        <pre class="fragment"><code class="size-M">$ istanbul cover _mocha</code></pre>
+        <pre class="fragment"><code class="size-S">$ open coverage/lcov-report/index.html</code></pre>
+    </section>
+
+
+</section>
+
+<!-- Заключение -->
+
+<section>
+    <h4>Домашнее задание</h4>
+    <a class="fragment" href="https://github.com/urfu-2015/webdev-tasks-3">github.com/urfu-2015/webdev-tasks-3</a>
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
