@@ -1,0 +1,1004 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Express.js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <img src="img/nodejs.png" width=300>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>).request</h4>
+    <pre><code>
+const http = require('http');
+
+const request = http.request({ // http.ClientRequest
+    hostname: 'localhost',
+    port: 8080
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>).request</h4>
+    <pre><code>
+request.on('response', response => {
+    let body = '';
+
+    response.on('data', chunk => {
+    	body += chunk;
+    });
+
+    response.on('end', () => {
+    	// Only now we can make awesome things
+    });
+});
+    </code></pre>
+    <pre class="fragment"><code>
+request.end();
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'request'</span>)</h4>
+    <pre class="fragment"><code>
+const request = require('request');
+
+request.get('http://localhost:8080/',
+    (err, res, body) => {
+        console.log(body)
+    }
+);
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'got'</span>)</h4>
+    <pre class="fragment"><code>
+const request = require('got');
+
+request
+    .get('http://localhost:8080/')
+    .then(res => {
+        console.log(res.body);
+    });
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>).Server</h4>
+    <pre class="fragment"><code>
+const http = require('http');
+const server = new http.Server();
+    </code></pre>
+    <pre class="fragment"><code>
+server.on('request', (req, res) => {
+    res.setHeader('content-type', 'text/html');
+
+    res.write('Hello, <b>User!</b>');
+
+    res.end();
+});
+    </code></pre>
+    <pre class="fragment"><code>
+server.listen(8080);
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>).Server</h4>
+    <pre><code>
+server.on('request', (req, res) => {
+    if (req.url === '/') {
+        res.setHeader('Content-Type', 'text/html');
+        res.write('Hello, <b>User!</b>');
+    } else {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/plain');
+        res.write('Not Found');
+    }
+
+    res.end();
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'http'</span>).Server</h4>
+    <pre>/name/Sergey</pre>
+    <pre class="fragment"><code>
+server.on('request', (req, res) => {
+    const matches = req.url.match(/^\/name\/([a-z]+)/);
+    const name = matches && matches[1];
+
+    if (name) {
+        res.setHeader('Content-Type', 'text/html');
+        res.write(`Hello, <b>${name}</b>`);
+    } else {
+        res.statusCode = 404;
+        res.setHeader('Content-Type', 'text/plain');
+        res.write('Not Found');
+    }
+
+    res.end();
+});
+    </code></pre>
+</section>
+
+<section class="large">
+    <h2>Express.js</h2>
+    <p class="author">
+        <small>Мокеев Евгений, </small> <small>Гоголев Сергей</small>
+    </p>
+    <a href="#/" class="fragment">Server</a><br>
+    <a href="#/" class="fragment">Routing</a><br>
+    <a href="#/" class="fragment">MVC</a><br>
+    <a href="#/" class="fragment">Templates</a><br>
+    <a href="#/" class="fragment">Middlewares</a><br>
+    <a href="#/" class="fragment">Error handling</a><br>
+</section>
+
+<section>
+    <h4><span>Server</span></h4>
+</section>
+
+<section>
+    <pre>
+$ <span class="green">npm</span> install --save <span class="magenta">express</span>
+    </pre>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> app.js
+    </pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'express'</span>)</h4>
+    <pre><code>
+const express = require('express');
+const app = express();
+
+app.get('/name/:name', (req, res) => {
+  res.send(`Hello, <b>${req.params.name}</b>`);
+});
+
+app.get('*', (req, res) => {
+  res.sendStatus(404);
+});
+
+app.listen(8080);
+    </code></pre>
+</section>
+
+<section>
+    <p><img src="img/express.png"></p>
+    <p class="fragment"><img src="img/koa.png"></p>
+    <!-- Лучше декомпозирован -->
+    <!-- Поддержка генераторов из коробки -->
+    <p class="fragment"><img src="img/hapi.png"></p>
+    <!-- Больше возможностей из коробки: кеширование, аутентификация -->
+    <!-- Декларативен -->
+</section>
+
+<section>
+    <p><img src="img/express.png"></p>
+    <p class="fragment left"><span class="green">✓</span> Проще</p>
+    <p class="fragment left"><span class="green">✓</span> Самое большое коммьюнити</p>
+    <p class="fragment left"><span class="green">✓</span> Поддержка <a href="https://strongloop.com/strongblog/a-new-day-for-express/">strongloop</a> <img src="img/ibm.png" width=64></p>
+    <a class="fragment" href="http://loopback.io/">loopback <img src="img/loopback.svg" width=30></a> <!-- Express + Juggler + StrongLoop Arc -->
+</section>
+
+<section>
+    <h4>Сервис «Заметки»</h4>
+    <p class="grey">Храним заметки пользователя в виде файлов</p>
+    <pre class="fragment">
+<span class="green"> GET</span> /               <span class="grey textbook">главная</span>
+    </pre>
+    <pre class="fragment">
+<span class="green"> GET</span> /notes          <span class="grey textbook">список заметок</span>
+    </pre>
+    <pre class="fragment">
+<span class="green">POST</span> /notes          <span class="grey textbook">добавление заметки</span>
+    </pre>
+    <pre class="fragment">
+<span class="green"> GET</span> /notes/films    <span class="grey textbook">просмотр заметки</span>
+    </pre>
+</section>
+
+<section>
+    <h4><span class="magenta">Routing</span></h4>
+    <!-- Процесс поиска обработчика для запроса пользователя -->
+</section>
+
+<section>
+    <h4>Паттерн <span class="green">Front controller</span></h4>
+    <p class="fragment grey">Единая точка входа в приложение</p>
+    <img class="fragment" src="img/front-ctrl.png">
+</section>
+
+<section>
+    <pre class="" style="padding-bottom: 15px;">
+<span class="green">GET</span> / <span class="grey">HTTP/1.1</span></pre>
+    <pre class="" style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes <span class="grey">HTTP/1.1</span></pre>
+    <pre class="" style="padding-bottom: 15px;">
+<span class="green">POST</span> /notes <span class="grey">HTTP/1.1</span></pre>
+    <pre class="fragment"><code>
+const express = require('express');
+const app = express();
+    </code></pre>
+    <pre class="fragment"><code>
+app.get('/', () => {});
+    </code></pre>
+    <pre class="fragment"><code>
+app.get('/notes', () => {});
+    </code></pre>
+    <pre class="fragment"><code>
+app.post('/notes', () => {});
+    </code></pre>
+    <!-- А также put и delete -->
+</section>
+
+<section>
+    <pre style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes <span class="grey">HTTP/1.1</span></pre>
+    <pre style="padding-bottom: 15px;">
+<span class="green">POST</span> /notes <span class="grey">HTTP/1.1</span></pre>
+    <pre class="fragment"><code>
+const express = require('express');
+const app = express();
+
+app
+    .route('/notes')
+    .get(() => {})
+    .post(() => {})
+    </code></pre>
+</section>
+
+<section>
+    <pre style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/films <span class="grey">HTTP/1.1</span></pre>
+    <pre class="fragment" style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/books <span class="grey">HTTP/1.1</span></pre>
+    <pre class="fragment"><code>
+app.get('/notes/:name', () => {});
+    </code></pre>
+    <pre class="fragment"><code>
+app.get('/notes/:name', (req, res) => {});
+    </code></pre>
+    <pre class="fragment"><code>
+app.get('/notes/:name', (req, res) => {
+    const name = req.params.name;
+
+    res.send(`Note with "${name}" name`);
+});
+    </code></pre>
+</section>
+
+<section>
+    <span class="magenta">?</span>
+    <pre><code>
+app.get('/notes?/:name', () => {});
+    </code></pre>
+    <pre class="fragment" data-fragment-index=1 style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/films <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+    <pre class="fragment" data-fragment-index=1 style="padding-bottom: 15px;">
+<span class="green">GET</span> /note/films <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+    <span class="magenta fragment" data-fragment-index=2>+</span>
+    <pre class="fragment" data-fragment-index=2><code>
+app.get('/notes+/:name', () => {});
+    </code></pre>
+    <pre class="fragment" data-fragment-index=3 style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/films <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+    <pre class="fragment" data-fragment-index=3 style="padding-bottom: 15px;">
+<span class="green">GET</span> /notesss/films <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+</section>
+
+<section>
+    <span class="magenta">[]</span>
+    <pre><code>
+app.get('/notes/[a-z]+', () => {});
+    </code></pre>
+    <pre class="fragment" data-fragment-index=1 style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/films <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+    <pre class="fragment" data-fragment-index=1 style="padding-bottom: 15px;">
+<span class="green">GET</span> /notes/books <span class="grey">HTTP/1.1</span></pre>
+    </pre>
+    <span class="magenta fragment" data-fragment-index=2>()</span>
+    <pre class="fragment" data-fragment-index=2><code>
+app.get('/notes+/:name([a-z]+)', req => {
+    console.log(req.params.name)
+});
+    </code></pre>
+</section>
+
+
+<section>
+    <h4>404</h4>
+    <pre class="fragment"><code>
+app.get('*', res => res.sendStatus(404));
+app.put('*', res => res.sendStatus(404));
+    </code></pre>
+    <pre class="fragment"><code>
+app.all('*', res => res.sendStatus(404));
+    </code></pre>
+    <pre class="fragment">
+
+<span class="grey">HTTP/1.1</span> <span class="green">404</span> Not Found
+<span class="magenta">Connection</span>: keep-alive
+<span class="magenta">Content</span>-Length: 9
+<span class="magenta">Content</span>-Type: text/plain; charset=utf-8
+<span class="magenta">Date</span>: Sun, 28 Feb 2016 14:04:41 GMT
+<span class="magenta">ETag</span>: W/"9-nR6tc+Z4+i9RpwqTOwvwFw"
+<span class="magenta">X-Powered-By</span>: Express
+
+Not Found
+    </pre>
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="fragment red"><span class="grey">└──</span> routes.js</span>
+    </pre>
+    <pre class="fragment"><code>
+module.exports = (app) => {
+    app.get('/', (req, res) => {});
+};
+    </code></pre>
+    <pre class="fragment">
+
+app/
+<span class="grey">└──</span> <span class="red">app.js</span>
+<span class="grey">└──</span> routes.js
+    </pre>
+    <pre class="fragment"><code>
+require('./routes')(app);
+    </code></pre>
+
+    <a class="fragment" href="http://forbeslindesay.github.io/express-route-tester/">express-route-tester</a>
+</section>
+
+<section>
+    <h4><span>MVC</span></h4>
+</section>
+
+<section>
+    <h4>Паттерн <span class="green">MVC</span></h4>
+    <p class="fragment grey">Отделение модели от представления</p>
+    <img class="fragment" src="img/mvc.png">
+</section>
+
+<section>
+    <img src="img/front-ctrl-mvc.png">
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="fragment red"><span class="grey">└──</span> models
+    <span class="grey">└──</span> note.js</span></pre>
+    <pre class="fragment"><code>
+class Note {
+    constructor(data) {
+        this._data = data;
+    }
+
+    save() {}
+
+    static findByName(name) {}
+
+    static findAll {}
+}
+
+module.exports = Note;
+    </code></pre>
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="fragment red"><span class="grey">└──</span> controllers
+    <span class="grey">└──</span> notes.js</span></pre>
+    <pre class="fragment"><code>
+const Note = require('../models/note');
+
+exports.list = (req, res) => {
+    const notes = Note.findAll();
+
+    res.send(notes);
+}
+
+exports.item = (req, res) => {
+    const note = Note.find(req.params.name);
+
+    res.send(note);
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+    <span class="grey">└──</span> notes.js
+    <span class="fragment red"><span class="grey">└──</span> pages.js</span></span>
+</pre>
+    <pre class="fragment"><code>
+exports.index = (req, res) => {
+    res.send('Hello, User!');
+}
+
+exports.error404 = (req, res) => {
+    res.sendStatus(404);
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> <span class="red">routes.js</span>
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+</pre>
+    <pre class="fragment"><code>
+const pages = require('./controllers/pages');
+const notes = require('./controllers/notes');
+
+module.exports = function(app) {
+    app.get('/', pages.index);
+    app.get('/notes', notes.list);
+    app.get('/notes/:name', notes.item);
+    app.all('*', pages.error404)
+};
+    </code></pre>
+</section>
+
+<section>
+<p class="fragment left pros">Можем менять логику обработки запроса без изменения роутера</p>
+<p class="fragment left pros">Можем менять способ хранения данных без изменения контроллера</p>
+</section>
+
+<section>
+    <h4><span>Templates</span></h4>
+</section>
+
+<section>
+    <p>HTML = <span class="green">template</span> + <span class="green">data</span></p>
+</section>
+
+<section>
+    <h4>HTML</h4>
+    <pre><code class="html">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;My notes&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    Hello, User!
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">data</span></h4>
+    <pre><code>
+{
+    title: 'My notes',
+    message: 'Hello, User!'
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">template</span></h4>
+    <pre><code class="html" data-noescape>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;<span class="fragment highlight yellow init_visible" data-fragment-index="1">{{ title }}</span>&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="fragment highlight yellow init_visible" data-fragment-index="1">{{ message }}</span>
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</section>
+
+<section>
+    <ol>
+        <li class="fragment">Компиляция
+            <pre><code class="fragment">
+function index(data) {
+    return `&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;${data.title}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;${data.message}&lt;/body&gt;
+&lt;/html&gt;`;
+}
+            </code></pre>
+        </li>
+        <li class="fragment">Исполнение</li>
+    <ol>
+</section>
+
+<section>
+    <p class="fragment">
+        <pre class="fragment" style="float: right; width: 300px;">
+    doctype html
+    html(lang="en")
+      head
+        title=pageTitle
+        </pre>
+    <img src="img/jade.svg" width=300 style="float: right;"></p>
+
+    <p class="fragment"  style="clear: both"><img src="img/mustache.png"></p>
+    <p class="fragment"><img src="img/handlebars.png"></p>
+    <a class="fragment" href="https://github.com/expressjs/express/wiki?_ga=1.153748792.1029410862.1434373465#template-engines">Over 9000</a>
+</section>
+
+<section>
+    <h4><span>Handlebars</span></h4>
+</section>
+
+<section>
+    <pre>
+$ <span class="green">npm</span> install --save <span class="magenta">hbs</span>
+    </pre>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> <span class="red">app.js</span>
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+    </pre>
+    <pre class="fragment"><code data-noescape>
+const express = require('express');
+const app = express();
+
+<span class="fragment highlight yellow init_visible">app.set('view engine', 'hbs');</span>
+require('./routes')(app);
+
+app.listen(8080);
+    </code></pre>
+</section>
+
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="fragment red"><span class="grey">└──</span> views
+    <span class="grey">└──</span> index.hbs</span>
+    </pre>
+    <pre class="fragment"><code class="html">
+<h1>{{ message }}</h1>
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+exports.index = (req, res) => {
+    <del>res.send('Hello, User!');</del>
+    res.render('index', {
+        message: 'Hello, User!'
+    });
+}
+    </code></pre>
+</section>
+<section>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+    <span class="grey">└──</span> index.hbs
+    <span class="fragment red"><span class="grey">└──</span> layout.hbs</span>
+    </pre>
+    <pre><code class="fragment html" data-noescape>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="fragment highlight yellow init_visible">{{{ body }}}</span>
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</section>
+
+<section>
+    <h4>Выражения</h4>
+    <span class="magenta">{{ }}</span>
+    <pre><code class="html">
+<div>{{ body }}</div>
+    </code></pre>
+    <pre class="fragment" style="padding-bottom: 15px;">
+&amp;lt;h1&amp;gt;Hello, User!&amp;lt;/h1&amp;gt;
+    </pre>
+    <pre class="fragment red" style="padding-bottom: 15px;">
+&lt;script&gt;alert('Muahahaha!');&lt;/script&gt;
+    </pre>
+    <span class="magenta fragment">{{{ }}}</span>
+    <pre class="fragment"><code class="html">
+<div>{{{ body }}}</div>
+    </code></pre>
+    <pre class="fragment" style="padding-bottom: 15px;">
+&lt;h1&gt;Hello, User!&lt;/h1&gt;
+    </pre>
+</section>
+
+<section>
+    <span class="magenta">{{ meta.description }}</span>
+    <pre class="fragment"><code data-noescape>
+res.render('index', {
+    title: 'My notes',
+    meta: {
+        description: 'My awesome notes',
+        charset: 'utf-8'
+    }
+});
+    </code></pre>
+    <pre><code class="fragment html" data-noescape>
+&lt;head&gt;
+    &lt;meta charset="{{ meta.charset }}"&gt;
+    &lt;meta
+        name="description"
+        content="{{ meta.description }}"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+    </code></pre>
+</section>
+
+<section>
+    <span class="magenta">{{#each }}</span>
+    <pre class="fragment"><code>
+res.render('notes', {
+    notes: [
+        { name: 'Films' },
+        { name: 'Books' },
+        { name: 'Todo' }
+    ]
+});
+    </code></pre>
+    <pre><code class="fragment html">
+<ul>
+    {{#each notes}}
+    <li>{{name}}</li>
+    {{/each}}
+</ul>
+    </code></pre>
+</section>
+
+<section>
+    <span class="magenta">{{#if }}</span>
+    <pre><code class="fragment html">
+{{#if notes.length}}
+<ul>
+    {{#each notes}}
+    <li>{{name}}</li>
+    {{/each}}
+</ul>
+{{^}}
+<p>Notes not found</p>
+{{/if}}
+    </code></pre>
+</section>
+
+<section>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+    <span class="grey">└──</span> index.hbs
+    <span class="grey">└──</span> layout.hbs
+    <span class="fragment red"><span class="grey">└──</span> partials
+        <span class="grey">└──</span> notes.hbs
+    </span>
+    </pre>
+    <pre class="fragment"><code data-noescape>
+const express = require('express');
+const app = express();
+
+app.set('view engine', 'hbs');
+<span class="fragment highlight yellow init_visible">hbs.registerPartials(__dirname + '/views/partials');</span>
+    </code></pre>
+</section>
+
+<section>
+    <span class="magenta">{{> }}</span>
+    <pre><code class="html" data-noescape>
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    <span class="fragment highlight yellow init_visible">{{> notes}}</span>
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+    <a class="fragment" href="http://handlebarsjs.com/">handlebarsjs.com</a>
+</section>
+
+<section>
+    <h4><span>Middlewares</span></h4>
+</section>
+
+<section>
+    <img src="img/front-ctrl-mw.png">
+</section>
+
+<section>
+    <h4>Паттерн <span class="green">Chain of responsibility</span></h4>
+    <p class="fragment grey">Декомпозиция и конвееризация обработки запросов</p>
+    <img class="fragment" src="img/mw.png" style="position:relative; left: -75px">
+</section>
+
+<section>
+    <h4>Паттерн <span class="green">Chain of responsibility</span></h4>
+    <ul>
+        <li class="fragment left">Запрос проходит через все обработчики без исключения</li>
+        <li class="fragment left">Запрос обрабатывается строго последовательно</li>
+        <li class="fragment left">Обработчик сам принимает решение, обрабатывать запрос или пропустить дальше</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Middlewares</h4>
+    <pre class="fragment"><code data-noescape>
+const express = require('express');
+const app = express();
+
+// Logs all requests
+app.use(function (<span class="fragment highlight yellow init_visible">req, res</span>, <span class="fragment highlight yellow init_visible">next</span>) {
+    console.log(`→ ${req.method} ${req.originalUrl}`);
+
+    <span class="fragment highlight yellow init_visible">next();</span>
+});
+    </code></pre>
+    <pre class="fragment">
+$ <span class="green">node</span> app.js
+
+→ GET /
+→ GET /notes
+→ GET /notes/films
+    </pre>
+</section>
+
+<section>
+    <h4>Middlewares</h4>
+    <pre><code data-noescape>
+app.use((req, res, next) => {
+    console.log(`→ ${req.method} ${req.originalUrl}`);
+    next();
+});
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+app.use((req, res, next) => {
+    setTimeout(() => {
+        req.commonData = { title: 'My Notes' };
+
+        next();
+    }, 1000);
+});
+    </code></pre>
+    <p class="left fragment">Выполняются в порядке регистрирования!</p>
+</section>
+
+<section>
+    <h4>require(<span class="green">'morgan'</span>)</h4>
+    <pre><code data-noescape>
+const express = require('express');
+<span class="fragment highlight yellow init_visible">const morgan = require('morgan');</span>
+const app = express();
+
+<span class="fragment highlight yellow init_visible">app.use(morgan('dev'));</span>
+    </code></pre>
+    <pre class="fragment">
+GET /notes 200 18.079 ms - 301
+|       |    |      |      |
+<span class="green">method</span>  <span class="green">url</span>  <span class="green">code</span>   <span class="green">time</span>   <span class="green">bytes</span>
+    </code></pre>
+    <pre><code class="fragment">
+app.use(morgan(`:method :url :status
+    :response-time ms - :res[content-length]`);
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'body-parser'</span>)</h4>
+    <pre class="fragment">
+<span class="green">POST</span> /notes <span class="grey">HTTP/1.1</span>
+<span class="magenta">Accept:</span> application/json
+<span class="magenta">Host:</span> localhost
+
+{
+    "name": "films",
+    "text": "Films to watch"
+}
+    </pre>
+    <pre class="fragment"><code>
+req.on('data', function(chunk) {
+    body += chunk;
+});
+    </code></pre>
+    <pre class="fragment"><code>
+const json = JSON.parse(body);
+    </code></pre>
+</section>
+
+<section>
+    <h4>require(<span class="green">'body-parser'</span>)</h4>
+    <pre>
+{
+    name: 'films',
+    text: 'Films to watch'
+}
+    </pre>
+    <pre class="fragment"><code data-noescape>
+const express = require('express');
+<span class="fragment highlight yellow init_visible">const bodyParser = require('body-parser');</span>
+const app = express();
+
+<span class="fragment highlight yellow init_visible">app.use(bodyParser.json());</span>
+
+app.use(function () {
+    console.log(<span class="fragment highlight yellow init_visible">req.body</span>);
+})
+    </code></pre>
+</section>
+
+<section>
+    <h4>express.static</h4>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="fragment red"><span class="grey">└──</span> public
+    <span class="grey">└──</span> styles.css</span>
+    </pre>
+    <pre class="fragment">
+<span class="green">GET</span> /styles.css
+    </pre>
+    <pre class="fragment"><code data-noescape>
+const express = require('express');
+const app = express();
+
+<span class="fragment highlight yellow init_visible">app.use(express.static(__dirname + '/public')));</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span>Error handling</span></h4>
+</section>
+
+<section>
+    <pre><code>
+app.use(function (err, req, res, next) {
+    console.log(err);
+    res.sendStatus(500);
+});
+    </code></pre>
+</section>
+
+<section>
+    <ul>
+        <li class="fragment left">Обработчиков может быть несколько</li>
+        <li class="fragment left">Если в middleware произошла ошибка, все последующие игнорируются вплоть до <span class="green">первого</span> обработчика</li>
+        <li class="fragment left">Обработчик ошибок может не прерывать процесс, а передать управление следующей middleware</li>
+    </ul>
+</section>
+
+<section>
+    <pre><code>
+app.use(bodyParser.json());
+    </code></pre>
+    <pre class="fragment"><code>
+app.use(function (err, req, res, next) {
+    console.log(err);
+    next();
+});
+    </code></pre>
+    <pre class="fragment"><code>
+app.use(morgan('dev'));
+    </code></pre>
+</section>
+
+<section>
+    <h4>Express generator</h4>
+    <pre class="fragment">
+
+$ <span class="green">npm</span> install --save --global <span class="magenta">express-generator</span>
+    </pre>
+    <pre class="fragment">
+$ <span class="green">express</span> --hbs <span class="magenta">myappr</span>
+    </pre>
+    <a class="fragment" href="http://expressjs.com/en/starter/generator.html">expressjs.com/starter/generator</a>
+</section>
+
+<section style="font-size: 1.2em">
+    <h4>Книги</h4>
+    <p><a href="http://www.ozon.ru/context/detail/id/31567996/">Node.js Design Patterns</a></p>
+    <p><a href="http://www.ozon.ru/context/detail/id/25358564/">Node.js the Right Way</a></p>
+
+    <h4>Статьи</h4>
+    <p><a href="https://medium.com/@ghaiklor/how-nodejs-works-bfe09efc80ca#.1pyo6jpac">How does NodeJS work?</a></p>
+    <p><a href="http://nodeweekly.com/">nodeweekly.com</a></p>
+
+    <h4>Обучение</h4>
+    <p><a href="http://nodeschool.io/ru/#workshoppers">nodeschool.io</a></p>
+    <p><a href="https://learn.javascript.ru/screencast/nodejs">Скринкаст Node.JS</a></p>
+</section>
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>

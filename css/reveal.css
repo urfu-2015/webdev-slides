@@ -26,6 +26,13 @@
     src: url('textbook-bold.woff'),
          url('textbook-bold.ttf');
 }
+@font-face {
+    font-family: sourcecodepro-light;
+    font-weight: 200;
+    src: local(textbook-bold);
+    src: url('SourceCodePro-Light.woff'),
+         url('SourceCodePro-Light.ttf');
+}
 /*********************************************
  * RESET STYLES
  *********************************************/
