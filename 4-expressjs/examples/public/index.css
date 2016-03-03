@@ -1,0 +1,9 @@
+.new-note__name {
+    width: 200px;
+    font-size: 16px;
+}
+
+.new-note__text {
+    width: 200px;
+    font-size: 12px;
+}
