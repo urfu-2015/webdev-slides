@@ -1,0 +1,9 @@
+{{#if notes.length}}
+<ul>
+    {{#each notes}}
+        <li><a href="/notes/{{ name }}">{{ name }}</a></li>
+    {{/each}}
+</ul>
+{{^}}
+Notes not found
+{{/if}}

@@ -1,0 +1,15 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "extends": "xo",
+  "rules": {
+    "indent": [2, 4],
+    "max-len": [2, 79],
+    "max-params": [2, 3]
+  }
+}

@@ -1,0 +1,1069 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Build, Deploy, Automate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <h4><del class=grey>Ешь, молись, люби</del></h4>
+    <h4>Build, Deploy, Automate</h4>
+    <p class="author">
+        <small>Жигалов Сергей, </small> <small>Грищенко Антон, </small> <small>Гоголев Сергей</small>
+    </p>
+</section>
+
+<section>
+    <h4><a href="#/1">Dependencies</a></h4>
+</section>
+
+<section>
+    <p class="fragment"><img src="img/npm.svg" width=200></p>
+    <p class="fragment"><img src="img/bower.png" width=200></p>
+</section>
+
+<section>
+    <img src="img/bower.png" width=200>
+    <pre>
+<span class=grey>bower_components</span>
+├── backbone<span class=green>#53f7790</span>
+├── moment<span class=green>#53f7790</span>
+├── underscore<span class=green>#53f7790</span>
+└── magnific-popup<span class=green>#53f7790</span>
+  </pre>
+</section>
+
+<section>
+    <img src="img/npm.svg" width=200>
+    <pre>
+<span class=grey>node_modules</span>
+├─┬ hbs<span class=green>@4.0.0</span>
+│ ├─┬ handlebars<span class=green>@4.0.3</span>
+│ │ ├─┬ optimist<span class=green>@0.6.1</span>
+│ │ │ ├── minimist<span class=green>@0.0.10</span>
+│ │ │ └── wordwrap<span class=green>@0.0.3</span>
+│ │ ├─┬ source-map<span class=green>@0.4.4</span>
+│ │ │ └── amdefine<span class=green>@1.0.0</span>
+│ └─┬ walk<span class=green>@2.2.1</span>
+│   └─┬ forEachAsync<span class=green>@2.2.1</span>
+│     └── sequence<span class=green>@2.2.1</span>
+└─┬ morgan<span class=green>@1.7.0</span>
+  ├── basic-auth<span class=green>@1.0.3</span>
+  └── on-headers<span class=green>@1.0.1</span>
+  </pre>
+</section>
+
+<section>
+    <h4>npm</h4>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>init</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>search</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>show</span> express
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> express
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--save</span> express
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--save-dev</span> mocha
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> express@1.0.0
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>uninstall</span> express
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>list</span>
+    </pre>
+</section>
+
+<section>
+    <h4>npm <span class=green>install</span></h4>
+    <pre class="grey">
+{
+  "dependencies": {
+    <span class=fragment>"express": "<span class="green">1.2.3</span>",</span>
+    <span class=fragment>"express": "<span class="green">>1.2.3</span>",</span>
+    <span class=fragment>"express": "<span class="green">>=1.2.3</span>",</span>
+    <span class=fragment>"express": "<span class="green">~1.2.3</span>", // >=1.2.3 <1.3.0</span>
+    <span class=fragment>"express": "<span class="green">^1.2.3</span>", // >=1.2.3 <2.0.0</span>
+    <span class=fragment>"express": "<span class="green">1.2.x</span>", </span>
+    <span class=fragment>"express": "<span class="green">latest</span>",</span>
+    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git</span>",</span>
+    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#4.13.4</span>",</span>
+    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#master</span>",</span>
+    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#f3d99a4</span>",</span>
+    <span class=fragment>"express": "<span class="green">expressjs/express#f3d99a4</span>"</span>
+  }
+}</pre>
+    <a class="fragment" href="https://docs.npmjs.com/misc/semver#advanced-range-syntax">Advanced Range Syntax</a>
+</section>
+
+<section>
+    <h4>npm</h4>
+    <p class="cons left fragment">Дубликаты</p>
+    <p class="cons left fragment">Windows API имеет <a href="https://msdn.microsoft.com/ru-ru/library/windows/desktop/aa365247(v=vs.85).aspx#maxpath">ограничение на длину</a> абсолютного пути к файлу</p> <!-- 260 (or 32767 for unicode api)-->
+</section>
+
+<section>
+    <h4>npm <span class="green">vs</span> npm3</h4>
+    <img src="img/npm3vs2-01.png" class=invert>
+</section>
+
+<section>
+    <h4>npm <span class="green">vs</span> npm3</h4>
+    <img src="img/npm3vs2-02.png" class=invert>
+</section>
+
+<section>
+    <h4>npm3</h4>
+    <img src="img/npm3vs2-05.png" class=invert>
+</section>
+
+<section>
+    <h4>npm3</h4>
+    <img src="img/npm3vs2-03.png" class=invert>
+</section>
+
+<section>
+    <h4>npm <span class=green>dedupe</span> <span class=grey>(deduplicate)</span></h4>
+    <p class="fragment">Упрощает структуру зависимостей,<br> делая её максимально плоской<br> и устраняя дублирование</p>
+</section>
+
+<section>
+    <img src="img/npm3vs2-04.png" class=invert>
+</section>
+
+<section>
+    <h4>npm <span class=green>outdated</span></h4>
+    <p class="fragment">Находит устаревшие зависимости</p>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>outdated</span> <span class=magenta>--depth=1</span>
+    </pre>
+    <pre class="fragment">
+Package                 Current  Wanted  Latest  Location
+<span class=red>mocha</span>                     2.3.3   <span class=green>2.3.3</span>   <span class=magenta>2.4.5</span>  <span class=grey>mocha</span>
+<span class=red>nodemon</span>                   1.8.0   <span class=green>1.8.0</span>   <span class=magenta>1.9.1</span>  <span class=grey>nodemon</span>
+<span class=red>lodash</span>                   3.10.1  <span class=green>3.10.1</span>   <span class=magenta>4.6.1</span>  <span class=grey>lodash</span>
+<span class=red>supertest</span>                 1.1.0   <span class=green>1.1.0</span>   <span class=magenta>1.2.0</span>  <span class=grey>supertest</span>
+<span class=red>vow</span>                      0.4.11  <span class=green>0.4.12</span>  <span class=magenta>0.4.12</span>  <span class=grey>vow-fs > vow</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>update</span>
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">Установка зависимости</span></h4>
+    <ol>
+        <li>Поиск архива с нужной версией</li>
+        <li class="fragment">Скачивание</li>
+        <li class="fragment">Распаковка</li>
+        <li class="fragment">Компилирование <span class="grey">(по необходимости)</span></li>
+    </ol>
+</section>
+
+<section>
+    <h4>npm <span class=green>cache</span></h4>
+    <p class="fragment">Кеширует зависимости <br><span class="grey">(по умолчанию, автоматически)</span></p>
+    <pre class="fragment">
+
+/home/gogoleff/.npm <span class=grey>(unix)</span>
+    </pre>
+    <pre class="fragment">/Users/gogolеff/AppData/Local/npm-cache <span class=grey>(windows)</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>cache</span> clean
+    </pre>
+</section>
+
+<section>
+    <h4>.npmrc</h4>
+    <pre class="fragment"><code>
+fetch-retries=10 // Default is 2
+    </code></pre>
+    <pre class="fragment"><code>
+progress=false // Hides progress (perfomance boost)
+    </code></pre>
+    <pre class="fragment"><code>
+init-license=MIT // Sets npm init default license
+    </code></pre>
+    <pre class="fragment"><code>
+init-author-name='Sergey Gogolev'
+    </code></pre>
+    <a class="fragment" href="https://docs.npmjs.com/misc/config">docs.npmjs.com/misc/config</a>
+</section>
+
+<section>
+    <h4>pnpm</h4>
+    <p><span class=grey>Performant npm install</span> <span class="fragment red">(x6)</span></p>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--global</span> pnpm
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> pnpm <span class=green>install</span> express
+    </pre>
+    <a class="fragment" href="http://ricostacruz.com/pnpm/">ricostacruz.com/pnpm</a>
+</section>
+
+<section>
+    <h4>npm <span class=green>publish</span></h4>
+    <p class="fragment">Публикует пакет в репозиторий</p>
+    <pre class="fragment"><code>
+// package.json
+{
+    "name": "notes",
+    "version": "1.0.0"
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>version</span> minor <span class=grey>// 1.1.0</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>publish</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>publish</span> <span class="magenta">--tag</span> beta
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> express@beta
+    </pre>
+</section>
+
+<section>
+    <h4>npm <span class=green>publish</span></h4>
+    <pre class="fragment"><code>
+// package.json
+{
+    "name": "notes",
+    "main": "./dist/index.js"
+}
+    </code></pre>
+    <pre class="fragment"><code>
+const notes = require('notes');
+    </code></pre>
+</section>
+
+<section>
+    <h4><a href="#/1">Codestyle</a></h4>
+</section>
+
+<section>
+    <pre><code>
+let foo = 1,
+    bar = 2,
+    baz = 3;
+    </code></pre>
+    <p class="red">vs</p>
+    <pre><code>
+let foo = 1;
+let bar = 2;
+let baz = 3;
+    </code></pre>
+</section>
+
+<section data-background="img/zerg-vs-terran.jpg">
+    <p>spaces <span class="red">vs</span> tabs</p>
+    <img src="">
+</section>
+
+<section>
+    <h4>Использование let и const</h4>
+    <pre><code>
+const pi = 3.141592653589;
+const e = 2.71828182;
+const φ = 1.618033988;
+
+for(let i = 0; i < 10; i++) {
+    console.log(i);
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Максимальная вложенность блоков</h4>
+    <pre><code>
+if (user.isAuthorized) {
+    if (notes.length > 0) {
+        for(let i = 0; i < note.length; i++) {
+            console.log(notes[i]);
+        }or
+    } else {
+        console.log('Notes not found!')
+    }
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4 style="margin-left: -120px"><span class="fragment red" data-fragment-index=1>Беc</span>полезное code review</h4>
+    <pre><code data-noescape>
+exports.list = function (req, res) { <span class="fragment" data-fragment-index=1>//Use arrow</span>
+    let notes = Note.findAll(); <span class="fragment" data-fragment-index=1>// Use const</span>
+    let data = { <span class="fragment" data-fragment-index=1>// Use const</span>
+        notes: notes,
+        meta: req['meta'] <span class="fragment" data-fragment-index=1>// Use dot operator</span>
+    };
+
+    res.render('notes', data);
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>Codestyle помогает</h4>
+    <p class="left fragment pros">Ускорить восприятие кода всей команды</p>
+    <p class="left fragment pros">Избежать конфликтов</p>
+    <p class="left fragment pros">Избежать типичных ошибок в коде</p>
+    <p class="left fragment pros">Сделать код качественнее</p>
+</section>
+
+<section>
+    <h4>codestyle.md</h4>
+    <pre><code class="markdown">
+# Variable declaration
+
+* Each variable should be declared:
+
+    * using a var statement;
+    * only once in the current scope;
+    * on a new line;
+    * as close as possible to the place
+      where it's first used.
+
+* Each var statement should have only
+  one variable declared in it.
+    </code></pre>
+    <a class="fragment" href="https://github.com/ymaps/codestyle/blob/master/javascript.md">ymaps/codestyle</a>
+</section>
+
+<section>
+    <h4>Цикломатическая сложность<span class="fragment">: <span class="green">3</span></span></h4>
+    <pre><code>
+function getNotes() {
+    if (user.isAuthorized) {
+        return null;        // Первый путь
+    }
+
+    if (notes.length) {
+        return notes;       // Второй путь
+    } else {
+        return null;        // Третий путь
+    }
+}
+    </code></pre>
+</section>
+
+<section>
+    <img src="img/editorconfig.png">
+</section>
+
+<section>
+    <h4>EditorConfig</h4>
+    <pre><code>
+[*]
+indent_size = 4
+indent_style = space
+insert_final_newline = true
+
+[*.json]
+indent_size = 2
+    </code></pre>
+    <a class="fragment" href="http://editorconfig.org/">editorconfig.org</a>
+</section>
+
+<section>
+    <p class="fragment"><a href="http://jshint.com/"><img src="img/jshint.png" width=200></a></p>
+    <p class="fragment"><a href="http://jscs.info/"><img src="img/jscs.svg" width=200></a></p>
+    <p class="fragment"><a href="http://eslint.org/"><img src="img/eslint.png" width=200></a></p>
+    <a class="fragment" href="https://habrahabr.ru/post/220229/">habrahabr.ru/post/220229/</a>
+</section>
+
+<section>
+    <h4>eslint</h4>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--save-dev</span> eslint
+    </pre>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="grey">└──</span> public
+<span class="red"><span class="grey">└──</span> .eslintrc.json</span>
+    </pre>
+</section>
+
+<section>
+    <h4>.eslintrc.json</h4>
+    <pre><code>
+{
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "dot-notation": 2,
+        "no-unused-vars": 1,
+        "no-empty": 2,
+        "max-len": [2, 100],
+        "max-params": [2, 3],
+    }
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>.eslintrc.json</h4>
+    <pre><code>
+{
+    "rules": {
+        "dot-notation": 2,
+        "no-unused-vars": 1,
+        "max-len": [2, 100],
+        "max-params": [2, 3],
+    }
+}
+    </code></pre>
+    <pre>
+
+<span style="color:cyan">0</span> - <span style="color:grey">off</span>
+
+<span style="color:cyan">1</span> - <span style="color:orange">warn</span>
+
+<span style="color:cyan">2</span> - <span style="color:red">error</span></pre>
+    <a class="fragment" href="http://eslint.org/docs/rules/">eslint.org/docs/rules</a>
+</section>
+
+<section>
+    <h4>.eslintrc.json</h4>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--save-dev</span> eslint-config-xo
+    </pre>
+    <pre class="fragment"><code>
+{
+    "extends": "xo",
+    "rules": {
+        "max-len": [2, 79],
+        "max-params": [2, 3],
+    }
+}
+    </code></pre>
+    <a class="fragment" href="https://www.npmjs.com/search?q=eslint-config">npmjs.com/search?q=eslint-config</a>
+</section>
+
+<section>
+    <h4>.eslintignore</h4>
+    <pre class="fragment">
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> .eslintrc.json
+<span class="red"><span class="grey">└──</span> .eslintignore</span>
+    </pre>
+    <pre class="fragment"><code data-noescape>
+build/
+**/*.coffee.js
+<del>node_modules</del>
+    </code></pre>
+
+    <pre class="fragment"><code data-noescape>
+/* eslint no-unused-vars: 0 */
+/* eslint max-params: [2, 4] */
+function onError(err, req, res, next) {
+    res.sendStatus(500);
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>eslint</h4>
+    <pre class="fragment"><span class=grey>$</span> node_modules/.bin/eslint
+    </pre>
+    <img class="fragment" src="img/eslint-output.png">
+</section>
+
+<section>
+    <h4>eslint <span class=red>♡</span> atom</h4>
+    <img src="img/eslint-atom.png">
+</section>
+
+<section>
+    <pre><span class=grey>$</span> node_modules/.bin/eslint <span class=magenta>--fix</span>
+    </pre>
+</section>
+
+<section>
+    <h4>Abstract syntax tree</h4>
+    <img src="img/ast.svg" width=500>
+</section>
+
+<section>
+    <pre><code>{
+  "type": "Program",
+  "body": [
+    {
+      "type": "VariableDeclaration",
+      "declarations": [{
+          "type": "VariableDeclarator",
+          "id": {
+            "type": "Identifier",
+            "name": "pi"
+          },
+          "init": {
+            "type": "Literal",
+            "value": 3.14,
+          }
+      }],
+      "kind": "let"
+    }
+  ]
+}</code></pre>
+</section>
+
+<section>
+    <p class="fragment"><a href="http://csslint.net/"><img src="img/csslint.png" width=200></a></p>
+    <p class="fragment"><a href="http://csscomb.com/">CSScomb</a></p>
+    <p class="fragment"><a href="http://stylelint.io/"><img src="img/stylelint.png" width=200></a></p>
+</section>
+
+<section>
+    <h4>CSScomb</h4>
+    <p class="cons left fragment">Немного правил</p>
+    <p class="pros left fragment">Автоматическое исправление ошибок</p>
+    <p class="pros left fragment">Автоматическая группировка свойств</p>
+    <pre><code class="css fragment">
+.tooltip {
+    position: absolute;
+
+    width: 200px;
+    height: 40px;
+
+    font-size: 16px;
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Stylelint</h4>
+    <p class="cons left fragment">Нет автоматического исправления ошибок</p>
+    <p class="pros left fragment">Более <a href="http://stylelint.io/user-guide/rules/">100 правил</a></p>
+    <p class="pros left fragment">Пресеты</p>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>install</span> <span class=magenta>--save-dev</span> stylelint stylelint-config-standard
+    </pre>
+    <a class="fragment" href="https://www.npmjs.com/search?q=stylelint-config">npmjs.com/search?q=stylelint-config</a>
+</section>
+
+<section>
+    <h4><a href="#/1">Scripts</a></h4>
+</section>
+
+<section>
+    <h4><span class="green">Задачи</span></h4>
+    <ul>
+        <li class="fragment left">Запуск dev сервера</li>
+        <li class="fragment left">Сборка статики (js, css)</li>
+        <li class="fragment left">Запуск тестов</li>
+        <li class="fragment left">Проверка codestyle</li>
+    </ul>
+</section>
+
+<section>
+    <h4><span class="green">Цель</span></h4>
+    <p>Запуск комплексных команд в виде простых запоминающихся алиасов к ним</p>
+</section>
+
+<section>
+    <h4><span class="green">Инструменты</span></h4>
+    <div class="fragment left"><center>Gulp</center>
+    <pre><code>
+const gulp = require('gulp');
+const jshint = require('gulp-jshint');
+
+gulp.task('lint', () => {
+    gulp
+        .src('*.js')
+        .pipe(jshint())
+});
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> gulp <span class=green>lint</span>
+    </pre>
+    </div>
+</section>
+
+<section>
+    <h4><span class="green">Инструменты</span></h4>
+    <div class="fragment left"><center>Makefile</center><pre><code class="makefile" data-noescape>
+<span class="green">lint:</span>
+    node_modules/.bin/stylelint **/*.css
+    node_modules/.bin/eslint .
+
+<span class="green">test:</span> lint
+    node_modules/.bin/mocha test/
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> make <span class=green>test</span>
+    </pre>
+    </p>
+</section>
+
+<section>
+    <h4><span class="green">Инструменты</span></h4>
+    <div class="fragment left"><center>npm scripts</center><pre><code>
+{
+  "name": "notes",
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/",
+    "lint:js": "node_modules/.bin/eslint ."
+  }
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm run <span class=green>test</span>
+    </pre>
+    </div>
+</section>
+
+<section>
+    <h4>.bin</h4>
+    <pre class="fragment"><code>
+{
+  "name": "mocha",
+  "bin": {
+      "mocha": "./path/to/index.js",
+  }
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm install <span class=green>mocha</span>
+    </pre>
+    <pre class="fragment">node_modules/.bin/mocha <span class=grey>-></span> ../mocha/path/to/index.js
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <pre class="fragment"><code data-noescape>
+{
+  "name": "notes",
+  "scripts": {
+    <del>"test": "node_modules/.bin/mocha test/"</del>
+    "test": "mocha test/"
+  }
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> mocha
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> echo <span class=magenta>$PATH</span>
+    </pre>
+    <pre class="fragment">
+/Users/gogoleff/bin<span class=red>:</span>/usr/local/bin<span class=red>:</span>/usr/local/bin<span class=red>:</span>/usr/bin<span class=red>:</span>/bin</pre>
+    <p class="fragment">npm добавляет <span class="green">node_modules/.bin/</span> в <span class="magenta">PATH</p>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Scripts shortcuts</p>
+
+    <pre class="fragment"><del><span class=grey>
+$</span> npm run <span class=green>test</span></del>
+<span class=grey>$</span> npm <span class=green>test</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>start</span>
+    </pre>
+    <pre class="fragment"><span class=grey>$</span> npm <span class=green>stop</span>
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Console commands</p>
+
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "clean": "rm -rf node_modules/"
+}
+    </code></pre>
+
+    <p class="fragment red">Помним о мультиплатформе</p>
+
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "clean": "rimraf node_modules/"
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>install</span> rimraf</span>
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Series commands</p>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "check:lint": "eslint .",
+  "check:test": "mocha test/"
+  "check": "npm run lint <span class="fragment highlight init_visible">&&</span> npm run mocha"
+}
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "build": "<span class="fragment highlight init_visible">npm-run-all</span> check:lint check:test"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Parallel commands</p>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "lint:css": "stylelint **/*.css",
+  "lint:js": "eslint .",
+  "lint": "npm run lint:css <span class="fragment highlight init_visible">&</span> npm run lint:js"
+}
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "lint": "<span class="fragment highlight init_visible">npm-run-all --parallel</span> lint:css lint:js"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Streams</p>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "css:pre": "stylus main.styl <span class="fragment highlight init_visible">></span> main.css",
+  "css:post": "autoprefixer -b <span class="fragment highlight init_visible"><</span> main.css <span class="fragment highlight init_visible">|</span> cssmin"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Groups</p>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "lint:css": "stylelint **/*.css",
+  "lint:js": "eslint .",
+  "lint": "npm-run-all --parallel <span class="fragment highlight init_visible">lint:*</span>"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Configuration</p>
+    <pre class="fragment"><code data-noescape>
+"config": {
+  "report": "nyan"
+},
+"scripts": {
+  "test": "mocha test/ -R <span class="fragment highlight init_visible">$npm_package_config_report</span>"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p><span class="grey">External scripts</p>
+    <pre class="fragment"><code>
+const favicons = require('favicons');
+
+favicons({
+    source: 'public/logo.png',
+    dest: 'public/'
+});
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "build:favicon": "node favicon.js"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Arguments</p>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "start": "node app.js",
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>run</span> start <span class="red">--</span> --mode=debug
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <p class="grey">Hooks</p>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>install</span> <span class="magenta">--save-dev</span> husky
+    </pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "precommit": "npm run test",
+  "prepush": "npm run test",
+  "prepublish": "npm run test"
+}
+    </code></pre>
+</section>
+
+
+<section>
+    <h4><span class="green">npm scripts</span></h4>
+    <!-- Kate Hudson -->
+    <p><a class="fragment" href="https://www.youtube.com/watch?v=0RYETb9YVrk">Advanced front-end automation with npm</a></p>
+    <!-- Keith Cirkel -->
+    <p><a class="fragment" href="http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/">How to Use npm as a Build Tool</a></p>
+</section>
+
+<section>
+    <h4><a href="#/1">Deploy</a></h4>
+    <!-- docker -->
+    <!-- heroku -->
+
+</section>
+
+<section>
+    <h4><a href="#/1">CDN</a></h4>
+</section>
+
+<section>
+    <h4><span class="green">Задача</span></h4>
+    <p>Разместить <span class="magenta">статику</span> ближе к пользователю</p>
+</section>
+
+<section>
+    <h4><span class="green">Статика</span></h4>
+    <p class="fragment">Не зависит от состояния приложения</p> <!-- authorization for example -->
+    <p class="fragment">Не меняется в рамках одной версии</p>
+    <p class="fragment">Требует в основном сетевые ресурсы</p>
+    <pre class="fragment" style="margin-left: 350px !important">
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="red"><span class="grey">└──</span> public
+    <span class="grey">└──</span> index.css
+    <span class="grey">└──</span> index.js</span>
+    </pre>
+</section>
+
+<section>
+    <h4>Content Delivery Network</h4>
+    <p class="grey">Географически распределённая сетевая инфраструктура</p>
+</section>
+
+<section>
+    <h4>Content Delivery Network</h4>
+    <img src="img/cdn-wo.png"><img src="img/cdn.png" style="margin: 0 0 0 30px;">
+</section>
+
+<section>
+    <div style="float: left;">
+        <h4 class="green">Unicast</h4>
+        <p>One Machine, One IP</p>
+        <img src="img/unicast.gif" class="invert" width=300>
+    </div>
+    <div class="fragment" style="float: right;">
+        <h4 class="green">Anycast</h4>
+        <p>Many Machines, One IP</p>
+        <img src="img/anycast.gif" class="invert" width=300>
+        <p class="fragment grey">BGP</p>
+    </div>
+</section>
+
+<section>
+    <h4>Border Gateway Protocol</h4>
+    <img src="img/bgp.png">
+</section>
+
+<section>
+    <h4>Задачи</h4>
+    <p class="pros left">Размещение статики ближе к пользователю</p>
+    <p class="pros left fragment">Кеширование</p>
+    <p class="pros left fragment">Сжатие текстовой статики <span class="green">(gzip)</span>:<br> <span class="grey">html, css, js, json, ...</span></p>
+    <p class="pros left fragment">Обеспечение <span class="green">100%</span> доступности</p>
+</section>
+
+<section>
+    <p><img src="img/cloudfare.png" width=300></p>
+    <p><img src="img/maxcdn.png" width=200></p>
+    <p><img src="img/surge.png" width=300></p>
+</section>
+
+<section>
+    <h4>Выбираем</h4>
+    <p class="question left">Количество точек присутствия<br> <span class="grey">Point of Presence</span></p>
+    <p class="question left fragment">Политика кеширования</p>
+    <p class="question left fragment">Политика устаревания</p>
+    <p class="question left fragment">API</p>
+</section>
+
+<section>
+    <h4>Surge</h4>
+    <pre><span class=grey>
+$</span> npm <span class=green>install</span> <span class="magenta">--save-dev</span> surge
+    </pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "deploy:static": "surge -p ./public"
+}
+    </code></pre>
+    <pre class="fragment"><span class=grey>
+$</span> npm <span class=green>run</span> deploy:static
+    </pre>
+</section>
+
+<section>
+    <h4>Surge</h4>
+    <img src="img/surge-welcome.png" width=100%>
+</section>
+
+<section>
+    <h4>Surge</h4>
+    <pre><code data-noescape>
+"scripts": {
+  "deploy:static": "surge -p ./public -d urfu2015..."
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="html" data-noescape style="font-size: .8em !important;">
+&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="utf-8"&gt;
+    &lt;title&gt;{{ title }}&lt;/title&gt;
+    <del>&lt;link rel="stylesheet" href="/index.css"&gt;</del>
+    &lt;link rel="stylesheet"
+        href="http://urfu2015-notes.surge.sh/index.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    {{{ body }}}
+    <del>&lt;script src="/index.js"&gt;&lt;/script&gt;</del>
+    &lt;script src="http://urfu2015-notes.surge.sh/index.js"&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+    </code></pre>
+</section>
+
+<section>
+    <h4>Дополнительные задачи</h4>
+    <p class="left pros">Обновить кеш у пользователя</p>
+    <p class="left pros">Синхронизировать статику и динамику</p>
+</section>
+
+<section>
+    <h4>Обновить кеш у пользователя</h4>
+    <div class="fragment"><p class="grey">Response</p>
+    <pre><code data-noescape>
+<span class="grey">HTTP/1.1</span> <span class="green">200</span> OK <!--Status line-->
+<span class="fragment highlight init_visible"><span class="magenta">Cache-Control:</span> public, max-age=31536000, no-cache</span><!-- Headers -->
+<span class="magenta">Content-Type:</span> text/css; charset=UTF-8
+<span class="fragment highlight init_visible"><span class="magenta">ETag:</span> d1d3c5c4cdb2568785ba1a366b7fb048</span>
+<span class="magenta">Server:</span> SurgeCDN/0.12.2
+<!-- Message body -->
+body {
+    font-family: Arial, sans-serif;
+}
+    </code></pre></div>
+</section>
+
+<section>
+    <h4>Обновить кеш у пользователя</h4>
+    <p class="grey">Request</p>
+    <pre><code data-noescape>
+<span class="green">GET</span> /index.css <span class="grey">HTTP/1.1</span>
+<span class="magenta">Host:</span> urfu2015-notes.surge.sh
+<span class="fragment highlight init_visible"><span class="magenta">If-None-Match:</span> d1d3c5c4cdb2568785ba1a366b7fb048</span>
+    </code></pre>
+    <p class="fragment"><span class="magenta">ETag</span> === <span class="magenta">If-None-Match</span></p>
+    <div class="fragment"><p class="grey">Response</p>
+    <pre><code data-noescape>
+<span class="grey">HTTP/1.1</span> <span class="green">304</span> Not Modified
+    </code></pre></div>
+</section>
+
+<section>
+    <h4>Версионирование</h4>
+    <pre style="margin-left: 350px !important">
+app/
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="grey">└──</span> public
+    <span class="grey">└──</span> index.css
+    <span class="grey">└──</span> index.js
+    <span class="fragment red"><span class="grey">└──</span> 1.1.0</span>
+        <span class="fragment red"><span class="grey">└──</span> index.css
+        <span class="grey">└──</span> index.js</span>
+    </pre>
+    <pre class="fragment"><code>
+const version = require('./package.json').version;
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+"scripts": {
+  "deploy:static": "node deploy-static.js"
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Content Delivery Network</h4>
+    <a href="https://habrahabr.ru/company/webzilla/blog/236511/">Знакомство с Content Delivery Network</a>
+    <a href="http://www.slashroot.in/what-anycast-and-how-it-works">What is Anycast and How it works</a>
+    <a href="http://www.amazon.com/Content-Delivery-Networks-Electrical-Engineering/dp/3540778861">Content Delivery Networks</a>
+</section>
+
+<section>
+    <h4><a href="#/1">Automate</a></h4>
+</section>
+
+<section style="font-size: 1.2em">
+    <a href="https://github.com/urfu-2015/webdev-slides/tree/gh-pages/5-deploy/examples">
+        Пример сервиса «Заметки»,<br>
+        подготовленного к сборке, деплою и автоматизации
+    </a>
+</section>
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>

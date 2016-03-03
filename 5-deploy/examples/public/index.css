@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+ul {
+    list-style: none;
+}
+
+li {
+    margin: 10px 20px;
+
+    font-size: 26px;
+}
