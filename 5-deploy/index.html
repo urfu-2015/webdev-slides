@@ -93,10 +93,10 @@
     <span class=fragment>"express": "<span class="green">^1.2.3</span>", // >=1.2.3 <2.0.0</span>
     <span class=fragment>"express": "<span class="green">1.2.x</span>", </span>
     <span class=fragment>"express": "<span class="green">latest</span>",</span>
-    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git</span>",</span>
-    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#4.13.4</span>",</span>
-    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#master</span>",</span>
-    <span class=fragment>"express": "<span class="green">git@github.com/expressjs/express.git#f3d99a4</span>",</span>
+    <span class=fragment>"express": "<span class="green">git://github.com/expressjs/express.git</span>",</span>
+    <span class=fragment>"express": "<span class="green">git://github.com/expressjs/express.git#4.13.4</span>",</span>
+    <span class=fragment>"express": "<span class="green">git://github.com/expressjs/express.git#master</span>",</span>
+    <span class=fragment>"express": "<span class="green">git://github.com/expressjs/express.git#f3d99a4</span>",</span>
     <span class=fragment>"express": "<span class="green">expressjs/express#f3d99a4</span>"</span>
   }
 }</pre>
@@ -181,7 +181,7 @@ Package                 Current  Wanted  Latest  Location
 <section>
     <h4>.npmrc</h4>
     <pre class="fragment"><code>
-fetch-retries=10 // Default is 2
+save-exact=true // Default is false
     </code></pre>
     <pre class="fragment"><code>
 progress=false // Hides progress (perfomance boost)
@@ -193,16 +193,6 @@ init-license=MIT // Sets npm init default license
 init-author-name='Sergey Gogolev'
     </code></pre>
     <a class="fragment" href="https://docs.npmjs.com/misc/config">docs.npmjs.com/misc/config</a>
-</section>
-
-<section>
-    <h4>pnpm</h4>
-    <p><span class=grey>Performant npm install</span> <span class="fragment red">(x6)</span></p>
-    <pre class="fragment"><span class=grey>$</span> npm <span class=green>install</span> <span class=magenta>--global</span> pnpm
-    </pre>
-    <pre class="fragment"><span class=grey>$</span> pnpm <span class=green>install</span> express
-    </pre>
-    <a class="fragment" href="http://ricostacruz.com/pnpm/">ricostacruz.com/pnpm</a>
 </section>
 
 <section>
@@ -355,7 +345,12 @@ function getNotes() {
 </section>
 
 <section>
-    <h4>EditorConfig</h4>
+    <h4>.editorconfig</h4>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="red"><span class="grey">└──</span> .editorconfig</span>
+    </pre>
     <pre><code>
 [*]
 indent_size = 4
@@ -494,7 +489,10 @@ function onError(err, req, res, next) {
 
 <section>
     <h4>Abstract syntax tree</h4>
-    <img src="img/ast.svg" width=500>
+    <pre><code data-noescape>
+let pi = 3.14
+    </code></pre>
+    <img src="img/ast.svg" width=400>
 </section>
 
 <section>
@@ -518,6 +516,12 @@ function onError(err, req, res, next) {
     }
   ]
 }</code></pre>
+</section>
+
+<section>
+    <h4>Abstract syntax tree</h4>
+    <a href="https://astexplorer.net/">astexplorer.net</a>
+    <a href="http://jointjs.com/demos/javascript-ast">jointjs.com/demos/javascript-ast</a>
 </section>
 
 <section>
@@ -815,7 +819,6 @@ $</span> npm <span class=green>install</span> <span class="magenta">--save-dev</
     </code></pre>
 </section>
 
-
 <section>
     <h4><span class="green">npm scripts</span></h4>
     <!-- Kate Hudson -->
@@ -826,18 +829,222 @@ $</span> npm <span class=green>install</span> <span class="magenta">--save-dev</
 
 <section>
     <h4><a href="#/1">Deploy</a></h4>
-    <!-- docker -->
-    <!-- heroku -->
+</section>
 
+<section>
+    <img src="img/classic.png">
+    <p class="grey">
+        FTP,
+        SCP,
+        rsync
+    </p>
+</section>
+
+<section>
+    <img src="img/classic-2.png" style="margin: 0 0 0 30px">
+    <p class="red">Конфликт за ресурсы</p>
+</section>
+
+<section>
+    <h4>Virtualization</h4>
+    <img src="img/hypervisor.png" width=300>
+    <p>Изолирование дерева процессов и ресурсов <span class="grey">(memory, cpu, disc)</span></p>
+</section>
+
+<section>
+    <h4>Containers</h4>
+    <img src="img/hypervisor.png" width=300>
+    <img src="img/containers.png" width=300>
+    <p>Не требуют OS и могут содержать только приложение</p>
+</section>
+
+<section>
+    <h4>Containers</h4>
+    <p class="pros left">Потребляют меньше ресурсов</p>
+    <p class="pros left fragment">Управление контейнерами менее требовательно к ресурсам</p>
+    <p class="pros left fragment">Быстрее запуск</p>
+    <p class="cons left fragment">Изоляция <a href="https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2014-9357">уязвима</a></p>
+    <p class="cons left fragment">Linux-only или windows-only</p>
+</section>
+
+<section>
+    <h4><img src="img/docker.png"></h4>
+    <p><img src="img/container.png"><img class="fragment" src="img/tools.png"></p>
+    <p class="fragment left"><a href="https://hub.docker.com/">Docker Hub</a> – хранилище контейнеров</p>
+    <p class="fragment left"><a href="https://www.docker.com/products/docker-toolbox">Docker Tools</a> – утилиты для сборки, публикации и запуска</p>
+    <p class="fragment left"><a href="">Docker Images</a> – read-only образы</p>
+</section>
+
+<section>
+    <h4><a href="">Docker Images</a></h4>
+    <img src="img/ogres.gif">
+</section>
+
+<section>
+    <h4><a href="">Docker Images</a></h4>
+    <p><img src="img/image.png"><img class="fragment" src="img/image-2.png"></p>
+    <p class="fragment">Из образов создаются экземпляры контейнеров</p>
+</section>
+
+<section>
+    <h4><img src="img/heroku.png"></h4>
+    <p class="grey">Облачная PaaS-платформа</p>
+</section>
+
+<section>
+    <h4>Heroku</h4>
+    <img src="img/heroku-routing.png">
+    <p class="fragment">Контейнеры в Heroku - <span class="green">Dyno</span></p>
+</section>
+
+<section>
+    <h4>Heroku</h4>
+    <img src="img/image.png"><img class="fragment" src="img/image.png">
+    <img class="fragment" src="img/image.png">
+    <p class="fragment">Больше нагрузка - больше контейнеров</p>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <a href="https://toolbelt.heroku.com/">toolbelt.heroku.com</a>
+    <pre class="fragment"><span class=grey>
+$</span> heroku<span class=green></span>
+    </pre>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="grey">└──</span> public
+<span class="red"><span class="grey">└──</span> package.json</span>
+    </pre>
+    <pre><code data-noescape>
+"engines": {
+    "node": "4.4.0"
+}
+    </code></pre>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre>
+app/
+<span class="red"><span class="grey">└──</span> app.js</span>
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="grey">└──</span> public
+<span class="grey">└──</span> package.json
+    </pre>
+    <pre><code data-noescape>
+app.listen(process.env.PORT || 5000)
+    </code></pre>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre>
+app/
+<span class="grey">└──</span> app.js
+<span class="grey">└──</span> routes.js
+<span class="grey">└──</span> models
+<span class="grey">└──</span> controllers
+<span class="grey">└──</span> views
+<span class="grey">└──</span> public
+<span class="grey">└──</span> package.json
+<span class="red fragment"><span class="grey">└──</span> Procfile</span>
+    </pre>
+    <pre class="fragment"><code data-noescape>
+web: node app.js
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+&lt;process type&gt;: &lt;command&gt;
+    </code></pre>
+    <a class="fragment" href="https://devcenter.heroku.com/articles/procfile">Process Types and the Procfile</a>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>local</span> web
+    </pre>
+    <pre class="fragment">
+forego | starting web.1 on port 5000
+<span class=green>web.1</span>  | Listening on port 5000
+<span class=green>web.1</span>  | GET / 200 35.429 ms - 410
+<span class=green>web.1</span>  | GET /favicon.ico 404 2.047 ms - 9
+    </pre>
+    <pre class="fragment">
+http://localhost:5000/
+    </pre>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>login</span></pre>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>create</span> urfu2015-notes
+    </pre>
+    <pre class="fragment">
+Creating urfu2015-notes... done, stack is cedar-14
+<span class="green">https://urfu2015-notes.herokuapp.com/</span> | <span class="grey">https://git.heroku.com/urfu2015-notes.git</span>
+    </pre>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre><span class=grey>
+$</span> git <span class=green>push</span> heroku master</pre>
+    <pre class="fragment">
+<span class=grey>remote:</span> Compressing source files... done.
+<span class=grey>remote:</span> Building source:
+<span class=grey>remote:</span>
+<span class=grey>remote:</span> -----> Using set buildpack heroku/nodejs
+<span class=grey>remote:</span> -----> Node.js app detected
+<span class=grey>remote:</span>
+<span class=grey>remote:</span> -----> Creating runtime environment
+<span class=grey>remote:</span>
+<span class=grey>remote:</span>        NODE_ENV=production
+<span class=grey>remote:</span>        NODE_MODULES_CACHE=true
+<span class=grey>remote:</span>
+<span class=grey>remote:</span> -----> Installing binaries
+<span class=grey>remote:</span>        engines.node (package.json):  4.4.0    </pre>
+    <a class="fragment" href="https://urfu2015-notes.herokuapp.com/">urfu2015-notes.herokuapp.com</a>
+</section>
+
+<section>
+    <p>Heroku</p>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>logs</span> </pre>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>ps:scale</span>
+
+web=1:Free
+    </pre>
+    <pre class="fragment"><span class=grey>
+$</span> heroku <span class=green>ps:scale</span> web=2
+
+Scaling dynos... failed
+ !    Cannot update to more than 1 Free size dynos per process type.
+    </pre>
+</section>
+
+<section>
+    <p><a href="http://patg.net/containers,virtualization,docker/2014/06/05/docker-intro/">Docker: Containers for the Masses</a></p>
+    <p><a href="https://devcenter.heroku.com/categories/heroku-architecture">Heroku Architecture</a></p>
+    <p><a href="https://habrahabr.ru/post/253877/">Понимая Docker</a></p>
 </section>
 
 <section>
     <h4><a href="#/1">CDN</a></h4>
-</section>
-
-<section>
-    <h4><span class="green">Задача</span></h4>
-    <p>Разместить <span class="magenta">статику</span> ближе к пользователю</p>
 </section>
 
 <section>
@@ -856,6 +1063,11 @@ app/
     <span class="grey">└──</span> index.css
     <span class="grey">└──</span> index.js</span>
     </pre>
+</section>
+
+<section>
+    <h4><span class="green">Задача</span></h4>
+    <p>Разместить <span class="magenta">статику</span> ближе к пользователю</p>
 </section>
 
 <section>
@@ -884,7 +1096,7 @@ app/
 
 <section>
     <h4>Border Gateway Protocol</h4>
-    <img src="img/bgp.png">
+    <img src="img/bgp.png" width=700>
 </section>
 
 <section>
@@ -959,12 +1171,6 @@ $</span> npm <span class=green>run</span> deploy:static
 </section>
 
 <section>
-    <h4>Дополнительные задачи</h4>
-    <p class="left pros">Обновить кеш у пользователя</p>
-    <p class="left pros">Синхронизировать статику и динамику</p>
-</section>
-
-<section>
     <h4>Обновить кеш у пользователя</h4>
     <div class="fragment"><p class="grey">Response</p>
     <pre><code data-noescape>
@@ -996,46 +1202,884 @@ body {
 </section>
 
 <section>
-    <h4>Версионирование</h4>
-    <pre style="margin-left: 350px !important">
-app/
-<span class="grey">└──</span> models
-<span class="grey">└──</span> controllers
-<span class="grey">└──</span> views
-<span class="grey">└──</span> public
-    <span class="grey">└──</span> index.css
-    <span class="grey">└──</span> index.js
-    <span class="fragment red"><span class="grey">└──</span> 1.1.0</span>
-        <span class="fragment red"><span class="grey">└──</span> index.css
-        <span class="grey">└──</span> index.js</span>
-    </pre>
-    <pre class="fragment"><code>
-const version = require('./package.json').version;
-    </code></pre>
-    <pre class="fragment"><code data-noescape>
-"scripts": {
-  "deploy:static": "node deploy-static.js"
-}
-    </code></pre>
-</section>
-
-<section>
     <h4>Content Delivery Network</h4>
-    <a href="https://habrahabr.ru/company/webzilla/blog/236511/">Знакомство с Content Delivery Network</a>
-    <a href="http://www.slashroot.in/what-anycast-and-how-it-works">What is Anycast and How it works</a>
-    <a href="http://www.amazon.com/Content-Delivery-Networks-Electrical-Engineering/dp/3540778861">Content Delivery Networks</a>
+    <p><a href="https://habrahabr.ru/company/webzilla/blog/236511/">Знакомство с Content Delivery Network</a></p>
+    <p><a href="http://www.slashroot.in/what-anycast-and-how-it-works">What is Anycast and How it works</a></p>
+    <p><a href="http://www.amazon.com/Content-Delivery-Networks-Electrical-Engineering/dp/3540778861">Content Delivery Networks</a></p>
 </section>
 
 <section>
     <h4><a href="#/1">Automate</a></h4>
 </section>
 
+<section>
+    <h4 class="green">Continuous Integration</h4>
+    <p>Автоматизированная сборка и тестирование исходного кода по факту изменения</p>
+</section>
+
+<section>
+    <h4 class="green">Continuous Deployment</h4>
+    <p>Автоматизированный деплой приложения</p>
+</section>
+
+<section>
+    <h4>Continuous Integration</h4>
+    <img src="img/ci.png">
+</section>
+
+<section>
+    <h4><span class="green">Polling</span> vs <span class="green">hooks</span></h4>
+</section>
+
+<section>
+    <h4>Continuous Integration</h4>
+    <p class="pros left">Автоматизация рутины</p>
+    <p class="pros left fragment">Неизбежное тестирование кода</p>
+    <p class="pros left fragment">Быстрая доставка до конечного пользователя</p>
+</section>
+
+<section>
+    <h4>Сервисы</h4>
+    <p class="fragment"><a href="https://www.jetbrains.com/teamcity/"><img src="img/tc.png" width=200></a></p>
+    <p class="fragment"><a href="https://drone.io/"><img src="img/drone.png" width=200></a></p>
+    <p class="fragment"><a href="https://travis-ci.org/"><img src="img/travis.png" width=150></a></p>
+</section>
+
+<section>
+    <h4>.travis.yml</h4>
+    <pre><code class="yaml">
+language: node_js
+node_js:
+  - "4"
+install:
+  - npm install
+script:
+  - npm run lint
+  - npm test
+    </code></pre>
+</section>
+
+<section>
+    <h4>.travis.yml</h4>
+    <pre><code class="yaml">
+after_success:
+  - '[ "${TRAVIS_PULL_REQUEST}" = "false" ] && \
+    npm run deploy:static'
+    </code></pre>
+</section>
+
+<section>
+    <h4>.travis.yml</h4>
+    <pre><code class="yaml">
+deploy:
+  skip_cleanup: true
+  provider: heroku
+  api_key:
+    secure: "RYtDTxQ+oCsAc5KTR+YtpdHWHlN7Ml+PWHsPul3Wdho6an8pvXhfTdMcg3sxncTji8DyOinEJQVYxaX61dw/dtd1fF7n06WWeFiXjlXAAp+17ySauWkwbFFicylrylYAl6nnC6Rw/T2FJ7Z3w4QQR377j8cgY5Ra9h3mSi7sT12xkfBYgjtyDDrajTASB5ZA3Hn9J9nRlg5Q52LIGMnGWkad+qF6MJfo5kja04YgrlAyqnPKVoxsL7k0fG0ZBjvg971DOBrxf2kt89hP7PWoXB4oOm3aNHBg7GFbyIF9qOspNcEIECjFLFaARIA556seK4zZe523HjvfSrf6QbCXsRkFEiY+zEOzUtE4KrfP9Igu+hZ9IVcLeDu2jrDnpJHRtMgFvgSbdmHExdzTbMDEBrZjfCC6N+5FjbD9HuGjW35bQ+UtneSP+dZI2xdGsFZhrlhym/zrij2DcAh9d9XS0EdIZTr0QFwg6PvyKW1EMX1zpOl02i4suVSw/Bw+C+usG3qaSOdDLvnYAYe0dKWK7wYLHxVG/6yUaN1BV8BF8mxmKqEuXRfiOnBNrPvWIJDmEZ8SOs2tlsDAK+1iTME+R2U/ivwERWP7DuJ8lOWqwCLQTtRx73CBmzWq6RvoBOZJR0BV2rCrMvZyFX6KnDj4Df5PyvfWez3lcSt2P7GjYuk="
+  on: master
+  app: urfu2015-notes
+    </code></pre>
+    <pre class="fragment"><code data-noescape><span class=grey>
+$</span> travis <span class=green>encrypt</span> $(heroku auth:token)
+    </code></pre>
+    <a class="fragment" href="https://travis-ci.org">travis-ci.org</a>
+</section>
+
+<section>
+    <h3>Структура проекта</h3>
+</section>
+
+<section>
+    <pre>
+notes
+    <span class="fragment">├── .gitignore</span>
+    <span class="fragment">├── .editorconfig</span>
+    <span class="fragment">├── package.json</span>
+    <span class="fragment">├── README.md</span>
+    <span class="fragment">└── index.js</span>
+    </pre>
+</section>
+
+<section>
+       <h4>Сервис «Заметки»</h4>
+       <p class="grey">Храним заметки пользователя в виде файлов</p>
+       <pre>
+   <span class="green"> GET</span> /                   <span class="grey textbook">главная</span>
+       </pre>
+       <pre>
+   <span class="green"> GET</span> /notes              <span class="grey textbook">список заметок</span>
+       </pre>
+       <pre>
+   <span class="green">POST</span> /notes              <span class="grey textbook">добавление заметки</span>
+       </pre>
+       <pre>
+   <span class="green"> GET</span> /notestodo-list    <span class="grey textbook">просмотр заметки</span>
+       </pre>
+</section>
+
+<section>
+    <h4><span class="grey">MVC</span>. Model</h4>
+    <pre>
+<span class="grey">notes</span>
+    <span class="grey">├── .gitignore</span>
+    <span class="grey">├── .editorconfig</span>
+    <span class="grey">├── package.json</span>
+    <span class="grey">├── README.md</span>
+    <span class="grey">├── index.js</span>
+    └─┬ models
+      └── note.js
+</section>
+
+<section>
+    <h4><span class="grey">MVC</span>. View</h4>
+    <pre>
+<span class="grey">notes</span>
+    <span class="grey">├── .gitignore</span>
+    <span class="grey">├── .editorconfig</span>
+    <span class="grey">├── package.json</span>
+    <span class="grey">├── README.md</span>
+    <span class="grey">├── index.js</span>
+    <span class="grey">├── models</span>
+    └─┬ views
+      ├── main.hbs
+      ├── note.hbs
+      └── notes.hbs
+    </pre>
+</section>
+
+<section>
+    <h4><span class="grey">MVC</span>. Controller</h4>
+    <pre>
+<span class="grey">notes</span>
+    <span class="grey">├── .gitignore</span>
+    <span class="grey">├── .editorconfig</span>
+    <span class="grey">├── package.json</span>
+    <span class="grey">├── README.md</span>
+    <span class="grey">├── index.js</span>
+    <span class="grey">├── models</span>
+    <span class="grey">├── views</span>
+    └─┬ controllers
+      ├── notes.js
+      └── pages.js
+    </pre>
+</section>
+
+<section>
+    <h4>Компонентный подход</h4>
+</section>
+
+<section>
+    <pre>
+<span class="grey">notes</span>
+    <span class="grey">├── .gitignore</span>
+    <span class="grey">├── .editorconfig</span>
+    <span class="grey">├── package.json</span>
+    <span class="grey">├── README.md</span>
+    <span class="grey">├── index.js</span>
+    <span class="grey">├── models</span>
+    <span class="grey">├── views</span>
+    <span class="grey">├── controllers</span>
+    └─┬ blocks
+      ├─┬ footer
+      │ ├── footer.css
+      │ └── footer.hbs
+      ├─┬ header
+      │ ├── header.css
+      │ ├── header.js
+      │ └── header.hbs
+      └─┬ notes
+        ├── notes.css
+        ├── notes.js
+        └── notes.hbs</pre>
+</section>
+
+<section>
+    <h4>Компонентный подход</h4>
+    <p class="pros left">Меньше вероятность конфликтов</p>
+    <p class="pros left">Легкое переиспользование кода</p>
+</section>
+
+<section>
+    <h4><span class="grey">Компонентный подход</span>. Ресурсы</h4>
+    <pre>
+    └─┬ blocks
+      ├─┬ footer
+      │ ├── <mark>footer.css</mark>
+      │ └── footer.hbs
+      ├─┬ header
+      │ ├── <mark>header.css</mark>
+      │ ├── <mark>header.js</mark>
+      │ └── header.hbs
+      └─┬ notes
+        ├── <mark>notes.css</mark>
+        ├── <mark>notes.js</mark>
+        └── notes.hbs</pre>
+</section>
+
+<section>
+    <h4>Публичная папка</h4>
+
+    <pre class="size-S">
+    public
+    ├── footer.css
+    ├── header.css
+    ├── notes.css
+    ├── header.js
+    └── notes.js</pre>
+</section>
+
+<section>
+    <h4><span class="grey">Компонентный подход</span>. Подключение</h4>
+
+    <pre class="size-M"><code class="hljs html" data-trim>
+&lt;head&gt;
+    &lt;link href="/footer.css" rel="stylesheet"&gt;
+    &lt;link href="/header.css" rel="stylesheet"&gt;
+    &lt;link href="/notes.css" rel="stylesheet"&gt;
+
+    &lt;script src="/header.js"&gt;&lt;/script&gt;
+    &lt;script src="/notes.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+</section>
+
+<section>
+    <p class="pros left">Работает</p>
+    <p class="cons left fragment">Много запросов за ресурсами</p>
+    <p class="cons left fragment">Много копирований при сборке</p>
+    <p class="cons left fragment">Ограничение на количество подключаемых ресурсов</p>
+</section>
+
+<section>
+    <h3><a href="https://webpack.github.io/">webpack</a></h3>
+
+    <pre class="fragment"><code class="hljs size-M" data-trim>
+        npm install --save-dev webpack
+    </code></pre>
+</section>
+
+<section>
+    <section>
+        <h2>Сборка скриптов</h2>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+{
+    context: __dirname + "/blocks",
+    entry: "blocks/mainPage.js",
+    output: {
+        path: __dirname + "/public",
+        filename: "mainPage.bundle.js"
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ blocks
+      └── mainPage.js</pre>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+var header = require('./header/header.js');
+var notes = require('./notes/notes.js');
+
+header.init();
+notes.init();
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Запуск</h3>
+<pre class="size-S">notes
+    └── package.json</pre>
+
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+"scripts": {
+    "build": "webpack"
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs size-S" data-trim>
+npm run build
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="size-S">notes
+    └─┬ public
+      ├── footer.css
+      ├── header.css
+      ├── notes.css
+      └── <mark>mainPage.bundle.js</mark></pre>
+    </section>
+
+    <section>
+        <h4>Подключение</h4>
+
+        <pre class="size-M"><code class="hljs html" data-trim data-noescape>
+&lt;head&gt;
+    &lt;link href="/footer.css" rel="stylesheet"&gt;
+    &lt;link href="/header.css" rel="stylesheet"&gt;
+    &lt;link href="/notes.css" rel="stylesheet"&gt;
+
+    &lt;script src="/<mark>mainPage.bundle.js</mark>"&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Сборка стилей</h3>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ blocks
+      └── mainPage.css</pre>
+
+        <pre class="fragment"><code class="hljs size-M" data-trim data-noescape>
+@import header/header.css
+@import notes/notes.css
+@import footer/footer.css
+        </code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ blocks
+      ├── <span class="grey">mainPage.css</span>
+      └── mainPage.js</pre>
+        <h4></h4>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim data-noescape>
+require('./mainPage.css');
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-M" data-trim data-noescape>
+npm run build
+        </code></pre>
+
+        <pre class="fragment red"><span class="size-M" data-trim>
+You may need an appropriate
+loader to handle this file type.
+        </span></pre>
+    </section>
+
+    <section>
+        <h4>Лоадеры</h4>
+
+        <pre>
+            <code class="size-S">npm install style-loader --save-dev</code>
+            <code class="size-S">npm install css-loader --save-dev</code>
+        </pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+{
+   ...
+
+   module: {
+      loaders: [
+         {test: /\.css$/, loaders: ["style", "css"]}
+      ]
+   }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="size-M"><code class="hljs html" data-trim data-noescape>
+&lt;head&gt;
+    &lt;style type="text/css"&gt;
+        body {
+            font-family: Arial, sans-serif;
+        }
+    &lt;/style&gt;
+
+    &lt;style type="text/css"&gt;
+        header {
+            border-bottom: 1px solid #ccc;
+        }
+    &lt;/style&gt;
+&lt;/head&gt;</code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+var ExtractTextPlugin =
+    require('extract-text-webpack-plugin');
+
+module.exports = {
+    ...
+
+    plugins: [
+        new ExtractTextPlugin("bundle.css")
+    ]
+}
+        </code></pre>
+    </section>
+
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+module: {
+    loaders: [
+        {
+            test: /\.css$/,
+            loader: ExtractTextPlugin
+             .extract('style-loader', 'css-loader')
+        }
+    ]
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="size-S">notes
+    └─┬ public
+      ├── bundle.css
+      └── mainPage.bundle.js</pre>
+    </section>
+
+    <section>
+        <h4>Подключение</h4>
+
+        <pre><code class="hljs html size-XS" data-trim data-noescape>
+&lt;head&gt;
+    &lt;link href="/bundle.css" rel="stylesheet"&gt;
+
+    &lt;script src="/mainPage.bundle.js"&gt;&lt;/script&gt;
+&lt;/head&gt;</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Сборка картинок</h3>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        ├── notes.css
+        ├── notes.js
+        ├── <mark>background.png</mark>
+        └── notes.hbs</pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS fragment">
+.notes {
+    background: url(background.png)
+}
+</code></pre>
+    </section>
+
+    <section>
+        <h4>Лоадеры</h4>
+
+        <pre>
+            <code class="size-S">npm install file-loader --save-dev</code>
+        </pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+module: {
+    loaders: [
+        {
+            test: /(\.png|\.jpg)$/,
+            loader: "file-loader"
+        }
+    ]
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="size-S">notes
+    └─┬ public
+      ├── bundle.css
+      ├── mainPage.bundle.js
+      └── <mark>9d86ab26bc61bc94bf09d352edff07a1.png</mark></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        Постпроцессинг CSS
+    </section>
+
+    <section>
+        <p class="pros left">расстановка браузерных префиксов</p>
+        <p class="pros left fragment">линтинг</p>
+        <p class="pros left fragment">конвертация картинок в base64 код</p>
+        <p class="left fragment">...</p>
+    </section>
+
+    <section>
+        <h4>расстановка браузерных префиксов</h4>
+
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS fragment" data-trim>
+.notes {
+    display: flex;
+}
+</code></pre>
+    </section>
+
+    <section>
+        <h3><a href="https://github.com/postcss/postcss">postcss</a></h3>
+        <pre><code class="size-M">npm i --save-dev postcss-loader</code></pre>
+    </section>
+
+    <section>
+        <h3>autoprefixer</h3>
+        <pre><code class="size-M">npm i --save-dev autoprefixer</code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+var autoprefixer = require('autoprefixer');
+
+module.exports = {
+    ...
+
+    postcss: function () {
+        return [autoprefixer];
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+└── webpack.config.js</pre>
+
+    <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+module: {
+  loaders: [
+    ...
+
+    {
+      test: /\.css$/,
+      loader: ExtractTextPlugin.extract(
+        "style-loader",
+        "css-loader"
+      )
+}
+    </code></pre>
+    </section>
+
+    <section>
+        <h4 class="red">До</h4>
+        <pre><code class="hljs css size-XS" data-trim>
+.notes {
+    display: flex;
+}
+        </code></pre>
+
+        <h4 class="fragment green">После</h4>
+        <pre><code class="hljs css size-XS fragment" data-trim>
+.notes {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Минификация CSS</h3>
+    </section>
+
+    <section data-transition="none">
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS fragment" data-trim>
+.notes {
+    div { margin: 0 0 0 0; }
+    div {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}
+</code></pre>
+    </section>
+
+    <section data-transition="none">
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS" data-trim data-noescape>
+.notes {
+    div { margin: 0 0 0 0<mark>;</mark> }
+    div {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex<mark>;</mark>
+    }
+}
+</code></pre>
+    </section>
+
+    <section data-transition="none">
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS" data-trim data-noescape>
+.notes {
+    <mark>div {</mark> margin: 0 0 0 0; }
+    <mark>div {</mark>
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}
+</code></pre>
+    </section>
+
+    <section data-transition="none">
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS" data-trim data-noescape>
+.notes {
+    div { margin: <mark>0 0 0 0</mark>; }
+    div {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}
+</code></pre>
+    </section>
+
+
+    <section data-transition="none">
+<pre class="size-S">notes
+    └─┬ blocks
+      └─┬ notes
+        └── notes.css</pre>
+
+<pre><code class="hljs css size-XS" data-trim data-noescape>
+.notes {
+    div { margin: 0 0 0 0; }
+    div {<mark>
+        </mark>display: -webkit-box;<mark>
+        </mark>display: -webkit-flex;<mark>
+        </mark>display: -ms-flexbox;<mark>
+        </mark>display: flex;
+    }
+}
+</code></pre>
+    </section>
+
+    <section>
+        <h3>cssnano</h3>
+        <pre><code class="size-M">npm i --save-dev cssnano</code></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+var cssnano = require('cssnano');
+
+module.exports = {
+    ...
+
+    postcss: function () {
+        return [
+            autoprefixer,
+            cssnano
+        ];
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h4 class="red">До</h4>
+<pre><code class="hljs css size-XS" data-trim>
+.notes {
+    div { margin: 0 0 0 0; }
+    div {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+}
+</code></pre>
+
+        <h4 class="green fragment">После</h4>
+<pre><code class="hljs css size-XXS fragment" data-trim>
+div{margin:0;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Минификация JS</h3>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+var webpack = require('webpack');
+
+module.exports = {
+    ...
+
+    plugins: [
+        ...
+        new webpack.optimize.UglifyJsPlugin()
+    ]
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h4 class="green">После</h4>
+<pre><code class="hljs jvascript size-XS" data-trim>
+!function(o){function n(e){if(t[e])return t[e]. ....
+</code></pre>
+    </section>
+
+    <section>
+        <img src="./img/without_sourcemap.png" alt="Без sourcemap" width="146%" />
+    </section>
+
+    <section>
+        <h3>sourcemap</h3>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+module.exports = {
+    ...
+
+    devtool: 'source-map'
+}
+        </code></pre>
+
+<pre class="size-S fragment">notes
+    └─┬ public
+      ├── mainPage.bundle.js
+      └── <mark>mainPage.bundle.js.map</mark></pre>
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └─┬ public
+      └── mainPage.bundle.js</pre>
+
+      <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+...
+//# sourceMappingURL=main.bundle.js.map
+      </code></pre>
+    </section>
+
+    <section>
+        <h4 class="red">До</h4>
+        <img src="./img/without_sourcemap.png" alt="Без sourcemap" width="146%" />
+
+        <h4 class="fragment green">После</h4>
+        <img src="./img/with_sourcemap.png" alt="с sourcemap" width="146%" class="fragment"/>
+    </section>
+</section>
+
+<section>
+    <section>
+        Бандлы
+    </section>
+
+    <section>
+<pre class="size-S">notes
+    └── webpack.config.js</pre>
+
+        <pre class="fragment"><code class="hljs size-XS javascript" data-trim>
+module.exports = {
+    ...
+
+    entry: {
+        mainPage: './mainPage.js',
+        innerPage: './innerPage.js'
+    },</code></pre>
+<pre class="fragment"><code class="hljs size-XS javascript">    output: {
+        filename: "[name].bundle.js"
+    }
+}
+        </code></pre>
+    </section>
+</section>
+
+
 <section style="font-size: 1.2em">
-    <a href="https://github.com/urfu-2015/webdev-slides/tree/gh-pages/5-deploy/examples">
+    <a href="https://github.com/urfu-2015/urfu2015-notes">
         Пример сервиса «Заметки»,<br>
         подготовленного к сборке, деплою и автоматизации
     </a>
 </section>
+
 </div></div>
 
 <script src="../lib/js/head.min.js"></script>
