@@ -6,6 +6,7 @@
 4. [Express.js, Handlebars](https://urfu-2015.github.io/webdev-slides/4-expressjs)
 5. [Тестирование. Эпизод I](https://urfu-2015.github.io/webdev-slides/5-tests/)
 6. [Build, Deploy, Automate](https://urfu-2015.github.io/webdev-slides/5-deploy/) ([Пример приложения](https://github.com/urfu-2015/urfu2015-notes))
+7. [Организация вёрстки](https://urfu-2015.github.io/webdev-slides/7-bem/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)
