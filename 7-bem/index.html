@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Организация вёрстки</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs"><div class="reveal"><div class="slides">
+
+<section class="large">
+    <h3>Организация вёрстки</h3>
+    <p class="author">
+        <small>Олег Мохов</small>
+    </p>
+</section>
+
+
+<section>
+    <section>
+        <h3>Как мы верстаем?</h3>
+    </section>
+
+    <section>
+        <h4>Типичная вёрстка</h4>
+<pre>
+    <span class="fragment">templates/</span>
+    <span class="fragment"><span class="grey">└──</span> index.html</span>
+    <span class="fragment"><span class="grey">└──</span> index.css</span>
+</pre>
+    </section>
+    <section>
+        <h4>Хороший CSS</h4>
+<pre><code class="hljs css size-XS" data-trim>
+a {
+    color: red;
+}
+</code></pre>
+    </section>
+    <section>
+        <h4>Типичный CSS</h4>
+<pre><code class="hljs css size-XXS" data-trim>
+html,
+body
+{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    font-family: Arial, sans-serif;
+}
+
+header
+{
+    position: relative;
+    border: 3px solid #000;
+    width: 952px;
+    height: 551px;
+    margin: 18px auto 0;
+}
+
+/* далее ещё 400 строчек кода */
+</code></pre>
+    </section>
+    <section>
+        <h4>CSS по полочкам</h4>
+<pre>
+<div class="fragment"><code class="hljs css size-XXS" data-trim>/* сброс умолчаний */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* общие стили */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* шапка */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* основная часть */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* футер */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* страница печати */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* мобильная версия */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* какие-то правки */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* новая страница */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* ещё какие-то правки */</code></div><!--
+--><div class="fragment"><code class="hljs css size-XXS" data-trim>/* стили новой шапки */</code></div>
+</pre>
+    </section>
+</section>
+
+
+<section>
+    <section>
+        <h3>Большие проекты</h3>
+    </section>
+    <section>
+        <h3>Проблемы</h3>
+        <ul>
+            <li class="fragment">При внесении правок результат не всегда предсказуем</li>
+            <li class="fragment">Блоки зависят от окружения</li>
+            <li class="fragment">DOM-lookup'ы</li>
+            <li class="fragment">Смешение назначений</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Большие проекты</h3>
+        <ul>
+            <li class="fragment">Длительная поддержка кода</li>
+            <li class="fragment">Много кода</li>
+            <li class="fragment">Время на разработку ограничено</li>
+            <li class="fragment">Большие команды</li>
+            <li class="fragment">Единый стиль</li>
+            <li class="fragment">Код должен быть качественным</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <!--<section>-->
+        <!--<h3>АНБ</h3>-->
+    <!--</section>-->
+    <section>
+        <h3>Независимые блоки</h3>
+        <ul>
+            <li class="fragment">Верстаем не макетами, а блоками</li>
+            <li class="fragment">Блоки бывают атомарные или составные</li>
+            <li class="fragment">HTML, CSS, JavaScript блока не зависит от других блоков</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Достижение независимости</h3>
+        <ul>
+            <li class="fragment">Модульность</li>
+            <li class="fragment">Реиспользование</li>
+            <li class="fragment">Общая предметная область</li>
+            <li class="fragment">Разделение ответственности</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Отказываемся от id</h3>
+        <ul>
+            <li class="fragment">#id и .class идентичны по скорости наложнения на DOM-дерево (защита от «дурака»)</li>
+            <li class="fragment">При этом работая с #id нельзя исключать, что когда-то элемент станет не уникальным</li>
+            <li class="fragment">Нельзя полностью отказаться от использования id'шников, т.к они нужны для форм или якорей</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Решение Яндекса<span class="fragment">: БЭМ</span></h3>
+    </section>
+    <section>
+        <img src="img/page_layout.jpg"/>
+    </section>
+    <section>
+        <img src="img/page_layout_with_blocks.png"/>
+    </section>
+    <section>
+        <h3>Блок</h3>
+        <ul class="size-xs">
+            <li class="fragment">это кирпичик проекта</li>
+            <li class="fragment">может быть простым или составным</li>
+            <li class="fragment">логически и функционально независим</li>
+            <li class="fragment">блок инкапсулирует в себе поведение, шаблоны и стили, а также другие технологии реализации</li>
+            <li class="fragment">повторно реиспользуем</li>
+            <!--<li class="fragment">аналог компонента в web components</li>-->
+        </ul>
+    </section>
+    <section>
+        <h3>Вложенность</h3>
+        <img src="img/key-concepts__head_marked.png"/>
+    </section>
+    <section>
+        <h3>Свободное перемещение</h3>
+        <img src="img/key-concepts__head.png"/>
+        <div class="fragment">
+            <img src="img/key-concepts__head_changed.png"/>
+        </div>
+    </section>
+    <section>
+        <h3>Элемент</h3>
+        <ul>
+            <li class="fragment">это часть блока, отвечающая за отдельную функцию</li>
+            <li class="fragment">может находиться только в составе блока и не имеет смысла в отрыве от него</li>
+        </ul>
+    </section>
+    <section>
+        <img style="position: absolute" class="fragment fade-out" src="img/element-example1.jpg"/>
+        <img src="img/element-example2.jpg"/>
+    </section>
+    <section>
+        <img src="img/element-example3.png"/>
+    </section>
+    <section>
+        <h3>Модификатор</h3>
+        </section>
+    <section>
+        <img src="img/modifier.jpg"/>
+    </section>
+    <section>
+        <img src="img/modifier2.jpg"/>
+    </section>
+    <section>
+        <h3>Модификатор</h3>
+        <ul>
+            <li class="fragment">это свойство блока или элемента, которое меняет его внешний вид или поведение</li>
+            <li class="fragment">имеет имя и значение</li>
+            <li class="fragment">одновременно может использоваться несколько разных модификаторов</li>
+        </ul>
+    </section>
+    <section>
+        <img src="img/key-concepts__site-footer-menu.png"/>
+    </section>
+    <section>
+        <iframe width="800" height="600" src="https://ru.bem.info/__example/bem-components/v2.4.0/desktop.pages/showcase/showcase.html"></iframe>
+        <p><a href="https://ru.bem.info/libs/bem-components/v2.4.0/showcase/">Витрина bem-components</a></p>
+    </section>
+
+    <section data-background-image="img/naming.jpg">
+        <h3 class="title-highlight">Именование</h3>
+    </section>
+
+    <section>
+        <h3>Именование блоков</h3>
+        <ul>
+            <li class="fragment">уникальное название, идентифицирующее блок</li>
+            <li class="fragment">пробелы заменяются на дефисы</li>
+            <li class="fragment">возможно использовать префиксы</li>
+            <li class="fragment">это класс HTML-элемента</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Именование элементов</h3>
+        <ul>
+            <li class="fragment">уникальное название, идентифицирующее элемент внутри блока</li>
+            <li class="fragment">название строится комбинированием имени блока и элемента (например <mark>блок__элемент</mark>)</li>
+            <li class="fragment">это класс HTML-элемента</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Именование модификаторов</h3>
+        <ul>
+            <li class="fragment">уникальная пара ключ-значение, идентифицирующая определенное свойство и состояние блока/элемента</li>
+            <li class="fragment">название строится добавлением к имени блока или элемент символа _ и названия (например, <mark>блок_модификатор</mark><span class="fragment"> или <mark>элемент_модификатор_значение</mark></span>)</li>
+            <li class="fragment">это дополнительный класс HTML-элемента</li>
+        </ul>
+    </section>
+    <section>
+        <input class="fragment animation1" type="hidden"/>
+        <span class="fader"></span>
+        <img src="img/bem-example.jpg"/>
+        <pre><code class="hljs html size-XXXS" data-trim>
+<span class="radio-group radio-group_size_m">
+     <label class="radio radio_size_m radio_disabled">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="1" disabled="disabled" />
+        </span>
+         <span class="radio__text">Футбол</span>
+     </label>
+    <br/>
+    <label class="radio radio_size_m radio_checked">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="2" checked="checked" />
+        </span>
+        <span class="radio__text">Баскетбол</span>
+    </label>
+    <br/>
+    <label class="radio radio_size_m">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="3" />
+        </span>
+        <span class="radio__text">Гандбол</span>
+    </label>
+</span>
+        </code></pre>
+    </section>
+</section>
+<section>
+    <section>
+        <h3>Вёрстка на файловой системе</h3>
+        <ul>
+            <li class="fragment">все сущности кладутся в отдельные директории</li>
+            <li class="fragment">при использовании <span class="spoiler">препроцессоров</span> или <span class="spoiler">постпроцессоров</span> возможно ограничиваться только блоками</li>
+            <li class="fragment">каждая технология в отдельный файл</li>
+        </ul>
+    </section>
+    <section>
+<pre>
+    <span>button/</span>
+    <span class="fragment"><span class="grey">└──</span> button.html</span>
+    <span class="fragment"><span class="grey">└──</span> button.css</span>
+    <span class="fragment"><span class="grey">└──</span> button.ie.css</span>
+    <span class="fragment"><span class="grey">└──</span> button.js</span>
+    <span class="fragment"><span class="grey">└──</span> _hovered/</span>
+    <span class="fragment"><span class="grey">    └──</span> button_hovered.css</span>
+    <span class="fragment"><span class="grey">    └──</span> button_hovered.png</span>
+    <span class="fragment"><span class="grey">└──</span> __icon/</span>
+    <span class="fragment"><span class="grey">    └──</span> button__icon.css</span>
+    <span class="fragment"><span class="grey">    └──</span> _color/</span>
+    <span class="fragment"><span class="grey">        └──</span> button__icon_color_blue.css</span>
+    <span class="fragment"><span class="grey">        └──</span> button__icon_color_red.css</span>
+</pre>
+    </section>
+    <section>
+        <h3>Уровни переопределения</h3>
+    </section>
+    <section>
+        <img src="img/levels.png"/>
+    </section>
+    <section>
+<pre>
+    <span>common/</span>
+    <span><span class="grey">└──</span> header/</span>
+    <span><span class="grey">    └──</span> header.css</span>
+    <span><span class="grey">    └──</span> header.js</span>
+</pre>
+<pre class="fragment">
+    <span>desktop/</span>
+    <span><span class="grey">└──</span> header/</span>
+    <span><span class="grey">    └──</span> header.css</span>
+</pre>
+<pre class="fragment">
+    <span>touch/</span>
+    <span><span class="grey">└──</span> header/</span>
+    <span><span class="grey">    └──</span> header.css</span>
+    <span><span class="grey">    └──</span> header.js</span>
+</pre>
+    </section>
+    <section>
+<pre>
+<code class="hljs css size-XXS" data-trim>
+@import (common/header/header.css);
+@import (desktop/header/header.css);
+</code><span class="grey">header.desktop.css</span>
+</pre>
+<br/>
+<pre class="fragment">
+<code class="hljs css size-XXS" data-trim>
+@import (common/header/header.css);
+@import (touch/header/header.css);
+</code><span class="grey">header.touch.css</span>
+</pre>
+    </section>
+    <section>
+        <h3>enb-make</h3>
+        <p><a href="https://github.com/enb-make/enb">https://github.com/enb-make/enb</a></p>
+    </section>
+    <section>
+<pre>
+<code class="hljs javascript size-XXS" data-trim>
+({
+    block: 'page'
+})
+</code><span class="grey">index.bemjson.js</span>
+</pre>
+        <br/>
+<pre class="fragment">
+<code class="hljs javascript size-XXS" data-trim>
+({
+    mustDeps: [
+        { block: 'header' }
+    ],
+    shouldDeps: [
+        { block: 'button' },
+        { block: 'icon', mods: ['warning', 'error'] }
+    ]
+})
+</code><span class="grey">page.deps.js</span>
+</pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Шаблонизация</h3>
+    </section>
+
+    <section>
+<pre>
+<code class="hljs javascript size-S" data-trim>
+res.render('template', data);
+</code>
+</pre>
+    </section>
+    <section>
+        <h3>Шаблонизация</h3>
+<p>Данные</p>
+<p>↓</p>
+<p>HTML</p>
+    </section>
+    <section>
+        <h3>Двухуровневая шаблонизация</h3>
+<p>Данные</p>
+<p>↓</p>
+<p>БЭМ-дерево</p>
+<p>↓</p>
+<p>HTML</p>
+    </section>
+    <section>
+        <h3>BEMJSON</h3>
+    </section>
+
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+{
+    block: 'page'
+}
+</code></pre>
+<br/>
+<pre class="fragment"><code class="hljs html size-XS" data-trim>
+<div class="page"></div>
+</code></pre>
+    </section>
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+{
+    block: 'page',
+    mods: { type: 'main' }
+}
+</code></pre>
+<br/>
+<pre class="fragment"><code class="hljs html size-XS" data-trim>
+<div class="page page_type_main"></div>
+</code></pre>
+    </section>
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+{
+    block: 'page',
+    mods: { type: 'main' },
+    content: {
+        block: 'header'
+    }
+}
+</code></pre>
+        <br/>
+<pre class="fragment"><code class="hljs html size-XS" data-trim>
+<div class="page page_type_main">
+    <div class="header"></div>
+</div>
+</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Императивное и декларативное программирование</h3>
+    </section>
+    <section>
+        <h3>Императивные языки программирования</h3>
+        <blockquote>«языки программирования, в которых описывается процесс вычисления в виде инструкций, изменяющих состояние программы (состояние памяти, состояние переменных...)»</blockquote>
+    </section>
+    <section>
+        <h3>Декларативные языки программирования</h3>
+        <blockquote>«языки высокого уровня, в которых не задается пошаговый алгоритм решения задачи ("как" решить задачу), а описывается, "что" требуется получить в качестве результата»</blockquote>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>BH</h3>
+        <p><a href="https://github.com/bem/bh">https://github.com/bem/bh</a></p>
+    </section>
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+bh.match('page', (ctx) => {
+    ctx.tag('main');
+});
+</code></pre>
+    </section>
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+bh.match('page', (ctx) => {
+    ctx.content({
+        elem: 'content',
+        content: ctx.content()
+    });
+});
+</code></pre>
+    </section>
+    <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+bh.match('page', (ctx) => {
+    ctx.content([
+        { elem: 'header' },
+        ctx.content(),
+        { elem: 'footer' }
+    ]);
+});
+</code></pre>
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+
+bh.match('page__footer', (ctx) => {
+    ctx.content('THIS IS FOOOOTER!');
+});
+</code></pre>
+    </section>
+    <section>
+        <h3>Уровни переопределения</h3>
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+bh.match('page', (ctx) => {
+    ctx.content('CONTENT');
+});
+bh.match('page', (ctx) => {
+    ctx.tag('div');
+});
+</code></pre>
+    </section>
+    <section>
+        <h3>Инкапсуляция разметки</h3>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3><a href="https://ru.bem.info/technology/i-bem/v2/i-bem-js/">i-bem.js</a></h3>
+    </section>
+    <section>
+        <h3>1. Манипулируем не DOM, а BEM-объектами</h3>
+    </section>
+    <section>
+        <h3>2. Вместо событий реагируем на изменения модификаторов</h3>
+    </section>
+    <section>
+        <h3>3. Блок манипулирует только собой</h3>
+    </section>
+    <section>
+        <h3>4. Для связывания двух блоков используется не хождение вверх по DOM, а блоки-обёртки или каналы (глобальные события)</h3>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Ещё решения</h3>
+        <ul class="fragment">
+            <li>OOCSS</li>
+            <li>SMACSS</li>
+            <li>Atomic CSS</li>
+            <li>MCSS</li>
+            <li>AMCSS</li>
+            <li>FUN</li>
+        </ul>
+        <p class="fragment"><a href="https://habrahabr.ru/post/256109/">Способы организации CSS-кода</a></p>
+    </section>
+    <section>
+        <h3>Polymer</h3>
+    </section>
+</section>
+
+<section>
+    <section>
+        <img src="img/webapp-1.png"/>
+    </section>
+    <section>
+        <img src="img/webapp-2.png"/>
+    </section>
+    <section>
+        <h3>Веб-компоненты</h3>
+        <ul>
+            <li class="fragment">Templates</li>
+            <li class="fragment">Custom Elements</li>
+            <li class="fragment">Shadow DOM</li>
+            <li class="fragment">Imports</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Шаблонизаторы</h3>
+        <ul>
+            <li class="fragment">Jade</li>
+            <li class="fragment">Handlebars</li>
+            <li class="fragment">Mustache</li>
+            <li class="fragment">Django Templates (Python)</li>
+            <li class="fragment">Smarty (PHP)</li>
+            <li class="fragment">BEM</li>
+            <li class="fragment">тыщи их...</li>
+            <li class="fragment">HTML + JavaScript</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Шаблоны в HTML</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<div id="mytemplate" hidden>
+    <img src="logo.png"/>
+    <div class="comment"></div>
+</div>
+</code></pre>
+    </section>
+    <section>
+        <h3>Шаблоны в HTML</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<script id="mytemplate" type="text/x-handlebars-template">
+    <img src="logo.png"/>
+    <div class="comment"></div>
+</script>
+</code></pre>
+    </section>
+    <section>
+        <h3>Шаблоны в HTML</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<template>
+    <img src="logo.png"/>
+    <div class="comment"></div>
+</template>
+</code></pre>
+    </section>
+    <section>
+        <h3>Templates</h3>
+        <blockquote>«Method of declaring a portion of reusable markup that is parsed but not rendered until cloned»</blockquote>
+        <a href="http://caniuse.com/#feat=template">http://caniuse.com/#feat=template</a>
+    </section>
+    <section>
+        <h3>Плюсы &lt;templates&gt;</h3>
+        <ul>
+            <li class="fragment">Содержимое не обрабатывается и не загружается, пока шаблон не активирован</li>
+            <li class="fragment">Содержимое не доступно с помощью querySelector и прочих функций</li>
+            <li class="fragment">Шаблоны можно помещать куда угодно, в &lt;head&gt;, в &lt;body&gt; или даже внутрь &lt;select&gt;</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Использование</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<template id="template1">
+    <img src="logo.png"/>
+    <div class="comment"></div>
+</template>
+</code></pre>
+        <br/>
+<pre class="fragment"><code class="javascript html size-XS" data-trim>
+var template = document.querySelector('#template1');
+document.body.appendChild(template.cloneNode(true));
+</code></pre>
+    </section>
+    <section>
+        <h3>Поддержка браузерами</h3>
+        <ul>
+            <li class="fragment">2013 – 46%</li>
+            <li class="fragment">2015 – 63%</li>
+            <li class="fragment">2016 – 72%</li>
+        </ul>
+    </section>
+</section>
+
+
+
+<section>
+    <section>
+        <h3>CustomElements</h3>
+    </section>
+    <section>
+        <h3>Типичная вёрстка</h3>
+<pre class="fragment"><code class="hljs html size-XS" data-trim>
+<div class="header">...</div>
+<div class="folders">...</div>
+<div class="messages">
+    <div class="message">...</div>
+</div>
+</code></pre>
+    </section>
+    <section>
+        <h3>Типичная вёрстка HTML5</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<header>...</header>
+<div class="folders">...</div>
+<main class="messages">
+    <div class="message">...</div>
+</main>
+</code></pre>
+    </section>
+    <section>
+        <h3>Вёрстка с CustomElements</h3>
+<pre><code class="hljs html size-XS" data-trim>
+<header>...</header>
+<folders>...</folders>
+<messages>
+    <message>...</message>
+</messages>
+</code></pre>
+    </section>
+    <section>
+        <h3>Создание</h3>
+<pre class="fragment"><code class="javascript html size-XS" data-trim>
+var Folders = Object.create(HTMLElement.prototype);
+    Folders.createdCallback = function() {
+        this.addEventListener('click', function(e) {
+        alert('Thanks!');
+    });
+};
+document.registerElement('folders', {prototype: Folders});
+</code></pre>
+    </section>
+    <section>
+        <h3>Lifecycle callbacks</h3>
+<pre class="fragment"><code class="javascript html size-XS" data-trim>
+createdCallback
+// экземпляр элемента создан
+</code>
+<code class="fragment javascript html size-XS" data-trim>
+enteredViewCallback
+// экземпляр элемента добавлен в документ
+</code>
+<code class="fragment javascript html size-XS" data-trim>
+leftViewCallback
+// экземпляр элемента удалён из документа
+</code>
+<code class="fragment javascript html size-XS" data-trim>
+attributeChangedCallback(attrName, oldVal, newVal)
+// добавление/удаление/изменение аттрибута attrName
+</code></pre>
+    </section>
+    <section>
+        <h3>Поддержка браузерами</h3>
+        <ul>
+            <li class="fragment">2013 – 45%</li>
+            <li class="fragment">2015 – 45%</li>
+            <li class="fragment">2016 – 48%</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Shadow DOM</h3>
+    </section>
+    <section>
+    <input class="fragment animation1" type="hidden"/>
+    <span class="fader"></span>
+    <img src="img/bem-example.jpg"/>
+        <pre><code class="hljs html size-XXXS" data-trim>
+<span class="radio-group radio-group_size_m">
+     <label class="radio radio_size_m radio_disabled">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="1" disabled="disabled" />
+        </span>
+         <span class="radio__text">Футбол</span>
+     </label>
+    <br/>
+    <label class="radio radio_size_m radio_checked">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="2" checked="checked" />
+        </span>
+        <span class="radio__text">Баскетбол</span>
+    </label>
+    <br/>
+    <label class="radio radio_size_m">
+        <span class="radio__box">
+            <input class="radio__control" type="radio"
+                   name="radio-line" value="3" />
+        </span>
+        <span class="radio__text">Гандбол</span>
+    </label>
+</span>
+        </code></pre>
+</section>
+    <section>
+        <p>
+            <input type="date"/>
+        </p>
+<pre class="fragment"><code class="hljs html size-XS" data-trim>
+<input type="date"/>
+</code></pre>
+    </section>
+    <section>
+        <img src="img/shadow-dom-enable.jpg"/>
+    </section>
+    <section>
+        <img src="img/shadow-dom-shown.jpg"/>
+    </section>
+    <section>
+        <h3>Создание</h3>
+<pre class="fragment"><code class="javascript html size-XS" data-trim>
+var Shadow = Object.create(HTMLElement.prototype);
+Shadow.createdCallback = function() {
+    var shadow = this.createShadowRoot();
+    shadow.innerHTML = "Ололо";
+};
+
+document.registerElement('my-element', {prototype: Shadow});
+</code></pre>
+    </section>
+    <section data-background="img/all-together.jpg">
+        <h3 class="fragment title-highlight">Shadow DOM + Templates + CustomElements</h3>
+    </section>
+    <section>
+        <h3>Всё вместе</h3>
+<pre><code class="javascript html size-XS" data-trim>
+var Shadow = Object.create(HTMLElement.prototype);
+Shadow.createdCallback = function() {
+    var shadow = this.createShadowRoot();
+    var template = document
+       .querySelector('template#myTemplate');
+    shadow.appendChild(template.content);
+};
+
+document.registerElement('my-element', {
+    prototype: Shadow
+});
+</code></pre>
+    </section>
+    <section>
+        <h3>Поддержка браузерами</h3>
+        <ul>
+            <li class="fragment">2013 – 33%</li>
+            <li class="fragment">2015 – 46%</li>
+            <li class="fragment">2016 – 52%</li>
+        </ul>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Imports</h3>
+    </section>
+    <section>
+        <h3>Загрузка внешних ресурсов</h3>
+        <ul>
+            <li class="fragment">&lt;link rel="stylesheet"&gt; для загрузки CSS</li>
+            <li class="fragment">&lt;script src&gt; для загрузки скриптов</li>
+            <li class="fragment">&lt;img&gt; для загрузки картинок</li>
+            <li class="fragment">&lt;audio&gt; для загрузки аудио</li>
+            <li class="fragment">&lt;video&gt; для загрузки видео</li>
+            <li class="fragment">??? для загрузки HTML</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Загрузка HTML</h3>
+        <ul>
+            <li class="fragment">&lt;iframe&gt; <span class="fragment">– всё своё (контекст, JS, стили), трудно взаимодействовать</span></li>
+            <li class="fragment">AJAX <span class="fragment">– нужен JS, сложно кэшировать</span></li>
+            <li class="fragment">&lt;script type="text/html"&gt;</li>
+            <img src="img/facepalm.jpg" class="fragment"/>
+        </ul>
+    </section>
+    <section>
+        <h3>Imports</h3>
+<pre><code class="hljs html size-XS" data-trim>
+&lt;head&gt;
+    <link rel="import" href="stuff.html">
+&lt;/head&gt;
+</code></pre>
+    </section>
+    <section>
+        <h3>Особенности</h3>
+        <ul>
+            <li class="fragment">Вёрстка и CSS глобальные</li>
+            <li class="fragment">JavaScript глобальный, но поддерживает локальный скоуп через document.currentScript.ownerDocument</li>
+            <li class="fragment">Кэширование вёрстки в браузере</li>
+            <li class="fragment">Не блокируют загрузку страницы (async)</li>
+        </ul>
+    </section>
+    <section>
+        <h3>Поддержка браузерами</h3>
+        <ul>
+            <li class="fragment">2013 – ?</li>
+            <li class="fragment">2015 – 40%</li>
+            <li class="fragment">2016 – 48%</li>
+        </ul>
+    </section>
+</section>
+
+
+<!-- Заключение -->
+
+    <section>
+        <h3>Ссылки</h3>
+        <ul>
+            <li><a href="https://bem.info">bem.info</a></li>
+            <li><a href="https://habrahabr.ru/post/256109/">Способы организации CSS-кода</a></li>
+            <li><a href="http://www.w3.org/TR/components-intro/">Спецификация W3C</a></li>
+            <li><a href="http://jonrimmer.github.io/are-we-componentized-yet/">http://jonrimmer.github.io/are-we-componentized-yet/</a></li>
+            <li>Статьи на HTML5Rocks:
+                <a href="http://www.html5rocks.com/en/tutorials/webcomponents/template/">Template</a>,
+                <a href="http://www.html5rocks.com/en/tutorials/webcomponents/shadowdom/">ShadowDOM</a>,
+                <a href="http://www.html5rocks.com/en/tutorials/webcomponents/customelements/">CustomElements</a>,
+                <a href="http://www.html5rocks.com/en/tutorials/webcomponents/imports/">Imports</a>
+
+            </li>
+            <li><a href="http://www.polymer-project.org/">Polymer Project</a></li>
+        </ul>
+    </section>
+
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
