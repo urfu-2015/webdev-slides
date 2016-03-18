@@ -157,9 +157,9 @@ mark span {
     top: 0;
     left: 0;
     transform: translateX(-100%);
-    animation-delay: 10s;
+    animation-delay: 5s;
     animation-duration: 3s;
-    animation-iteration-count: 1;
+    animation-iteration-count: 2;
     animation-direction: alternate;
     z-index: 10;
     display: none;
