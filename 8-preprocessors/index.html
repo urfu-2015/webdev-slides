@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Preprocessors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex preprocessor"><div class="reveal"><div class="slides">
+    <img src="images/mokhov.png" class="mokhov" id="mokhov">
+
+    <section class="large">
+        <h2>Процессинг CSS</h2>
+        <p class="author">
+            <small>Рыбалка Екатерина, </small>
+            <small>Завьялов Александр</small>
+        </p>
+    </section>
+
+    <section>
+        <h2>О наболевшем</h2>
+        <pre class="css"><code>
+.menu {
+    display: inline-block;
+}
+
+.menu__item {
+    background: #d0881d;
+}
+
+.menu__item:hover {
+    background: #ebb96f;
+}
+
+.menu__arrow {
+    background: #d0881d;
+}
+        </code></pre>
+    </section>
+
+    <section id="supercat" data-background-video='video/supercat.webm'>
+    </section>
+
+    <section>
+        <h2>Препроцессоры</h2>
+        <div class="img-pre">
+            <p class="text">Код</p>
+            <p class="pr-arrow">&darr;</p>
+            <div class="box red">
+                <p>Препроцессор</p>
+            </div>
+            <p class="pr-arrow">&darr;</p>
+            <p class="text">CSS</p>
+        </div>
+    </section>
+
+    <section data-transition="none">
+        <div class="code-row">
+            <pre><code>
+.menu {
+    display: inline-block;
+}
+
+.menu__item {
+    background: #d0881d;
+}
+
+.menu__item:hover {
+    background: #ebb96f;
+}
+
+.menu__arrow {
+    background: #d0881d;
+}
+
+
+            </code></pre>
+            <pre class="css fragment"><code>
+$bg_color = #d0881d;
+
+.menu {
+    display: inline-block;
+}
+
+menu__item {
+    background: $bg_color;
+}
+
+.menu__item:hover {
+    background: lighten($bg_color, 40%);
+}
+
+.menu__arrow {
+    background: $bg_color;
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section data-transition="none">
+        <div class="code-row">
+            <pre><code>
+.menu {
+    display: inline-block;
+}
+
+.menu__item {
+    background: #d0881d;
+}
+
+.menu__item:hover {
+    background: #ebb96f;
+}
+
+.menu__arrow {
+    background: #d0881d;
+}
+
+
+            </code></pre>
+            <pre class="css"><code data-trim data-noescape>
+<mark></mark>
+<mark>$bg_color = #d0881d;</mark>
+
+.menu {
+    display: inline-block;
+}
+
+menu__item {
+    background: <mark>$bg_color;</mark>
+}
+
+.menu__item:hover {
+    background: <mark>lighten($bg_color, 40%)</mark>;
+}
+
+.menu__arrow {
+    background: <mark>$bg_color</mark>;
+}
+ <mark></mark>
+            </code></pre>
+        </div>
+    </section>
+
+    <section data-transition="none">
+        <div class="code-row">
+            <pre><code>
+.menu {
+    display: inline-block;
+}
+
+.menu__item {
+    background: #d0881d;
+}
+
+.menu__item:hover {
+    background: #ebb96f;
+}
+
+.menu__arrow {
+    background: #d0881d;
+}
+            </code></pre>
+            <pre class="css"><code data-trim data-noescape>
+<mark></mark>
+$bg_color = #d0881d;
+
+.menu {
+    display: inline-block;
+
+    &__item {
+        background: $bg_color;
+
+        &:hover {
+            background: lighten($bg_color, 40%);
+        }
+    }
+
+    &__arrow {
+        background: $bg_color;
+    }
+}
+                <mark></mark>
+            </code></pre>
+        </div>
+    </section>
+
+    <section data-transition="none">
+        <div class="code-row">
+            <pre><code>
+.menu {
+    display: inline-block;
+}
+
+.menu__item {
+    background: #d0881d;
+}
+
+.menu__item:hover {
+    background: #ebb96f;
+}
+
+.menu__arrow {
+    background: #d0881d;
+}
+            </code></pre>
+            <pre class="css"><code data-trim data-noescape>
+<mark></mark>
+$bg_color = #d0881d;
+
+<mark>.menu</mark> {
+    display: inline-block;
+
+    <mark>&</mark>__item {
+        background: $bg_color;
+
+        <mark>&</mark>:hover {
+            background: lighten($bg_color, 40%);
+        }
+    }
+
+    <mark>&</mark>__arrow {
+        background: $bg_color;
+    }
+}
+                <mark></mark>
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Препроцессоры</h2>
+        <p class="fragment">Less</p>
+        <div class="fragment">
+            <p>Sass</p>
+            <p>Stylus</p>
+        </div>
+    </section>
+
+    <section>
+        <p>Установка</p>
+        <pre class="fragment"><code>
+npm install stylus
+        </code></pre>
+        <p class="fragment">Компиляция</p>
+        <pre class="fragment"><code>
+stylus index.styl --out ./css/index.css
+        </code></pre>
+        <pre class="fragment"><code>
+stylus --watch index.styl
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Переменные</h2>
+        <div class="code-row wide">
+            <pre class="fragment"><code>
+$font = 14px Helvetica, sans-serif;
+box_width = 30%;
+box_height = 300px;
+
+.block {
+    font: $font;
+    width: box_width;
+    height: box_height;
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.block {
+    font: 14px Helvetica, sans-serif;
+    width: 30%;
+    height: 300px;
+}
+
+
+
+
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Операторы</h2>
+        <div class="code-row">
+            <pre class="fragment"><code>
+$box_width = 300px;
+$box_height = $box_width * 2;
+
+.box {
+    width: $box_width;
+    height: $box_height;
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.box {
+    width: 300px;
+    height: 600px;
+}
+
+
+
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Вложенность</h2>
+        <div class="code-row">
+            <pre class="fragment"><code>
+.header {
+    .title {
+        font-size: 20px;
+    }
+
+    .link {
+        color: green;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.header .title {
+    font-size: 20px;
+}
+
+.header .link {
+    color: #008000;
+    text-decoration: none;
+}
+
+.header .link:hover {
+    text-decoration: underline;
+}
+
+
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Вложенность</h2>
+        <div class="code-row">
+            <pre class="fragment"><code>
+.header {
+    &__title {
+        font-size: 20px;
+    }
+
+    &__link {
+        color: green;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.header__title {
+    font-size: 20px;
+}
+
+.header__link {
+    color: #008000;
+    text-decoration: none;
+}
+
+.header__link:hover {
+    text-decoration: underline;
+}
+
+
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Массивы и циклы</h2>
+        <div class="code-row none-margin">
+            <pre><code class="fragment">
+$col_list = 1 2 3 4;
+            </code><code class="fragment">for $col in $col_list {
+    td:nth-child({$col}) {
+        width: 10% * $col;
+    }
+}
+            </code><code class="fragment">for $col in (1..4) {...}
+                            </code></pre>
+            <pre class="css fragment"><code>
+td:nth-child(1) {
+    width: 10%;
+}
+
+td:nth-child(2) {
+    width: 20%;
+}
+
+td:nth-child(3) {
+    width: 30%;
+}
+
+td:nth-child(4) {
+    width: 40%;
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Hashes</h2>
+        <div class="code-row marg">
+            <pre><code class="fragment">
+$cats = {
+    cat_1: './images/cat1.jpg',
+    cat_2: './images/cat2.jpg'
+}
+            </code><code class="fragment">
+$cats.cat_1 = './images/cat1_new.jpg';
+$cats['cat_3'] = './images/cat3.jpg';
+            </code><code class="fragment">
+for $name, $bg_img in $cats {
+    #img-{$name} {
+        background: url($bg_img);
+    }
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+#img-cat1 {
+    background: url("./images/cat1_new.jpg");
+}
+
+#img-cat2 {
+    background: url("./images/cat2.jpg");
+}
+
+#img-cat3 {
+    background: url("./images/cat3.jpg");
+}
+
+
+
+
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Условные операторы</h2>
+        <div class="code-row">
+            <pre class="fragment"><code>
+$theme = 'day';
+
+.sky {
+    if $theme == 'day' {
+        background: blue;
+        background-image: url(sun.png);
+    } else {
+        background: black;
+        background-image: url(stars.png);
+    }
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.sky {
+    background: #00f;
+    background-image: url(sun.png);
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>import</h2>
+        <pre><code>
+@import 'theme'
+        </code></pre>
+    </section>
+
+    <section>
+        <div class="code-row">
+        <div>
+            <pre><code class="php">
+// theme_day.styl
+
+$bg_color = blue;
+$bg_img = sun.png;
+            </code></pre>
+            <pre><code class="php">
+// main.styl
+
+@import 'theme_day'
+
+.sky {
+    background: $bg_color;
+    background-image: url($bg_img);
+}
+            </code></pre>
+        </div>
+        <div>
+            <pre><code class="css">
+/* main.css */
+
+.sky {
+    background: #00f;
+    background-image: url(sun.png);
+}
+            </code></pre>
+        </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Миксины</h2>
+        <div class="code-row">
+            <pre class="fragment"><code>
+set_bg_color($theme) {
+    if $theme == 'day' {
+        background: blue;
+        background-image: url(sun.png);
+    } else {
+        background: black;
+        background-image: url(stars.png);
+    }
+}
+
+.sky {
+    set_bg_color('night');
+}
+            </code></pre>
+            <pre class="css fragment"><code>
+.sky {
+    background: #000;
+    background-image: url(stars.png);
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>nib</h2>
+        <pre><code class="fragment">
+npm install nib
+        </code><code class="fragment">
+@import 'nib'
+        </code><code class="fragment">
+@import 'nib/gradients'
+@import 'nib/buttons'
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Gradient</h2>
+        <div>
+            <pre class="wide-code"><code>
+body {
+    background linear-gradient(bottom left, 80% white, blue, red)
+}
+            </code></pre>
+            <pre class="wide-code"><code>
+body {
+    background: -webkit-linear-gradient(bottom left, #fff 80%, #00f, #f00);
+    background: -moz-linear-gradient(bottom left, #fff 80%, #00f, #f00);
+    background: -o-linear-gradient(bottom left, #fff 80%, #00f, #f00);
+    background: -ms-linear-gradient(bottom left, #fff 80%, #00f, #f00);
+    background: linear-gradient(to top right, #fff 80%, #00f, #f00);
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Position</h2>
+        <pre><code>
+#back-to-top {
+    fixed bottom 10px right 5px
+}
+        </code></pre>
+        <pre><code class="css">
+#back-to-top {
+    position: fixed;
+    bottom: 10px;
+    right: 5px;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Transparent Mixins</h2>
+        <pre><code>
+.animate-item {
+    animation-delay 1s;
+    animation-duration 1s;
+}
+        </code></pre>
+        <pre><code class="css">
+.animate-item {
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    -o-animation-delay: 1s;
+    animation-delay: 1s;
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    -o-animation-duration: 1s;
+    animation-duration: 1s;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Clearfix</h2>
+        <pre><code>
+.clearfix {
+    clearfix()
+}
+        </code></pre>
+        <pre><code>
+.clearfix {
+    zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+}
+
+.clearfix:after {
+    clear: both;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Responsive Images</h2>
+        <pre><code class="css">
+#logo {
+    image '/images/logo.main.png'
+}
+        </code></pre>
+        <pre><code class="css">
+#logo {
+    background-image: url(/images/logo.main.png);
+}
+
+@media all and (-webkit-min-device-pixel-ratio: 1.5) {
+    #logo {
+        background-image: url(/images/logo.main@2x.png);
+        background-size: auto auto;
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Комментарии</h2>
+        <pre class="fragment"><code>
+// Очень содержательный комментарий
+        </code></pre>
+        <pre class="fragment"><code>
+/*
+Длинный содержательный комментарий
+*/
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>DEMO</h3>
+        <p>verstka-task-8</p>
+    </section>
+
+    <section>
+        <h2>Debug</h2>
+        <p class="fragment">source maps</p>
+    </section>
+
+    <section>
+        <h2>Создание</h2>
+        <pre><code>
+stylus index.styl -m
+        </code></pre>
+        <pre class="fragment"><code class="javascript">
+{
+    "version": 3,
+    "sources": ["index.styl"],
+    "names": [],
+    "mappings": "AA2BQ;EACI,YAAwB,kCAAxB;EACA,iBAAiB,KAAjB...
+    "file": "index.css"
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>DevTools</h2>
+        <img src="images/chrome_maps.jpg" id="chrome">
+    </section>
+
+    <section>
+        <h2>WebStorm</h2>
+        <img src="images/webstorm_maps.jpg" id="webstorm">
+    </section>
+
+
+    <section>
+        <h2>Постпроцессоры</h2>
+    </section>
+
+    <section>
+        <div class="img-post">
+            <div class="box">
+                <p class="text">CSS</p>
+            </div>
+            <span class="pr-arrow">&darr;</span>
+            <div class="box blue">
+                <p>Парсер</p>
+            </div>
+            <span class="pr-arrow">&darr;</span>
+            <div class="box red">
+                <p>АSТ</p>
+            </div>
+            <p class="pr-arrow">&darr;</p>
+            <div class="box red">
+                <p>Плагины</p>
+            </div>
+            <p class="pr-arrow">&darr;</p>
+            <div class="box blue">
+                <p>toString</p>
+            </div>
+            <p class="pr-arrow">&darr;</p>
+            <div class="box">
+                <p class="text">CSS</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <p>PostCSS</p>
+        <pre class="fragment"><code>
+npm install postcss
+        </code></pre>
+        <pre class="fragment"><code>
+npm install autoprefixer
+        </code></pre>
+        <p class="fragment">Запуск</p>
+        <pre class="fragment"><code>
+postcss --use autoprefixer -c options.json -o main.css css/*.css
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>options.json</h2>
+        <pre><code class="javascript">
+{
+    "autoprefixer": {
+        "browsers": "> 5%"
+    }
+}
+        </code></pre>
+        <pre class="fragment"><code class="javascript">
+{
+    "autoprefixer": {
+        "browsers": "Firefox > 20, last 2 Chrome versions"
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Webpack</h2>
+        <pre><code class="javascript">
+module.exports = {
+    module: {
+        loaders: [
+            {
+                test:   /\.css$/,
+                loader: "style-loader!css-loader!postcss-loader"
+            }
+        ]
+    },
+
+    postcss: function () {
+        return [require('autoprefixer'), require('precss')];
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Autoprefixer</h2>
+        <pre><code class="css">
+.box {
+    transition: transform 1s
+}
+        </code></pre>
+        <pre><code class="css">
+.box {
+    -webkit-transition: -webkit-transform 1s;
+    transition: -ms-transform 1s;
+    transition: transform 1s
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Color short</h2>
+        <div>
+            <pre><code class="css">
+.box {
+    border-bottom: 1px solid rgb(200);
+    background: #20;
+    color: #f;
+    box-shadow: 0 1px 5px rgba(0, 0.5);
+}
+            </code></pre>
+            <pre><code class="css">
+.box {
+    border-bottom: 1px solid rgb(200, 200, 200);
+    background: #202020;
+    color: #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.5);
+}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>Size</h2>
+        <div class="code-row">
+        <pre><code class="css">
+.one {
+    size: 20px 10px;
+}
+
+.two {
+    size: 10px;
+}
+        </code></pre>
+        <pre><code class="css">
+.one {
+    width: 20px;
+    height: 10px;
+}
+
+.two {
+    width: 10px;
+    height: 10px;
+}
+        </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>postcss-sprites</h2>
+        <pre><code class="css">
+.comment {
+    background: url(images/sprite/ico-comment.png) no-repeat 0 0;
+}
+
+.bubble {
+    background: url(images/sprite/ico-bubble.png) no-repeat 0 0;
+}
+        </code></pre>
+        <pre><code class="css">
+.comment {
+    background-image: url(images/sprite.png);
+    background-position: 0 0;
+}
+
+.bubble {
+    background-image: url(images/sprite.png);
+    background-position: 0 -50px;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Font Magician</h2>
+        <pre class="wide-code"><code class="css">
+body {
+    font-family: "Alice";
+}
+        </code></pre>
+        <pre class="wide-code"><code class="css small-font">
+@font-face {
+    font-family: "Alice";
+    font-style: normal;
+    font-weight: 400;
+    src: local("Alice"), local("Alice-Regular"),
+        url("http://fonts.gstatic.com/s/alice/v7/sZyKh5NKrCk1xkCk_F1S8A.eot?#") format("eot"),
+        url("http://fonts.gstatic.com/s/alice/v7/l5RFQT5MQiajQkFxjDLySg.woff2") format("woff2"),
+        url("http://fonts.gstatic.com/s/alice/v7/_H4kMcdhHr0B8RDaQcqpTA.woff")  format("woff"),
+        url("http://fonts.gstatic.com/s/alice/v7/acf9XsUhgp1k2j79ATk2cw.ttf")   format("truetype")
+}
+body {
+    font-family: "Alice";
+}
+        </code></pre>
+    </section>
+
+    <section id="postcss-bem">
+        <h2>PostCSS BEM</h2>
+        <pre><code>
+@b nav {
+    @e item {
+        display: inline-block;
+    }
+    @m placement_header {
+        background-color: red;
+    }
+}
+        </code></pre>
+        <pre><code>
+.nav__item {
+    display: inline-block;
+}
+
+.nav_placement_header {
+    background-color: red;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>CSSNano</h2>
+        <div class="code-row">
+        <pre class="fragment"><code class="css">
+h1::before, h1:before {
+    margin: 10px 20px 10px 20px;
+    color: #ff0000;
+    -webkit-border-radius: 16px;
+    border-radius: 16px;
+    font-weight: normal;
+    font-weight: normal;
+}
+/* invalid placement */
+@charset "utf-8";
+        </code></pre>
+            <pre class="fragment"><code class="css">
+@charset "utf-8";h1:before{margin:10px 20px;
+color:red;border-radius:1pc;font-weight:400}
+            </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h2>CSSNext</h2>
+    </section>
+
+    <section>
+        <h2>Any-Link</h2>
+        <div class="code-row">
+        <pre><code class="css">
+nav :any-link > span {
+    background-color: yellow;
+}
+
+        </code></pre>
+        <pre><code class="css">
+nav :link > span,
+nav :visited > span {
+    background-color: yellow;
+}
+        </code></pre>
+        </div>
+    </section>
+
+    <section>
+        <h3>Matches</h3>
+        <pre><code class="css">
+.rating-star:matches(:first-child, .special) {
+    color: red;
+}
+        </code></pre>
+        <pre><code class="css">
+.rating-star:first-child, .rating-star.special {
+    color: red;
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h2>Поддержка IE8</h2>
+    </section>
+
+    <section>
+        <h3>postcss-color-rgba-fallback</h3>
+        <pre><code class="css">
+.rgbaFallback {
+    background: rgba(0,0,0,0.5);
+}
+        </code></pre>
+        <pre><code class="css">
+.rgbaFallback {
+    background: #000000;
+    background: rgba(0,0,0,0.5);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>postcss-opacity</h3>
+        <pre><code class="css">
+.opacityFallback {
+    opacity: 0.5;
+}
+        </code></pre>
+        <pre><code class="css small-font">
+.opacityFallback {
+    opacity: 0.5;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>node-pixrem</h3>
+        <pre><code>
+body {
+    font-size: 16px;
+}
+
+.remFallback {
+    height: 10rem;
+    font: 2rem Arial;
+}
+        </code></pre>
+        <pre><code>
+body {
+    font-size: 16px;
+}
+
+.remFallback {
+    height: 160px;
+    height: 10rem;
+    font: 32px Arial;
+    font: 2rem Arial;
+}
+        </code></pre>
+    </section>
+
+    <section id="cocaine" data-background-video='video/cocaine.webm'>
+    </section>
+
+    <section>
+        <h2>Полезные ссылки</h2>
+        <p>
+            <a href="http://stylus-lang.com/">Документация Stylus,</a>
+            <a href="http://nibstyl.us/docs/">nib</a>
+        </p>
+        <p>
+            <a href="https://github.com/postcss/postcss">PostCSS, </a>
+            <a href="https://github.com/postcss/postcss/blob/master/docs/plugins.md">список плагинов</a>
+        </p>
+        <p>
+            <a href="http://cssnano.co/">CSSNano</a>
+        </p>
+        <p>
+            <a href="http://cssnext.io/">CSSNext</a>
+        </p>
+        <p>
+            <a href="https://www.youtube.com/watch?v=qhouBGNncGQ">"Используем PostCSS правильно"</a>
+        </p>
+    </section>
+
+    <section>
+        <h2>Вопросы?</h2>
+    </section>
+
+    <section>
+        <h4>Домашнее задание</h4>
+        <a class="fragment" href="https://github.com/urfu-2015/webdev-tasks-4">webdev-tasks-4</a>
+        <br><br><br>
+        <p style="text-align: center" class="fragment deadline">Время на решение<br> 7 дней</p>
+    </section>
+
+    <!--<section>-->
+        <!--<p>Картиночка</p>-->
+    <!--</section>-->
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+
+<script src="js/vendors/jquery.min.js"></script>
+<script src="js/vendors/attrchange.js"></script>
+<script src="js/main.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>

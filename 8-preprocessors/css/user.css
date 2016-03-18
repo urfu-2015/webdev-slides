@@ -1,0 +1,172 @@
+.code-row {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+    width: 100%;
+}
+
+.preprocessor pre {
+    margin-right: 60px;
+}
+
+.vertical-pos {
+    min-width: 55%;
+}
+
+.wide pre:first-child {
+    margin-left: -50px; !important;
+}
+
+.preprocessor pre,
+.preprocessor pre code {
+    max-height: 700px; !important;
+}
+
+.none-margin pre {
+    display: block;
+}
+
+.none-margin pre code{
+    margin-top: 0; !important;
+    margin-bottom: 0; !important;
+}
+
+.preprocessor pre code {
+    font-size: 22px; !important;
+    line-height: 27px; !important;
+    padding: 0 30px; !important;
+}
+
+.hero {
+    width: 80%; !important;
+}
+
+.progress {
+    height: 7px !important;
+}
+
+.slide-number {
+    font-size: 35px !important;
+}
+
+.author {
+    text-align: center;
+}
+
+.author small::first-letter {
+    color: red;
+}
+
+.img-post,
+.img-pre {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: solid 3px yellow; !important;
+}
+.img-pre .box,
+.img-pre .pr-arrow,
+.img-pre .text,
+.img-post .box,
+.img-post .text,
+.img-post .pr-arrow,
+.img-post p {
+    margin: 0; !important;
+    padding: 0; !important;
+    display: inline-block;
+}
+
+.text {
+    text-decoration: underline;
+}
+
+.img-pre .pr-arrow {
+    margin: 10px 0 20px;
+}
+
+.img-post .pr-arrow {
+    font-size: 45px;
+}
+
+.box {
+    max-width: 60%;
+    min-width: 40%;
+    margin: auto 0; !important;
+}
+
+.box.blue {
+    border: solid 3px blue; !important;
+}
+
+.box.red {
+    border: solid 3px red;
+}
+
+.img-pre {
+    margin-top: 60px; !important;
+}
+
+#settings {
+    width: 85%
+}
+
+#chrome {
+    width: 80%;
+}
+
+img#webstorm {
+    width: 1000px; !important;
+    max-width: 1300px; !important;
+}
+
+pre.wide-code {
+    width: 1100px; !important;
+    margin-left: -40px;
+}
+
+code.css.small-font.hljs {
+    font-size: 19px; !important;
+}
+
+mark,
+mark span {
+    color: black !important;
+}
+
+.marg {
+    margin-left: -50px !important;
+}
+
+.video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+}
+
+#supercat .h3-supercat {
+    margin-top: -250px;
+}
+
+#cocaine .h3-cocaine {
+    margin-top: -250px;
+}
+
+.mokhov {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    animation-delay: 10s;
+    animation-duration: 3s;
+    animation-iteration-count: 1;
+    animation-direction: alternate;
+    z-index: 10;
+    display: none;
+}
+
+@keyframes move_mokhov {
+    100% {
+        transform: translateX(-10%);
+    }
+}
