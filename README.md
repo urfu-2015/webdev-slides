@@ -8,6 +8,7 @@
 6. [Build, Deploy, Automate](https://urfu-2015.github.io/webdev-slides/5-deploy/) ([Пример приложения](https://github.com/urfu-2015/urfu2015-notes))
 7. [Организация вёрстки](https://urfu-2015.github.io/webdev-slides/7-bem/)
 8. [Процессинг CSS](https://urfu-2015.github.io/webdev-slides/8-preprocessors/)
+9. [HTTP и REST](https://urfu-2015.github.io/webdev-slides/9-rest/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)

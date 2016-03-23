@@ -1,0 +1,145 @@
+.hljs-comment {
+    color: #999 !important;
+}
+
+.hljs-string {
+    color: #a1b56c !important;
+}
+
+.red {
+    color: #ab4642 !important;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.magenta {
+    color: #a0a0f0 !important;
+}
+
+.yellow {
+    color: yellow !important;
+}
+
+.grey {
+    color: #777 !important;
+}
+
+.blue {
+    color: #00b4ff !important;
+}
+
+img {
+    background: none !important;
+    max-width: 100%;
+    max-height: 100%;
+    border: 0 !important;
+}
+
+img.invert {
+    -webkit-filter: invert(100%)
+}
+
+.textbook {
+    font-family: 'textbook-light';
+}
+
+.pros,
+.cons,
+.question {
+    padding-left: 50px !important;
+}
+
+.pros:before,
+.cons:before,
+.question:before {
+    position: absolute;
+    left: 0;
+}
+
+.pros:before {
+    content: '✓';
+    color: #a1b56c !important;
+}
+
+.cons:before {
+    content: '✗';
+    color: #992200 !important;
+}
+
+.question:before {
+    content: '?';
+    color: #546BD2 !important;
+}
+
+.progress {
+    height: 4px !important;
+}
+
+.slide-number {
+    font-family: 'sourcecodepro-light' !important;
+    font-size: 35px !important;
+}
+
+.author small::first-letter {
+    color: red;
+}
+
+.reveal section .fragment.init_visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.reveal section .fragment.highlight {
+    transition-duration: .3s;
+}
+
+.highlight.fragment.visible,
+.highlight.static {
+    background-color: rgb(68, 97, 142);
+}
+
+pre,
+pre code {
+    font-size: 26px !important;
+    font-family: 'sourcecodepro-light' !important;
+}
+
+pre {
+    margin: 10px 15px !important;
+    width: 100% !important;
+}
+
+pre code {
+    padding: 0 25px !important;
+    line-height: 35px !important;
+    border: 3px solid rgba(63, 63, 63, 0.3) !important;
+    background: rgba(63, 63, 63, 0.2) !important;
+    max-height: 100% !important;
+}
+
+pre.flat code {
+    padding: 0 15px !important;
+    border: 0 !important;
+    background: none !important;
+}
+
+.join {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.join code {
+    padding: 18px 25px !important;
+    border: 0 !important;
+}
+
+.left {
+    text-align: left;
+}
+
+.scheme img {
+    vertical-align: bottom;
+    margin: 0 !important;
+}
