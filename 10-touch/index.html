@@ -1,0 +1,915 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Touch</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+   <script type="text/javascript">
+     google.charts.load('current', {'packages':['corechart']});
+     google.charts.setOnLoadCallback(drawChart);
+     function drawChart() {
+
+       var data = google.visualization.arrayToDataTable([
+         ['Task', 'Hours per Day'],
+         ['Пк',     59],
+         ['Планшеты',      17],
+         ['Смартфоны',  23],
+         ['TV', 0.3]
+       ]);
+
+       var options = {
+           is3D: true,
+//           pieSliceText: 'label',
+           backgroundColor: 'transparent',
+           legend: {textStyle:{color: 'white', fontSize: 25}},
+           slices: {  3: {offset: 0.2}}
+//         title: 'My Daily Activities'
+       };
+
+       var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+       chart.draw(data, options);
+     }
+   </script>
+</head>
+<body class="yandex nodejs">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="large">
+            <h3>Touch<br/>
+                <small>или как верстать под "мобилки"</small>
+            </h3>
+            <p class="author">
+                <small>Кувалдин Артем,</small>
+                <small>Мохов Олег</small>
+            </p>
+        </section>
+
+        <!-- Введение -->
+
+        <!--<section>-->
+            <!--<h3>Особенности мобильных устройств</h3>-->
+            <!--<ul>-->
+                <!--<li class="fragment">Разные размеры экранов</li>-->
+                <!--<li class="fragment">Разные плотности экранов</li>-->
+                <!--<li class="fragment">Палец ≠ курсор</li>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <section>
+            <h2>Предыстория</h2>
+            <img src="img/evolution.jpg">
+        </section>
+
+        <section>
+            <h3>Статистика мобильных устройств в России</h3>
+            <!--<img src="img/phones-tablets-pc.png">-->
+            <div id="piechart" style="width: 900px; height: 500px;"></div>
+            <!--http://adaptist.ru/blog/statistika-mobile/-->
+        </section>
+
+        <section>
+            <h3>Разрешения экранов</h3>
+            <img src="img/resolution.png">
+        </section>
+
+        <section>
+            <h2>Размеры экранов</h2>
+            <div class="fragment" data-fragment-index="2"></div>
+            <div class="phone fr-rotate">
+                <div class="phone__content">
+                    <div class="text fragment"
+                         style="border-bottom: 1px solid white; transform: translate(-93px, 121px) rotate(-58deg); width: 377px;"
+                         data-fragment-index="1">4''
+                    </div>
+                    <div class="fragment text-show-hide" data-fragment-index="3"></div>
+                    <div class="text fr-hide" style="bottom: 0; width: 100%; text-align: center;">320px</div>
+                    <div class="text fr-show" style="bottom: 0; width: 100%; text-align: center;">1136px</div>
+                    <div class="text fr-hide" style="right: -40px; transform: rotate(-90deg); top: 150px;">568px</div>
+                    <div class="text fr-show" style="right: -40px; transform: rotate(-90deg); top: 150px;">640px</div>
+                </div>
+            </div>
+            <!--<a href="http://mydevice.io/devices/#sortSmartphones">mydevice.io</a>-->
+        </section>
+
+        <section data-background-image="./img/pixels.jpg">
+            <h2 style="color: black; font-weight: 700;">Pixels</h2>
+        </section>
+        <section>
+            <h2>device pixel</h2>
+            <p>— привычные нам пиксели: самые маленькие элементы любого дисплея, каждый из которых имеет свой цвет и яркость.</p>
+        </section>
+        <section>
+            <h2>CSS pixels</h2>
+            <p> — абстрактная величина, используемая браузерами для точного отображения контента на страницах, вне зависимости от экрана</p>
+        </section>
+
+        <section>
+            <h2>Плотность пикселей</h2>
+            <p>PPI (Pixels Per Inch) - пиксели на дюйм.</p>
+            <img src="img/dpi.jpg" width="400">
+        </section>
+
+        <section>
+            <h3>Дисплеи с повышенной плотностью</h3>
+            <img src="img/iphone-retina-display-details.jpg" height="400">
+        </section>
+
+        <section>
+            <h2>Retina display</h2>
+            <blockquote>
+                — общее маркетинговое название ЖК-дисплеев, используемых в устройствах Apple и отличающихся настолько высокой плотностью пикселей.
+            </blockquote>
+        </section>
+
+
+        <section>
+            <h2>Retina display</h2>
+            <img src="img/retina.jpg">
+        </section>
+
+        <section>
+            <h2>Отличия</h2>
+            <img src="img/retina_example.jpg" height="500">
+        </section>
+
+        <section>
+            <h2>Какие браузеры популярны?</h2>
+            <img src="img/browsers.png" height="300">
+        </section>
+        <section data-background-image="img/StatCounter-browser-ww-monthly-201510-201512-bar.png" data-background-size="auto 100%">
+            <!--http://caniuse.com/usage-table-->
+        </section>
+
+        <section>
+            <img style="background: transparent" src="img/opera-mini-logo-large.png">
+            <br>
+            <img src="img/Opera_mini.png">
+        </section>
+
+        <section>
+            <h2>Макеты (layout)</h2>
+        </section>
+
+        <section>
+            <h2>Фиксированный макет</h2>
+            <p>Ширина контента не меняется в зависимости от размеров окна браузера.</p>
+            <img src="img/fixed-static-layout.png" height="400">
+        </section>
+
+        <section>
+            <h2>Резиновый макет</h2>
+            <p>Подстраивание контента под ширину экрана путем сжатия элементов.</p>
+            <img src="img/Rezinovij_design.png" height="400">
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive">На одной странице максимальное количество информации</li>
+                <li class="negative">Не заботится о том, как контент будет выглядеть на экранах с критически большой или маленькой шириной</li>
+            </ul>
+        </section>
+
+        <!--http://frontender.info/adaptive-vs-responsive-terminology/-->
+        <section>
+            <h2>Адаптивный макет</h2>
+            <img src="img/Adaptivej_design.png" height="400">
+            <!--<div class="fragment slide-adaptive-second-image"></div>-->
+            <!--<div class="fragment slide-adaptive-third-image"></div>-->
+            <!--<div class="image-adaptive"></div>-->
+            <div class="advice">Сайт подстраивается под разрешение и размер экрана</div>
+
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive">Адаптация под различные разрешения экранов</li>
+                <li class="negative">Не можем предугадать как будет выглядеть контент на всех устройствах</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Отзывчивый макет</h2>
+            <img src="img/Responsive_design.png" height="400">
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive">Не «прыгает» по контрольным точкам</li>
+                <li class="negative">Тщательная проработка</li>
+            </ul>
+        </section>
+
+        <section data-background-image="img/rwd-vs-adapt-example.gif" data-background-size="100%">
+
+        </section>
+
+        <section>
+            <h2>Стратегии разработки</h2>
+        </section>
+
+        <section>
+            <h3>Progressive enhancement</h3>
+            <blockquote>Cоздание веб-интерфейса происходит поэтапно, от самого простого к сложному</blockquote>
+        </section>
+        <section  data-background-image="img/13-progressive-jpeg.gif">
+
+        </section>
+        <section data-background-video="img/p-en.webm">
+
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive">Гарантированная работа проекта в любом браузере</li>
+                <li class="positive">Выкатывать новые возможности и изменения раньше</li>
+                <li class="negative fragment">Увеличение сложности реализации back-end’а</li>
+            </ul>
+        </section>
+
+        <section>
+            <a href="http://www.lukew.com/"><h2>Mobile first</h2></a>
+            <blockquote>Начинаете проектирование сервиса с мобильной версии</blockquote>
+            <a href="http://moffjs.com/examples/non-mobile-first/"> Не mobile first</a><br>
+            <a href="http://moffjs.com/examples/mobile-first/"> mobile first</a>
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive">Фокус на самом главном</li>
+                <li class="positive">Полнофункциональная мобильная версия</li>
+                <li class="positive">Мобильная версия может хорошо работать в “большом” вебе</li>
+                <li class="negative fragment">У вас не сразу будет версия для “большого“ веба</li>
+                <li class="negative fragment">Подход сложно применим для больших порталов</li>
+            </ul>
+        </section>
+
+        <!--https://habrahabr.ru/company/futubra/blog/136370/-->
+        <section>
+            <h2>Responsive web design</h2>
+            <blockquote>Вы делаете одну версию вашего веб-проекта для всех устройств с любым размером экрана
+            </blockquote>
+            <a href="https://abookapart.com/products/responsive-web-design">хорошая книга</a>
+        </section>
+
+        <section>
+            <h2>Особенности</h2>
+            <ul>
+                <li class="positive negative">Одна версия сайта</li>
+                <li class="positive">Преемственность интерфейса</li>
+                <li class="negative fragment">Неоптимальное использование возможностей всех устройств</li>
+                <li class="negative fragment">Возрастают требования к проработке интерфейса и дизайна</li>
+            </ul>
+        </section>
+
+        <section>
+            <a href="https://developers.google.com/web/fundamentals/design-and-ui/responsive/patterns/?hl=ru"><h3>Шаблоны отзывчивых макетов</h3></a>
+            <!--http://www.lukew.com/ff/entry.asp?1514-->
+            <ul>
+                <li><a target="_blank" href="https://googlesamples.github.io/web-fundamentals/samples/fundamentals/design-and-ui/responsive/patterns/mostly-fluid.html">Mostly Fluid (Наиболее резиновый)</a></li>
+                <li><a target="_blank" href="https://googlesamples.github.io/web-fundamentals/samples/fundamentals/design-and-ui/responsive/patterns/column-drop.html">Column Drop (Столбцы друг под другом)</a></li>
+                <li><a target="_blank" href="https://googlesamples.github.io/web-fundamentals/samples/fundamentals/design-and-ui/responsive/patterns/layout-shifter.html">Layout shifter (Двигающийся макет)</a></li>
+                <li><a target="_blank" href="https://googlesamples.github.io/web-fundamentals/samples/fundamentals/design-and-ui/responsive/patterns/tiny-tweaks.html">Tiny Tweaks (Крошечные изменения)</a></li>
+                <li><a target="_blank" href="https://googlesamples.github.io/web-fundamentals/samples/fundamentals/design-and-ui/responsive/patterns/off-canvas.html">Off Canvas (Вне экрана)</a></li>
+            </ul>
+        </section>
+        <!-- Основная часть -->
+        <!--http://mydevice.io/devices/#sortOthers-->
+        <!--https://responsivedesign.is/strategy/page-layout/defining-breakpoints-->
+        <!--http://www.quirksmode.org/mobile/viewports2.html-->
+        <section>
+            <h2>Инструменты</h2>
+        </section>
+
+        <section>
+            <a href="http://www.quirksmode.org/mobile/viewports2.html"><h2>Two viewports</h2></a>
+            <span style="display: inline-block">
+                <div>visual viewport </div>
+                <img src="img/mobile_visualviewport.jpg" height="400">
+            </span>
+            <span style="display: inline-block">
+                <div>layout viewport</div>
+                <img src="img/mobile_layoutviewport.jpg" height="400">
+            </span>
+        </section>
+
+        <section>
+            <h3>Какая ширина layout viewport?</h3>
+            <ul>
+                <li class="fragment">Safari iPhone = 980px,</li>
+                <li class="fragment">Opera = 850px,</li>
+                <li class="fragment">Android WebKit = 800px,</li>
+                <li class="fragment">IE = 974px,</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Meta–тэг viewport</h2>
+<pre><code>&lt;meta name="viewport" content="width=device-width">
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/mobile_mediaqueries.jpg" height="500">
+        </section>
+
+        <section>
+            <img src="img/withot_meta_viewport.png" height="500">
+            <img src="img/with_meta_viewport.png" height="500">
+        </section>
+
+        <section>
+            <h2>Другие значения</h2>
+<pre class="html size-XXS "><code>&lt;meta name="viewport" content="width=device-width, initial-scale=1.0">
+</code></pre>
+
+<pre class="html size-XXS "><code><!--Не рекомендуется-->
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0
+                                maximum-scale=1.0, user-scalable=no">
+</code></pre>
+        </section>
+
+        <section>
+            <a href="https://www.w3.org/TR/css-device-adapt/#atviewport-rule"><h2>@viewport</h2></a>
+<pre><code>@viewport {//@-o-viewport | @-ms-viewport
+  width: auto; // auto | device-width | length | %
+
+  max-width: auto;
+  min-width: auto;
+
+  zoom: auto; // auto | number | %
+
+  max-zoom: 5; // Largest allowed zoom factor.
+  min-zoom: 0.25; // Smallest allowed zoom factor.
+
+  user-zoom: zoom; // fixed | zoom
+
+  orientation: auto; // auto | portrait | landscape
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>Media queries</h2>
+            <p>Правило @media - позволяет указать тип устройства, для которого будет применяться указанный стиль.</p>
+            <!--<img src="img/07-media-query.png">-->
+<pre><code>@media [not|only] mediatype [and (media feature)] {
+    CSS-Code;
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>Минимум</h2>
+<pre><code>@media {
+    a {
+        color: red;
+    }
+}</code></pre>
+        </section>
+
+        <section>
+            <a href="https://drafts.csswg.org/mediaqueries-4/#media-types"><h2>Media types</h2></a>
+            <ul>
+                <li>all – все устройства(по-умолчанию)</li>
+                <li>print – принтеры и режим "Print preview"</li>
+                <li>screen – все утройства не print и не speech</li>
+                <li>speech – скринридеры</li>
+            </ul>
+        </section>
+        <section>
+            <h2>Версия для печати</h2>
+<pre class="css"><code>body {
+  color: red
+}
+@media print {
+  body {
+    color: blue
+  }
+}</code></pre>
+        </section>
+        <section>
+            <h2>Для печати и экранов</h2>
+<pre class="css"><code>@media print, screen {
+  body {
+    color: blue
+  }
+}</code></pre>
+        </section>
+
+        <section>
+            <h2>media features</h2>
+            <blockquote>
+                – задают технические характеристики устройства, на котором отображается документ.
+            </blockquote>
+        </section>
+
+        <section>
+            <h2>Ширина</h2>
+<pre><code>@media (min-width:600px) {
+    aside {
+        float: left;
+        width: 300px;
+        margin: 10px;
+    }
+}</code></pre>
+<pre><code>@media (max-width:600px) {
+    aside {
+        float: none;
+        color: blue;
+    }
+}</code></pre>
+        <a href="http://jsbin.com/naqagaqeru">Пример</a>
+        </section>
+
+        <section>
+            <h2>Диапазон</h2>
+<pre><code>h1 {
+    font-size: 50px;
+}
+
+@media (min-width:400px) and (max-width:600px) {
+    h1 {
+        font-size: 20px;
+        color: red;
+    }
+}</code></pre>
+        <a href="http://jsbin.com/valiliwiti">Пример</a>
+        </section>
+
+        <section>
+            <h2>Диапазон</h2>
+<pre><code>h1 {
+    font-size: 50px;
+}
+
+@media (min-width:600px), (max-width:400px) {
+    h1 {
+        font-size: 20px;
+        color: red;
+    }
+}</code></pre>
+        <a href="http://jsbin.com/rutiqozevo">Пример</a>
+        </section>
+
+        <section>
+            <h2>device width</h2>
+<pre><code>@media (min-device-width: 200px) and
+       (max-device-width: 400px) {
+    body {
+        color: red;
+    }
+}</code></pre>
+        <a href="http://jsbin.com/jigutigega">Пример</a>
+        </section>
+
+        <section>
+            <h2>В чем разница?</h2>
+            <div class="fragment">
+<pre class="css"><code>@media (min-width: 300px) {
+    body {
+        color: red;
+    }
+}
+@media (min-device-width: 300px) and
+       (max-device-width: 400px) {
+    body {
+        color: blue;
+    }
+}</code></pre>
+        <a href="http://jsbin.com/zepibowoja">Пример</a>
+            </div>
+        </section>
+
+        <section>
+            <h2>Ориентация</h2>
+<pre><code>//landscape | portrait
+@media (orientation: landscape) {
+    body {
+        color: red;
+    }
+}</code></pre>
+
+        <a href="http://jsbin.com/zogilomiri">Пример</a>
+        </section>
+
+            <section>
+            <a href="http://egorkhmelev.github.io/retina/"><h2>Pixel ratio</h2></a>
+
+<pre class="css"><code>.selector {
+    background: url(../apple.png) no-repeat;
+}
+
+// -o-min-device-pixel-ratio
+// min--moz-device-pixel-ratio
+// -webkit-min-device-pixel-ratio
+@media (min-device-pixel-ratio: 2) {
+  .selector {
+    background-image: url(../apple@2x.png);
+    background-size: cover;
+  }
+}
+</code></pre>
+            </section>
+
+
+        <section>
+            <img src="img/pixel-ratio.png">
+        </section>
+
+        <section>
+            <h2>resolution</h2>
+<pre><code>@media (min-device-pixel-ratio:2),
+       //dpi (dots per inch) - точек на дюйм
+       //для экранов 1DPI = 1PPI
+       (min-resolution: 192dpi),
+       //dppx (dots per pixel) - точек на пиксель
+       (min-resolution: 2dppx) { ... }</code></pre>
+        </section>
+
+        <section>
+            <a href="http://htmlbook.ru/css/value/media"><h3>Остальные media features</h3></a>
+            <ul>
+                <li>min-height, max-height</li>
+                <li class="fragment">device-min-height, device-max-height</li>
+                <li class="fragment">grid – устройство с фиксированным размером символов</li>
+                <li class="fragment">min-resolution, max-resolution</li>
+                <li class="fragment">color (min-color, max-color)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Отрицание</h2>
+<pre><code>@media not all and (monochrome) { ... }</code></pre>
+            <div class="fragment positive">
+                То же самое что:
+<pre><code>@media not (all and (monochrome)) { ... }</code></pre>
+            </div>
+            <div class="fragment negative">
+                Но не:
+<pre><code>@media (not all) and (monochrome) { ... }</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Но</h2>
+
+<pre><code>@media not screen and (color), print and (color) { ... }</code></pre>
+<div class="fragment positive">
+                То же самое что:
+<pre><code>@media (not (screen and (color))), print and (color) { ... }</code></pre>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Аттрибут media</h2>
+<pre class="html size-XXS"><code>&lt;link rel="stylesheet" media="(max-width: 640px)" href="max-640px.css">
+&lt;link rel="stylesheet" media="(min-width: 640px)" href="min-640px.css">
+&lt;link rel="stylesheet" media="(orientation: portrait)" href="portrait.css">
+&lt;link rel="stylesheet" media="(orientation: landscape)" href="landscape.css">
+</code></pre>
+        </section>
+
+
+<section>
+            <h2>Перерыв</h2>
+            <p>&nbsp;<br><br><br><br><br><br><br><br><br><br></p>
+            <style type="text/css">
+                .rybalka {
+                    position: absolute;
+                    animation-name: fly;
+                    animation-duration: 3s;
+                    animation-iteration-count: infinite;
+                    animation-direction: alternate;
+                    left: 50%;
+                }
+
+                @keyframes fly {
+                    to { bottom: 0 }
+                    from { bottom: -2000px }
+                }
+            </style>
+            <img src="img/rybalka.png" class="rybalka"/>
+        </section>
+
+        <section>
+            <section>
+                <h2>Практика</h2>
+            </section>
+            <section>
+                <h3>Автоопределение телефонов</h3>
+                <pre><code class="html hljs">
+<span>+73191111110</span>
+                </code></pre>
+                <p class="fragment"><a href="https://jsfiddle.net/14euzh53/1/">https://jsfiddle.net/14euzh53/1/</a></p>
+            </section>
+            <section>
+                <img style="position: absolute" width=350 src="img/example-phone.png"/>
+                <img style="position: relative" class="fragment" width=350 src="img/example-phone_2.png"/>
+            </section>
+            <section>
+                <h3>Автоопределение телефонов</h3>
+                <pre><code class="html hljs">&lt;head&gt;
+    <meta name="format-detection" content="telephone=no">
+&lt;/head&gt;
+                </code><code class="fragment"><a href="tel:+73191111110">+73191111110</a></code></pre>
+            </section>
+
+            <section>
+                <h2>input</h2>
+            </section>
+            <section>
+                <h3>&lt;input type="..."&gt;</h3>
+                <p class="fragment">button, checkbox, color, date, datetime-local, email, file, hidden, image, month, number, password, number, radio, range, reset, search, submit, tel, text, time, url, week</p>
+            </section>
+            <section>
+                <img width=450 src="img/controls-browser.jpg"/>
+                <p><a href="https://jsfiddle.net/z8ubygof/1/">https://jsfiddle.net/z8ubygof/1/</a></p>
+            </section>
+            <section>
+                <input type="email"/>
+                <p class="fragment">email</p>
+            </section>
+            <section>
+                <h3>email</h3>
+                <img width=300 src="img/kbd/email.png"/>
+            </section>
+            <section>
+                <h3>url</h3>
+                <img width=300 src="img/kbd/url.png"/>
+            </section>
+            <section>
+                <h3>number</h3>
+                <img width=300 src="img/kbd/number.png"/>
+            </section>
+            <section>
+                <h3>tel</h3>
+                <img width=300 src="img/kbd/tel.png"/>
+            </section>
+            <section>
+                <h3>date</h3>
+                <img width=300 src="img/kbd/date.png"/>
+            </section>
+            <section>
+                <h3>datetime-local</h3>
+                <img width=300 src="img/kbd/datetime-local.png"/>
+            </section>
+            <section>
+                <h3>month</h3>
+                <img width=300 src="img/kbd/month.png"/>
+            </section>
+            <section>
+                <h3>time</h3>
+                <img width=300 src="img/kbd/time.png"/>
+            </section>
+
+            <section>
+                <h3>input</h3>
+                <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input">MDN::&lt;input&gt;</a></p>
+            </section>
+
+            <section>
+                <h3>Подсветка элемента</h3>
+                <img src="img/webkit-tap-highlight-color-before.png"/>
+            </section>
+
+            <section>
+                <h3>-webkit-tap-highlight-color</h3>
+                <p>Устанавливает цвет подсветки ссылки или любого кликабельного элемента</p>
+                <pre><code class="css hljs">
+.wrapper {
+    –webkit-tap-highlight-color: transparent
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>-webkit-appearance</h3>
+                <p>Изменяет внешний вид кнопок и других элементов управления, чтобы походить на стандартные средства управления. </p>
+                <pre><code class="css hljs">
+.element {
+    –webkit-appearance: none | button | radio | ...;
+}
+                </code></pre>
+                <p><a href="http://www.xiper.net/manuals/css-extensions/webkit/properties/webkit-appearance.html">Все значения</a></p>
+            </section>
+            <section>
+                <img width=350 src="img/webkit-appearance.png"/>
+            </section>
+            <section>
+                <img width=350 style="position: absolute" src="img/webkit-appearance-1.png"/>
+                <img class=fragment style="position: absolute" width=350 src="img/webkit-appearance-2.png"/>
+                <img class=fragment style="position: relative" width=350 src="img/webkit-appearance-3.png"/>
+            </section>
+            <section>
+                <h3>-webkit-overflow-scrolling</h3>
+                <pre><code class="css hljs">
+.element {
+    -webkit-overflow-scrolling: touch;
+}
+                </code></pre>
+                <img class="fragment" src="img/touch-scrolling.gif"/>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Ретина</h2>
+            </section>
+            <section>
+                <h2>1. Всегда x2</h2>
+                <pre class="fragment"><code class="html hljs">
+<img width="200" src="image-400px.jpg">
+                </code></pre>
+            </section>
+            <section>
+                <h2>2. media-queries</h2>
+                <pre class="fragment"><code class="css hljs">
+.logo {
+    background: url(image.png);
+}
+
+@media screen and (device-pixel-ratio: 2) {
+    .logo {
+        background: url(image-x2.png);
+    }
+}
+                </code></pre>
+            </section>
+            <section>
+                <h2>3. Вектор</h2>
+                <pre class="fragment"><code class="css hljs">
+.logo {
+    background: url(logo.svg);
+    background-size: 100px 60px;
+}
+                </code></pre>
+            </section>
+            <section>
+                <h2>4. «Стандартный»</h2>
+            </section>
+            <section>
+                <h2>4.1. image-set</h2>
+                <pre class="fragment"><code class="css hljs">.logo {
+    background-image: image-set(
+        "logo.png" 1x,
+        "logo-2x.png" 2x,
+        "logo-print.png" 600dpi);
+}</code></pre>
+            </section>
+            <section>
+                <div><img src="img/image-set.jpg" alt=""/></div>
+                <p><a href="http://caniuse.com/#feat=css-image-set">Can I Use CSS image set</a></p>
+            </section>
+            <section>
+                <h2>4.2. srcset</h2>
+                <pre class="fragment"><code class="html hljs"><img src="logo.png" srcset="logo-1x.png 1x,
+                            logo-2x.png 2x"></code></pre>
+            </section>
+            <section>
+                <div><img src="img/srcset.jpg" alt=""/></div>
+                <p><a href="http://caniuse.com/#feat=srcset">Can I Use srcset</a></p>
+            </section>
+            <section>
+                <h2>4.3. &lt;picture&gt;</h2>
+                <pre class="fragment"><code class="html hljs"><picture>
+    <source srcset="logo-x2.png" media="(min-width: 600px)">
+    <img src="logo.png">
+</picture></code></pre>
+            </section>
+            <section>
+                <div><img src="img/picture.jpg" alt=""/></div>
+                <p><a href="http://caniuse.com/#feat=picture">Can I Use tag Picture</a></p>
+            </section>
+
+            <section>
+                <h2>position: fixed</h2>
+            </section>
+            <section>
+                <ul style="font-size:75% !important;">
+                    <li>Android 2.1 и ниже&nbsp;нет фиксированного позиционирования.</li>
+                    <li>Android 2.2&nbsp;позиционирует только после завершения прокрутки.</li>
+                    <li>Android 2.3&nbsp;поддерживает фиксированное позиционирование, но при запрете масштабирования.</li>
+                    <li>Opera Mobile - Частично, после скрола элемент прыгает в выще/ниже</li>
+                    <li>Opera Mini - не поддерживает</li>
+                    <li>Windows Phone 7 - не поддерживает</li>
+                </ul>
+                <p><a href="http://bradfrost.com/blog/mobile/fixed-position/">Fixed Positioning in Mobile Browsers</a></p>
+            </section>
+            <section>
+                <img src="img/fixed.jpg"/>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>JavaScript на touch-устройствах</h2>
+            </section>
+            <section data-background-image="img/jscompare.png"></section>
+            <section>
+                <p><a href="http://habrahabr.ru/post/188580/">Почему веб-приложения на мобильных платформах работают медленно</a></p>
+            </section>
+            <section>
+                <h2>Особенности</h2>
+                <ul>
+                    <li>Нет мышки</li>
+                    <li>Есть события «на пальцах»</li>
+                    <li>Есть события с девайсом</li>
+                </ul>
+            </section>
+            <section>
+                <img src="img/touch-gestures.jpg"/>
+            </section>
+            <section>
+                <img src="img/touch-event-tap.jpg" width="600"/>
+            </section>
+            <section>
+                <img src="img/touch-event-scroll.jpg" width="300"/>
+                <p>
+                    <a href="https://developer.apple.com/library/safari/documentation/AppleApplications/Reference/SafariWebContent/HandlingEvents/HandlingEvents.html">Документация Apple по тач-событиям</a>
+                </p>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Чем пользуемся мы?</h2>
+            </section>
+            <section>
+                <h2><a href="https://raw.githubusercontent.com/bem/bem-bl/dev/blocks-touch/i-ua/i-ua.js">i-ua.js</a></h2>
+                <p>Своего рода modernizr. Навешивает необходимые классы на body</p>
+
+                <pre>
+                    <code class="fragment">.i-ua_svg_ yes/no</code><code class="fragment"
+>.i-ua_platform_ ios/android/wp/opera/bada/other</code><code class="fragment"
+>.i-ua_orientation_ portrait/landscape</code><code class="fragment"
+>.i-ua_size_ small/normal/big</code>
+                </pre>
+            </section>
+            <section>
+                <h2><a href="http://iscrolljs.com/">i-scroll5</a></h2>
+                <blockquote>iScroll is a high performance, small footprint, dependency free, multi-platform javascript scroller.</blockquote>
+            </section>
+
+            <section>
+                <h2>Как тестировать?</h2>
+                <ul>
+                    <li>Инспекторы</li>
+                    <li class="fragment">Подключение девайса и инспектинг (iOS, Android)</li>
+                    <li class="fragment">Эмуляторы: iOS (XCode), <a href="http://developer.android.com/sdk/index.html">Android</a>, <a href="http://www.opera.com/ru/developer/mobile-emulator">Opera Emulator</a></li>
+                    <li class="fragment">Но лучше всего</li>
+                </ul>
+            </section>
+
+            <section data-background-image="img/stand.jpg"></section>
+        </section>
+        <!-- Заключение -->
+
+        <section>
+            <h4>Домашнее задание</h4>
+            <div><img src="img/310.gif"></div>
+            <a class="fragment"
+               href="https://github.com/urfu-2015/webdev-tasks-5">github.com/urfu-2015/webdev-tasks-5</a>
+        </section>
+
+
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
