@@ -1,0 +1,1068 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Client rendering</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <h4>Client rendering</h4>
+    <p><small>Роман Парадеев</small></p>
+</section>
+
+<section>
+    <h4><a href="https://github.com/urfu-2015/urfu2015-notes/tree/client-render">Awesome notes</a> на Redux</h4>
+</section>
+
+<section>
+    <p class="blue">Server rendering</p>
+    <p class="left">На сервере <span class="green">данные</span> подставляются в <span class="green">шаблоны</span>, на клиент приходит готовая <span class="green">разметка</span>.</p>
+    <p class="fragment blue" data-fragment-index="0">Client rendering</p>
+    <p class="fragment left" data-fragment-index="0">С сервера приходят <span class="green">данные</span> и <span class="green">шаблоны</span>, <span class="green">разметка</span> генерируется на клиенте.</p>
+</section>
+
+<section>
+    <section>
+        <h4><a href="http://localhost:5000" target="blank">Зачем?</a></h4>
+    </section>
+    
+    <section>
+        <video controls loop src="video/serverside_local.mov"></video>
+    </section>
+
+    <section>
+        <video controls loop src="video/enable_throttling.mov"></video>
+    </section>
+
+    <section>
+        <video controls loop src="video/serverside_gprs.mov"></video>
+    </section>
+</section>
+
+<section>
+    <h4>Сеть – <span class="red">медленная</span></h4>
+</section>
+
+<section>
+    <h4><span class="green">Handlebars</span> в браузере</h4>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html">
+&lt;body>
+    {{>header}}
+    &lt;ul>
+    {{#each notes}}
+        &lt;li>&lt;a>{{name}}&lt;/a>&lt;/li>
+    {{/each}}
+    &lt;/ul>
+    {{>footer}}
+&lt;/body>
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html" data-trim>
+&lt;body>
+    &lt;div id="root">&lt;/div>
+&lt;/body>
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="0">bundles/note/<span class="green">note.js</span></h4>
+    <pre class="fragment" data-fragment-index="0"><code>
+var template = ...; // Шаблон
+var data = ...;     // Данные
+
+var rootEl = document.getElementById('root');
+
+rootEl.innerHTML = template(data);
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html" data-trim>
+&lt;script src="/handlebars.js">&lt;/script>
+
+&lt;script id="template" type="text/x-handlebars-template">
+    {{>header}}
+    &lt;ul>
+        {{#each notes}}
+            &lt;li>&lt;a>{{name}}&lt;/a>&lt;/li>
+        {{/each}}
+    &lt;/ul>
+    {{>footer}}
+&lt;/script>
+
+&lt;body>
+    &lt;div id="root">&lt;/div>
+&lt;/body>
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html" data-trim>
+&lt;script id="template" type="text/x-handlebars-template">
+    ...
+&lt;/script>
+
+&lt;body>
+    &lt;div id="root">&lt;/div>
+&lt;/body>
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="0">bundles/note/<span class="green">note.js</span></h4>
+    <pre class="fragment" data-fragment-index="0"><code>
+var rootEl = document.getElementById('root');
+var source = document.getElementById('entry-template');
+var template = Handlebars.compile(source);
+
+rootEl.innerHTML = template(data);
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html" data-trim>
+&lt;body>
+    &lt;div id="root">&lt;/div>
+&lt;/body>
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="0">blocks/note/<span class="green">note.hbs</span></h4>
+    <pre class="fragment" data-fragment-index="0"><code class="html" data-trim>
+{{>header}}
+<ul>
+{{#each notes}}
+    <li><a>{{ name }}</a></li>
+{{/each}}
+</ul>
+{{>footer}}
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="red">note.hbs</span></h4>
+    <pre><code class="html" data-trim>
+&lt;body>
+    &lt;div id="root">&lt;/div>
+&lt;/body>
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="0">blocks/note/<span class="green">note.hbs</span></h4>
+    <pre class="fragment" data-fragment-index="0"><code class="html" data-trim>
+...
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="1">bundles/note/<span class="green">note.js</span></h4>
+    <pre class="fragment" data-fragment-index="1"><code>
+const rootEl = document.getElementById('root');
+const template = require('./blocks/note/note.hbs');
+
+rootEl.innerHTML = template(data);
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="bash flat">
+npm install --save-dev handlebars handlebars-loader
+    </code></pre >
+    <h4 class="fragment" data-fragment-index="0"><span class="green">webpack</span>.config.js</h4>
+    <pre class="fragment" data-fragment-index="0"><code class="js">
+module: {
+    loaders: [
+        ...,
+        {
+            test: /\.hbs$/,
+            loader: "handlebars-loader"
+        }
+    ]
+}
+    </code></pre>
+</section>
+
+<section>
+    <img src="img/notes_main.png" class="stretch">
+</section>
+
+<section>
+    <pre><code class="html">
+&lt;ul class="note__navigation">
+    {{#each notes}}
+        &lt;li>
+            &lt;a href="#">{{ name }}&lt;/a>
+        &lt;/li>
+    {{/each}}
+&lt;/ul>
+
+{{#if selectedNote}}
+&lt;div class="note">
+    &lt;div class="note__name">{{ selectedNote.name }}&lt;/div>
+    &lt;div class="note__text">{{ selectedNote.text }}&lt;/div>
+&lt;/div>
+{{/if}}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code data-trim data-noescape>
+function render(notes, selectedNote) {
+    var template = require('./blocks/note/note.hbs');
+    var rootEl = document.getDocumentById('root');
+
+    rootEl.innerHTML = template({
+        notes: notes,
+        selectedNote: selectedNote
+    });
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code data-trim data-noescape>
+function render(notes, selectedNote) {
+    ...
+}
+
+<div class="fragment">render(notes, null);</div>
+<div class="fragment">document.addEventListner('click', function(event) {
+<div class="fragment">    if (event.target.tagName === 'a') {
+        event.preventDefault();
+
+<div class="fragment">        var selectedNoteName = event.target.textContent;
+        var selectedNote = _.findWhere(notes, {
+            name: selectedNoteName
+        });</div>
+<div class="fragment">        render(notes, selectedNote);</div>    }</div>});</div>
+    </code></pre>
+</section>
+
+<section>
+    <p><span class="red">REST</span> на сервере</p>
+    <pre><code data-trim>
+app.get('/api/notes', function (req, res) {
+    var Note = require('./models/note');
+    var notes = Note.findAll();
+
+    res.json({ notes: notes });
+});
+    </code></pre>
+    <p class="fragment" data-fragment-index="0"><span class="green">fetch</span> в браузере</p>
+    <pre class="fragment" data-fragment-index="0"><code data-trim>
+fetch('/api/notes')
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(json) {
+        render(json.notes, null); 
+    });
+    </code></pre>
+</section>
+
+<section>
+    <table>
+        <tr>
+            <td>
+                <pre class="flat"><code>
+.
+├── blocks
+├── bundles
+├── controllers
+├── models
+└── router.js
+                </code></pre>
+            </td>
+            <td style="vertical-align: middle;">
+                <span class="fragment" data-fragment-index="0">=></span>
+            </td>
+            <td>
+                <pre class="fragment flat" data-fragment-index="0"><code>
+.
+├── server
+│   ├── bundles
+│   ├── controllers
+│   ├── models
+│   └── router.js
+└── client
+    └── blocks
+                </code></pre>
+            </td>
+        </tr>
+    </table>
+</section>
+
+<section>
+    <section>
+        <p class="fragment" data-fragment-index="0">Демо</p>
+        <br>
+        <h4 class="shout">ಠ_ಠ</h4>
+        <br>
+        <p class="fragment" data-fragment-index="0">Вопросы</p>
+    </section>
+    
+    <section>
+        <video controls loop src="video/clientside_hbs_root.mov"></video>
+    </section>
+
+    <section>
+        <video controls loop src="video/clientside_hbs_throttling.mov"></video>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h4><a href="http://localhost:5000" target="blank">Ускорили?</a></h4>
+    </section>
+
+    <section>
+        <video controls loop src="video/clientside_hbs_load.mov"></video>
+    </section>
+</section>
+
+<section>
+    <h4><span class="blue">Пустой экран</span></h4>
+    <p class="left">до тех пор, пока: </p>
+    <ul class="left" style="width: inherit;">
+        <li>загружаются <span class="red">все ресурсы</span></li>
+        <li>парсится и выполняется js</li>
+        <li>выполняется <span class="red">запрос</span> за данными</li>
+        <li>генерируется и <span class="red">вставляется</span> html</li>
+    </ul>
+</section>
+
+<section>
+    <h4><span class="blue">Universal JavaScript</span></h4>
+    <p><span class="green">Первый запрос</span> обрабатываем на сервере, <span class="green">последующие</span> – в браузере.</p>
+    <p class="fragment">Но – <span class="red">сложно</span> :(</p>
+</section>
+
+<section>
+    <h4>Заглушка!</h4>
+    <pre class="fragment"><code class="html" data-trim>
+&lt;body>
+    &lt;div id="root">
+        Пожалуйста, подождите
+        [===== 69% ====>    ] 
+    &lt;/div>
+&lt;/body>
+    </code></pre>
+</section>
+
+<section>
+    <video controls loop src="video/spinner.mov"></video>
+</section>
+
+<section>
+    <section>
+        <h4><a href="http://localhost:5000" target="blank">И ещё кое-что...</a></h4>
+    </section>
+
+    <section>
+        <video controls loop src="video/clientside_hbs_paint.mov"></video>
+    </section>
+</section>
+
+<section>
+    <h4>Paint – <span class="red">медленный</span></h4>
+</section>
+
+<section>
+    <pre><code data-trim data-noescape>
+render(notes, null);
+
+document.addEventListner('click', function(event) {
+    if (event.target.tagName === 'a') {
+        event.preventDefault();
+
+        var selectedNoteName = event.target.textContent;
+        var selectedNote = _.findWhere(notes, {
+            name: selectedNoteName
+        });
+
+        render(notes, selectedNote);
+    }
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4><div class="green">Handlebars</div></h4>
+    <pre><code data-trim data-noescape>
+&nbsp;
+render(notes, selectedNote);
+&nbsp;
+    </code></pre>
+
+    <h4 class="fragment" data-fragment-index="0">Вручную</h4>
+    <pre class="fragment" data-fragment-index="0"><code data-trim data-noescape>
+var noteName = document.querySelector('.note__name');
+var noteText = document.querySelector('.note__text');
+
+noteName.textContent = selectedNote.name;
+noteText.textContent = selectedNote.text;
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="html" data-noescape>
+&lt;div class="note">
+    &lt;div class="note__name">Films&lt;/div>
+    &lt;div class="note__text">Films to Watch&lt;/div>
+&lt;/div>
+    </code></pre>
+    <pre><code class="html" data-noescape>
+&lt;div class="note">
+    &lt;div class="note__name">Books&lt;/div>
+    &lt;div class="note__text">Books To Read&lt;/div>
+&lt;/div>
+    </code></pre>
+</section>
+
+<section>
+    <h4>Алгоритм <span class="blue">render</span>: <span class="red">naive</span></h4>
+    <pre><code>
+// псевдокод
+
+var oldElem = document.querySelector('.note');
+var newElem = document.createElement('div');
+
+newElem.insertBefore(oldElem);
+oldElem.parentNode.removeChild(node);
+    </code></pre>
+</section>
+
+<section>
+    <pre><code class="nohighlight" data-noescape>
+&lt;div class="note">
+    &lt;div class="note__name"><span class="fragment highlight-red" data-fragment-index="0">Films</span>&lt;/div>
+    &lt;div class="note__text"><span class="fragment highlight-red" data-fragment-index="0">Films to Watch</span>&lt;/div>
+&lt;/div>
+    </code></pre>
+    <pre><code class="nohighlight" data-noescape>
+&lt;div class="note">
+    &lt;div class="note__name"><span class="fragment highlight-green" data-fragment-index="0">Books</span>&lt;/div>
+    &lt;div class="note__text"><span class="fragment highlight-green" data-fragment-index="0">Books To Read</span>&lt;/div>
+&lt;/div>
+    </code></pre>
+</section>
+
+<section>
+    <h4>Алгоритм <span class="blue">render</span>: <span class="green">diff</span></h4>
+    <pre><code>
+// псевдокод
+
+document.querySelector('.note_name')
+        .textContent('Books');
+
+document.querySelector('.note__text')
+        .textContent('Books To Read');
+    </code></pre>
+</section>
+
+<section>
+    <h4>ES2015</h4>
+</section>
+
+<section>
+    <h4>Constants</h4>
+    <pre><code>
+var TEMPLATE_NAME = './blocks/note.hbs';
+    </code></pre>
+    <pre><code>
+const templateName = './blocks/note.hbs';
+    </code></pre>
+</section>
+
+<section>
+    <h4>Arrow functions</h4>
+    <pre><code>
+var onClick = function (event) {
+    render(notes, selectedNote);
+};
+    </code></pre>
+    <pre><code>
+const onClick = (event) => {
+    render(notes, selectedNote);
+}  
+    </code></pre>
+</section>
+
+<section>
+    <h4>Enchanced object literals</h4>
+    <pre><code>
+var state = {
+    notes: notes,
+    selectedNoteName: selectedNoteName
+};
+    </code></pre>
+    <pre><code>
+const state = {
+    notes,
+    selectedNoteName
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>Destructuring</h4>
+    <pre><code>
+var state = {
+    notes: [],
+    selectedNoteName: 'Book'
+};
+var notes = state.notes;
+var selectedNoteName = state.selectedNoteName;
+    </code></pre>
+    <pre><code>
+const state = {
+    notes: [],
+    selectedNoteName: 'Book'
+};
+const {note, selectedNoteName} = state;
+    </code></pre>
+</section>
+
+<section>
+    <h4>Default function parameters</h4>
+    <pre><code>
+function notesApp(state, action) {
+    state = state || {};
+    ...
+}
+    </code></pre>
+    <pre><code>
+const notesApp = (state = {}, action) => {
+    ...
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>Spread operator</h4>
+    <pre><code>
+var numbers = [1, 2, 3];
+var maxNumber = Math.max.apply(null, numbers);
+    </code></pre>
+    <pre><code>
+const numbers = [1, 2, 3];
+const maxNumber = Math.max(...numbers);
+    </code></pre>
+</section>
+
+<section>
+    <h4>Modules</h4>
+    <pre><code>
+var _ = require('underscore');
+
+module.exports = function () {
+    ...
+};
+    </code></pre>
+    <pre><code>
+import _ from 'underscore';
+
+export default () => {
+    ...
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>React</h4>
+</section>
+
+<section>
+    <h4>JSX</h4>
+    <pre><code class="jsx">
+const HelloMessage = ({name}) => (
+    &lt;div>Hello {name}&lt;/div>
+);
+
+ReactDOM.render(
+    &lt;HelloMessage name="John" />,
+    document.getElementById('root')
+);
+    </code></pre>
+</section>
+
+<section>
+    <h4>JSX + ES2015 -> ECMAScript 5</h4>
+</section>
+
+<section>
+    <h4>Babel</h4>
+    <pre><code class="bash flat" data-noescape>
+npm install --save-dev \
+<span class="fragment highlight-current-red" data-fragment-index="1">    babel-core</span> \
+<span class="fragment highlight-current-red" data-fragment-index="2">    babel-loader</span> \
+<span class="fragment highlight-current-red" data-fragment-index="3">    babel-plugin-react</span> \
+<span class="fragment highlight-current-red" data-fragment-index="3">    babel-plugin-es2015</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4>.<span class="red">babel</span>rc</h4>
+    <pre><code class="json">
+{
+  "presets": ["es2015", "react"]
+}
+    </code></pre>
+    <h4 class="fragment" data-fragment-index="0"><span class="red">webpack</span>.config.js</h4>
+    <pre class="fragment" data-fragment-index="0"><code data-noescape>
+loaders: [
+  {
+    test: <span class="fragment highlight-red">/\.js$/</span>,
+    loader: 'babel',
+    exclude: /node_modules/
+  }
+]
+    </code></pre>
+</section>
+
+<section>
+    <h4>blocks/header.js</h4>
+    <pre><code>
+import React from 'react';
+
+export default () => (
+    &lt;header>&lt;/header>
+);
+    </code></pre>
+    <h4>blocks/footer.js</h4>
+    <pre><code>
+import React from 'react';
+
+export default () => (
+    &lt;footer>&copy; 2016&lt;/footer>
+);
+    </code></pre>
+</section>
+<section>
+    <h4>blocks/navigation.js</h4>
+    <pre><code>
+import React from 'react';
+
+const onClick = (event) => { ... };
+
+export default ({notes}) => (
+    &lt;ul>
+        {notes.map(note => (
+            &lt;li>
+                &lt;a href="#" onClick={onClick}>
+                    {note.name}
+                &lt;/a>
+            &lt;/li>
+        ))}
+    &lt;/ul>
+);
+    </code></pre>
+</section>
+<section>
+    <h4>blocks/note.js</h4>
+    <pre><code>
+import React from 'react';
+import Header from './blocks/header';
+import Footer from './blocks/footer';
+import Navigaion from './blocks/navigation';
+import SelectedNote from './blocks/selectedNote';
+
+export default ({notes, selectedNote}) => (
+    &lt;div>
+        &lt;Header />
+        &lt;Navigation notes={notes} />
+        &lt;SelectedNote {...selectedNote} />
+        &lt;Footer />
+    &lt;/div>
+);
+    </code></pre>
+</section>
+
+<section>
+    <section>
+        <h4 class="shout">ಠ_ಠ</h4>
+    </section>
+    
+    <section>
+        <video controls loop src="video/clientside_react.mov"></video>
+    </section>
+</section>
+
+<!-- READY ABOVE! -->
+
+<section>
+    Архитектура
+</section>
+
+<section>
+    <h4><span class="blue">Состояние приложения</span></h4>
+    <ul>
+        <li>ответы сервера и закэшированные данные</li>
+        <li>данные, созданные локально (в том числе не сохранённые на сервер)</li>
+        <li>состояние интерфейса: индикатор загрузки, открытая вкладка и т. д.</li>
+    </ul>
+</section>
+
+<section>
+    <h4>1. <span class="blue">Единый источник истины</span></h4>
+    <p class="left">Состояние всего приложения хранится в виде дерева в <span class="green">единственном</span> хранилище.</p>
+</section>
+
+<section>
+    <h4>State</h4>
+    <pre><code>
+{
+    selectedNoteName: 'Films',
+    notes: [
+        {
+            name: 'Films',
+            text: 'Films to watch'
+        },
+        {
+            name: 'Books',
+            text: 'Books to read'
+        }
+    ]
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>2. <span class="blue">Состояние – read-only</span></h4>
+    <p class="left">Чтобы изменить состояние, нужно вызвать <span class="green">действие</span>.</p>
+</section>
+
+<section>
+    <h4>Actions</h4>
+    <pre><code>
+{
+    type: 'ADD_NOTE',
+    note: { text: 'Купи слона' }
+}
+
+{
+    type: 'SELECT_NOTE',
+    selectedNoteName: 'book'
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>3. <code class="blue">s<sub>n</sub> = f(s<sub>n-1</sub>, a)</code></h4>
+    <p class="left">Преобразования выполняются <span class="green">чистыми функциями.</span></p>
+</section>
+
+<section>
+    <h4>Чистая функция</h4>
+    <ul>
+        <li><span class="green">детерминирована</span></li>
+        <li>не обладает <span class="green">побочными эффектами</span></li>
+    </ul>
+</section>
+
+<section>
+    <h4>Не являются таковыми</h4>
+    <section>
+        <pre><code>
+function getRandomArbitrary(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+function sayHello(name) {
+    console.log('Hello ' + name);
+}
+
+function incrementCounter() {
+    window.counter += 1;
+}
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <pre><code>
+function addNote(notes, note) {
+    notes.push(note);
+    return notes;
+}
+    </code></pre>
+
+    <p class="fragment" data-fragment-index="0">v</p>
+
+    <pre class="fragment" data-fragment-index="0"><code>
+function addNote(notes, note) {
+    const notesCopy = notes.slice();
+    notesCopy.push(number);
+    return notesCopy;
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code>
+function addNote(notes, note) {
+    notes.push(note);
+    return notes;
+}
+    </code></pre>
+
+    <p>v</p>
+
+    <pre><code>
+function addNote(notes, note) {
+    const notesCopy = notes.concat([note]);
+    return notesCopy;
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code>
+function addNote(notes, note) {
+    notes.push(note);
+    return notes;
+}
+    </code></pre>
+
+    <p>v</p>
+
+    <pre><code>
+function addNote(notes, note) {
+    const notesCopy = [...notes, note];
+    return notesCopy;
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code>
+function selectNote(state, selectedNoteName) {
+    state.selectedNoteName = selectedNoteName;
+    return state;
+}
+    </code></pre>
+
+    <p class="fragment" data-fragment-index="0">v</p>
+    <pre class="fragment" data-fragment-index="0"><code>
+function selectNote(state, selectedNoteName) {
+    const stateCopy = {
+        notes: state.notes,
+        selectedNoteName: selectedNoteName
+    };
+    return stateCopy;
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code>
+function selectNote(state, selectedNoteName) {
+    state.selectedNoteName = selectedNoteName;
+    return state;
+}
+    </code></pre>
+
+    <p>v</p>
+    <pre><code>
+function selectNote(state, selectedNoteName) {
+    const stateCopy = Object.assign({}, state, {
+        selectedNoteName: selectedNoteName
+    };
+    return stateCopy;
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Reducer</h4>
+    <pre><code>
+function noteApp(state, action) {
+    switch (action.type) {
+        case 'ADD_NOTE':
+            return ...
+        case 'SELECT_NOTE':
+            return ...
+        default:
+            return state;
+    }
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>Reducer</h4>
+    <pre><code>
+function noteApp(state, action) {
+    switch (action.type) {
+        case 'ADD_NOTE':
+            return Object.assign({}, state, {
+                notes: addNote(state.notes, action.note);
+            });
+        case 'SELECT_NOTE':
+            return selectNote(state,
+                              action.selectedNoteName);
+        default:
+            return state;
+    }
+};
+    </code></pre>
+</section>
+
+<section>
+    <h4>Хранилище (Store)</h4>
+    <pre><code>
+import {createStore} from 'redux';
+import {noteApp} from './reducers';
+
+const store = createStore(noteApp);
+
+// никогда так не делайте,
+// используйте Provider
+window.store = store;
+    </code></pre>
+</section>
+
+<section>
+    <h4>Хранилище – <span class="green">Event Emitter</span></h4>
+    <pre><code>
+store.subscribe(function () {
+   const state = store.getState(); 
+});
+
+store.dispatch({
+    type: 'ADD_NOTE',
+    note: {}
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="green">note.js</span></h4>
+    <pre><code>
+const store = createStore(noteApp);
+
+function render() {
+    const state = store.getState();
+
+    ReactDom.render(
+        &lt;Note state={state} />,
+        document.getElementById('root')
+    );
+}
+
+render();
+store.subscribe(render);
+    </code></pre>
+</section>
+
+<section>
+    <h4>bundles/note/<span class="green">note.js</span></h4>
+    <pre><code>
+fetch('/api/notes')
+    .then(response => response.json())
+    .then(json => {
+        json.notes.forEach(note => {
+            store.dispatch({
+                type: 'ADD_NOTE',
+                note: note
+            });
+        });
+    });
+    </code></pre>
+</section>
+
+<section>
+    <h4>blocks/navigation.js</h4>
+    <pre><code>
+import React from 'react';
+
+const onClick = (event) => { ... };
+
+export default ({notes}) => (
+    &lt;ul>
+        {notes.map(note => (
+            &lt;li>
+                &lt;a href="#" onClick={onClick}>
+                    {note.name}
+                &lt;/a>
+            &lt;/li>
+        ))}
+    &lt;/ul>
+);
+    </code></pre>
+</section>
+
+<section>
+    <h4>blocks/navigation.js</h4>
+    <pre><code>
+...
+
+const onClick = (event) => {
+    const selectedNoteName = event.target.textContent;
+
+    store.dispatch({
+        type: 'SELECT_NOTE',
+        selectedNoteName: selectedNoteName
+    });
+};
+
+...
+    </code></pre>
+</section>
+
+<section>
+    <section>
+        <h4 class="shout">ಠ_ಠ</h4>
+    </section>
+
+    <section>
+        <video controls loop src="video/clientside_redux_actions.mov"></video>
+    </section>
+</section>
+
+<section>
+    <h4>Ресурсы</h4>
+
+    <ul>
+        <li><a href="https://github.com/urfu-2015/urfu2015-notes/tree/client-render">Awesome notes на Redux</a></li>
+        <li><a href="http://exploringjs.com/es6/ch_overviews.html">An overview of what’s new in ES6</a></li>
+        <li><a href="https://egghead.io/series/getting-started-with-redux">Getting Started with Redux</a></li>
+        <li><a href="http://redux.js.org/index.html">Redux documentation</a></li>
+        <li><a href="https://github.com/xgrommx/awesome-redux">Awesome Redux</a></li>
+    </ul>
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'none',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
