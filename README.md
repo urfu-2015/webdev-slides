@@ -10,6 +10,7 @@
 8. [Процессинг CSS](https://urfu-2015.github.io/webdev-slides/8-preprocessors/)
 9. [HTTP и REST](https://urfu-2015.github.io/webdev-slides/9-rest/)
 10. [TOUCH](https://urfu-2015.github.io/webdev-slides/10-touch/)
+11. [Client rendering](https://urfu-2015.github.io/webdev-slides/11-clientside/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)
