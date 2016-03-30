@@ -1,0 +1,14 @@
+{
+  "name": "client-side",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "author": "Sergey Zhigalov <zhigalov@yandex-team.ru>",
+  "license": "MIT",
+  "devDependencies": {
+    "phantomjs": "^2.1.3"
+  }
+}

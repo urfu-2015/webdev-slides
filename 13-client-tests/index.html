@@ -1,0 +1,840 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Tests. Part II</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs"><div class="reveal"><div class="slides">
+
+<section class="large">
+    <h3>Тесты<br/ ><small>Эпизод 2 — Атака клонов</small></h3>
+    <p class="author">
+        <small>Жигалов Сергей</small>
+    </p>
+</section>
+
+<!-- В предыдущем эпизоде -->
+
+<section>
+    <h3>Много лекций назад...<br/ ><small>Эпизод 1 — Скрытая угроза</small></h3>
+</section>
+
+<section>
+    <section>
+        <h3><a href="https://mochajs.org/">Mocha</a></h3>
+<pre class="javascript fragment" data-fragment-index="1"><code>describe('Note id generator', function() {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>    it('should cast to lower case', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="3"><code>        var actual = generateNoteId('HellO');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="3"><code>        assert.equal(actual, 'hello');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>    });</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code> </code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>    it('should replace spaces to `-`', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>        var actual = generateNoteId('mu ha ha');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>        assert.equal(actual, 'mu-ha-ha');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>    });</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="1"><code>});</code></pre>
+    </section>
+
+    <section>
+        <h2>mocha</h2>
+<pre class="bash size-S"><code>$ npm install mocha --save-dev</code></pre>
+<pre class="bash size-S fragment join-top"><code>$ mocha generateNoteId-test.js</code></pre>
+<br />
+<pre class="size-S fragment code">Note id generator
+  <span class="green">✓</span> should cast to lower case
+  <span class="green">✓</span> should replace spaces to `-`
+
+<span class="green">2 passing</span> (8ms)</pre>
+    </section>
+</section>
+
+<section>
+    <section data-background='./images/white-box-testing.jpg'>
+        <h3 style="color:black;">White box</h3>
+    </section>
+
+    <section>
+        <h3>Тестовые кейсы</h3>
+
+        <ul>
+            <li>+1 тест на каждое действие</li>
+            <li class="fragment">+1 тест на исключение</li>
+            <li class="fragment">+1 тест на ветвление</li>
+        </ul>
+
+        <p class="fragment fact">
+            Тест должен содержать одну логическую проверку которая не повторяется в других тестах*
+        </p>
+
+        <small class="fragment">[*] в идеале ;)</small>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Задача</h3>
+
+        <blockquote>
+            «Форма создания заметки»
+        </blockquote>
+    </section>
+
+    <section>
+        <img src="images/awesome-notes.jpg" alt="Screen notes" />
+    </section>
+
+    <section>
+        <h4>Требования</h4>
+        <ul>
+            <li>
+                Заголовок
+                <p class="pros">Не пустой</p>
+                <p class="pros">Менее 100 символов</p>
+            </li>
+            <li class="fragment">
+                Текст
+                <p class="pros">Не пустой</p>
+                <p class="pros">Менее 1000 символов</p>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Кнопка</h4>
+        <p class="fragment cons"><img src="images/send-button-disabled.jpg" alt="Disabled send button" class="middle" /></p>
+        <p class="fragment pros"><img src="images/send-button-enabled.jpg" alt="Enabled send button" class="middle" /></p>
+    </section>
+
+    <section>
+        <h3><a href="http://localhost:5000/form" target="_blank">DEMO</a></h3>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Модульные тесты</h3>
+    </section>
+
+    <section>
+        <h4>Кнопка недоступна, если</h4>
+        <p class="pros left fragment">форма пустая</p>
+        <p class="pros left fragment">заголовок не заполнен</p>
+        <p class="pros left fragment">текст не заполнен</p>
+        <p class="pros left fragment">заголовок больше 100 символов</p>
+        <p class="pros left fragment">текст больше 1000 символов</p>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-S" data-trim>
+describe('Note form', function () {
+    var $save;
+    var $name;
+    var $text;
+
+    before(function () {
+        $save = $('#save');
+        $name = $('#name');
+        $text = $('#text');
+    });
+});
+</code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-S" data-trim>
+function inputTextTo($el, text) {
+    $el.val(text).trigger('input');
+}
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+function inputTextTo($el, text) {
+    $el.focus();
+    document.execCommand(
+        'insertText', false, text);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs javascript size-XS" data-trim>
+it('when name and text is valid', function () {
+    inputTextTo($name, 'some value');
+    inputTextTo($text, 'some value');
+
+    $save.prop('disabled').should.be.false;
+});
+</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Запуск тестов на клиенте</h3>
+    </section>
+
+    <section>
+        <img src="images/awesome-notes-mocha-test-report.jpg" alt="Mocha test report" />
+    </section>
+
+    <section>
+        <h4>&lt;head&gt;</h4>
+        <pre><code class="hljs html size-XS" data-trim>
+&lt;!-- подключаем стили Mocha --&gt;
+&lt;link
+    rel="stylesheet"
+    href="path/to/mocha.css"&gt;
+        </code></pre>
+    </section>
+
+    <section>
+        <h4>&lt;body&gt;</h4>
+        <pre><code class="hljs html size-XS" data-trim>
+&lt;!-- подключаем библиотеку Mocha --&gt;
+&lt;script src="path/to/mocha.js"&gt;&lt;/script&gt;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs html size-XS" data-trim>
+&lt;!-- настраиваем Mocha --&gt;
+&lt;script&gt; mocha.setup('bdd'); &lt;/script&gt;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs html size-XS" data-trim>
+&lt;!-- подключаем файл с тестами --&gt;
+&lt;script src="/form.test.js"&gt;&lt;/script&gt;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs html size-XS" data-trim>
+&lt;!-- элемент в котором будут результаты тестов --&gt;
+&lt;div id="mocha"&gt;&lt;/div&gt;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs html size-XS" data-trim>
+&lt;!-- запускаем Mocha --&gt;
+&lt;script&gt; mocha.run(); &lt;/script&gt;
+        </code></pre>
+    </section>
+
+    <section>
+        <h3><a href="http://localhost:5000/form" target="_blank">DEMO</a></h3>
+    </section>
+
+    <section>
+        <p class="pros left">тесты запускаются в контексте страницы</p>
+        <p class="pros left fragment">быстро выполняются</p>
+        <p class="cons left fragment">запускать вручную</p>
+        <p class="cons left fragment">следить за результатом глазами</p>
+        <p class="fragment">
+            ⬇ <br>
+            Плохо автоматизируется
+        </p>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3><a href="http://phantomjs.org/" target="_blank">PhantomJS</a></h3>
+    </section>
+
+    <section>
+        <h4><a href="http://phantomjs.org/" target="_blank">PhantomJS</a></h4>
+        <blockquote cite="http://phantomjs.org/">
+            PhantomJS is a headless WebKit scriptable with a JavaScript API.
+        </blockquote>
+    </section>
+
+    <section>
+        <h3><a href="https://github.com/nathanboktae/mocha-phantomjs" target="_blank">mocha-phantomjs</a></h3>
+
+        <pre class="fragment"><code class="hljs size-S" data-trim>$ npm install -g mocha-phantomjs</code></pre>
+    </section>
+
+    <section>
+        <h4>Адаптируем запуск</h4>
+
+        <pre ><code class="hljs html size-XS" data-trim>
+&lt;!-- запускаем Mocha --&gt;
+&lt;script&gt;
+    window.mochaPhantomJS ?
+        mochaPhantomJS.run() :
+        mocha.run();
+&lt;/script&gt;
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-XS" data-trim>$ mocha-phantomjs http://localhost:5000/form</code></pre>
+        <br>
+        <pre class="size-XS code fragment">
+  Note form
+    save button disabled
+      <span style="color:green">✓</span> when form is empty
+      <span style="color:green">✓</span> when text is empty
+      <span style="color:green">✓</span> when name is empty
+      <span style="color:green">✓</span> when name is long
+      <span style="color:green">✓</span> when text is long
+    save button enabled
+      <span style="color:green">✓</span> when name and text is valid
+
+  <span style="color:green">6 passing</span> (8ms)
+    </section>
+
+    <section>
+        <h3>Скриншоты</h3>
+
+        <pre ><code class="hljs javascript size-XS" data-trim>
+function takeScreenshot() {
+    if (!window.callPhantom) {
+        return;
+    }
+
+    var fileName = 'note-' +  new Date().getTime();
+    callPhantom({ screenshot: fileName });
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Скриншоты</h3>
+
+        <pre ><code class="hljs javascript size-XS" data-trim>
+afterEach(function () {
+    if (this.currentTest.state == 'failed') {
+        takeScreenshot();
+    }
+});
+        </code></pre>
+    </section>
+
+    <section>
+        <p class="pros left">тесты запускаются в контексте страницы</p>
+        <p class="pros left fragment">быстро выполняются</p>
+        <p class="pros left fragment">удобно автоматизировать</p>
+        <p class="cons left fragment">не проверяем поведение в различных браузерах</p>
+    </section>
+</section>
+
+<section>
+    <section data-background="images/black-box-testing.jpg">
+    </section>
+
+    <section>
+        <h3>Сценарий</h3>
+        <p class="fragment">Переходим на страницу создания заметки</p>
+
+        <p class="fragment">
+            ⬇ <br>
+            Вводим название и содержание заметки
+        </p>
+
+        <p class="fragment">
+            ⬇ <br>
+            Отправляем форму
+        </p>
+
+        <p class="fragment">
+            ⬇ <br>
+            Попадаем на список заметок, где новая заметка - последняя
+        </p>
+    </section>
+</section>
+
+<section>
+    <section style="background-color: #1c1c1c">
+        <img src="images/casperjs-logo.jpg" alt="casperjs logo" />
+    </section>
+
+    <section>
+        <h3><a href="http://casperjs.org/" target="_blank">casperjs</a></h3>
+
+        <pre class="fragment"><code class="hljs size-S" data-trim>$ npm install -g casperjs</code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-S" data-trim>
+casper.test.begin(
+    'Send form',
+    3,
+    function (test) { /* test */ }
+);
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-xS" data-trim>
+casper
+    .start('http://localhost:5000/form')
+        </code></pre>
+        <pre class="fragment"><code class="hljs size-xS">    .then(function () {
+        this.fill('form#create-note', {
+            name: 'new-note',
+            text: 'some text of new note'
+        }, true);
+    })</code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-xS">    .then(function () {
+        test.assertUrlMatch(/\/notes$/,
+            'should redirect to `/notes`');
+    })</code></pre>
+        <pre class="fragment"><code class="hljs size-xS">    .then(function () {
+        var list = this.getElementsInfo('li');
+        test.assert(list.length > 3,
+            'should new note not exists');
+
+        var newNote = list.pop();
+        test.assertEqual(newNote.text,
+            'new-note', 'should success add');
+    })</code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-xS">    .run(function () {
+        test.done();
+    });</code></pre>
+    </section>
+
+    <section>
+        <pre><code code class="hljs size-XXS" data-trim>
+casper.test.begin('Send form', 3, function (test) {
+    casper
+        .start('http://localhost:5000/form')
+        .then(function () {
+            this.fill('form#create-note', {
+                name: 'new-note',
+                text: 'some text of new note'
+            }, true);
+        })
+        .then(function () {
+            test.assertUrlMatch(/\/notes$/, 'should redirect to `/notes`');
+        })
+        .then(function () {
+            var list = this.getElementsInfo('li');
+            test.assert(list.length > 3, 'should new note not exists');
+
+            var newNote = list.pop();
+            test.assertEqual(newNote.text, 'new-note',
+                'should success add in and of list');
+        })
+        .run(function () {
+            test.done();
+        });
+});
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-XS" data-trim>$ casperjs test bundles/form/form.casper.test.js</code></pre>
+
+        <img src="images/casper-test-report.jpg" alt="Casper test report" class="fragment"/>
+
+        <p class="fragment">
+            DEMO
+        </p>
+    </section>
+
+    <section>
+        <h3>Скриншоты</h3>
+        <pre><code code class="hljs size-XS" data-trim>
+casper
+    .start('http://localhost:5000/form')
+    .then(function () {
+       this.captureSelector('note-page.png', 'body');
+    })
+    .run(function () {
+        test.done();
+    });
+});
+        </code></pre>
+    </section>
+
+    <section>
+        <p class="pros left">быстро выполняются</p>
+        <p class="cons left fragment">Только PhantomJS и  SlimerJS</p>
+        <p class="cons left fragment">Можем пропустить баги из настоящих браузеров</p>
+    </section>
+</section>
+
+<section>
+    <section data-background="images/selenium.jpg">
+    </section>
+
+    <section>
+        <img src="images/selenium-architecture.png" alt="Selenium architecture" />
+    </section>
+
+    <section>
+        <p class="left"><a href="http://docs.seleniumhq.org/download/">http://docs.seleniumhq.org/download/</a></p>
+        <p class="left fragment">Selenium Standalone Server</p>
+        <pre class="left fragment size-XS"><code>$ java -jar selenium-server-standalone-2.53.0.jar</code></pre>
+    </section>
+
+    <section data-background="images/WebdriverIO.jpg">
+    </section>
+
+    <section>
+        <h3>WebdriverIO</h3>
+        <pre class="fragment size-XS"><code>$ npm install webdriverio</code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Standalone Mode</h3>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-xS" data-trim>
+var webdriverio = require('webdriverio');
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs size-xS" data-trim>
+var options = {
+    desiredCapabilities: {
+        browserName: 'firefox'
+    }
+};
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs size-xS" data-trim>
+var client = webdriverio
+    .remote(options)
+    .init();
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="hljs size-xS" data-trim>
+client
+    .url('http://localhost:5000/form')
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs size-xS">    .setValue('#name', 'Selenium standalone')
+    .setValue('#text', 'some text')
+    .submitForm('#save')</code></pre>
+
+        <pre class="fragment"><code class="hljs size-xS">    .getText('li')</code></pre>
+
+        <pre class="fragment"><code class="hljs size-xS">    .then(function (notes) {
+        var actual = notes.pop();
+        console.log(actual);
+    })
+    .end();</code></pre>
+    </section>
+
+    <section>
+        <pre class="size-S"><code>$ node bundles/form/form.standalone.js</code></pre>
+
+        <p class="fragment">DEMO</p>
+    </section>
+
+    <section>
+        <p class="pros left">тесты запускаются внастоящих браузерах</p>
+        <p class="cons left fragment">не параллелятся</p>
+        <p class="cons left fragment">promise-интерфейс</p>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>WDIO mode</h3>
+    </section>
+
+    <section>
+<pre class="javascript join-top fragment" data-fragment-index="1"><code> describe('Notes form', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>     it('should success add new note', function () {</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="3"><code>         browser.url('http://localhost:5000/form');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code> </code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>         browser.setValue('#name', 'Selenium wdio');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>         browser.setValue('#text', 'some text');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="4"><code>         browser.submitForm('#save');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code> </code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>         var notes = browser.getText('li');</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="5"><code>         var actual = notes.pop();</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="6"><code> </code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="6"><code>         actual.should.be.equal('Selenium wdio')</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="2"><code>     });</code></pre>
+<pre class="javascript join-top fragment" data-fragment-index="1"><code> });</code></pre>
+    </section>
+
+    <section>
+        <pre><code>./node_modules/.bin/wdio config</code></pre>
+        <p class="fragment">
+            ⬇ <br>
+            <code>wdio.conf.js</code>
+        </p>
+    </section>
+
+    <section>
+        <pre><code>./node_modules/.bin/wdio</code></pre>
+
+        <img class="fragment" src="images/selenium-wdio-demo.jpg" alt="selenium wdio demo" />
+
+        <p class="fragment">DEMO</p>
+    </section>
+
+    <section>
+        <p class="pros left">тесты запускаются внастоящих браузерах</p>
+        <p class="pros left fragment">Параллельный запуск</p>
+        <p class="pros left fragment">Синхронный интерфейс</p>
+        <p class="cons left fragment">Может не быть браузеров</p>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Selenium Grid</h3>
+    </section>
+
+    <section>
+        <h3><a href="https://saucelabs.com/">saucelabs</a></h3>
+
+        <img src="images/saucelabs.jpg" alt="saucelabs" />
+    </section>
+
+    <section>
+        <p>Зайти на https://github.com/urfu-2015</p>
+        <p class="fragment">
+            ⬇ <br>
+            Ввести `slide` в поле поиска
+        </p>
+        <p class="fragment">
+            ⬇ <br>
+            Проверить что вернулось три репозитория
+        </p>
+    </section>
+
+    <section>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="1"><code> it('should search repo', function () {</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="2"><code>     browser.url('https://github.com/urfu-2015');</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="3"><code> </code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="3"><code>     browser.setValue('input[name="query"]', 'slides');</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>     browser.waitUntil(function () {</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>         return browser</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>             .getUrl()</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>             .then(function (url) {</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>                 return /query=slides/.test(url);</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>             });</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="4"><code>     });</code></pre>
+    </section>
+
+    <section>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="5"><code>     var repos = browser.getText('h3.repo-list-name');</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code> </code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code>     repos.should.deep.equal([</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code>         'webdev-slides',</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code>         'javascript-slides',</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code>         'verstka-slides'</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code>     ]);</code></pre>
+<pre class="javascript join-top fragment size-XS" data-fragment-index="6"><code> })</code></pre>
+    </section>
+
+    <section>
+        <h4><code>soucelabs.conf.js</code></h4>
+
+        <pre>
+            <code data-trim>
+{
+    ...,
+    host: 'ondemand.saucelabs.com',
+    user: 'zhigalov',
+    key: 'XXXXX_XXXXX_XXXXXX_XXXXX'
+}
+            </code>
+        </pre>
+    </section>
+
+    <section>
+        <pre class="size-S">
+            <code>./node_modules/.bin/wdio soucelabs.conf.js</code>
+        </pre>
+
+        <p class="fragment">
+            DEMO
+        </p>
+    </section>
+
+    <section>
+        <p class="pros left">тесты запускаются внастоящих браузерах</p>
+        <p class="pros left fragment">Параллельный запуск</p>
+        <p class="pros left fragment">Синхронный интерфейс</p>
+        <p class="pros left fragment">Удаленно во многих браузерах</p>
+    </section>
+</section>
+
+<!-- Gemini -->
+
+<section class="large">
+            <h3>Gemini</h3>
+            <p class="author">
+                <small>Сергей Жигалов,</small>
+                <small>Олег Мохов</small>
+            </p>
+        </section>
+
+        <section>
+            <img class="fragment" style="box-shadow: none; position: absolute; top: 250px;" src="i/2.png"/>
+            <img src="i/1.jpg"/>
+        </section>
+        <section>
+            <h2>Тестирование<br> «на глазок»</h2>
+        </section>
+        <section>
+            <img src="i/3.png"/>
+        </section>
+        <section>
+            <h2><a href="https://github.com/gemini-testing/gemini">Gemini</a></h2>
+        </section>
+        <section>
+            <p>Установка</p>
+        <pre class="fragment"><code data-trim>
+npm install gemini
+        </code></pre>
+            <p class="fragment">Запуск</p>
+        <pre class="fragment"><code data-trim>
+gemini test [путь до директории с тестами]
+        </code></pre>
+        </section>
+        <section>
+            <p>Конфигурация</p>
+        <pre class="hljs yml"><code data-trim>
+rootUrl: http://yandex.com
+browsers:
+    PhantomJS:
+        desiredCapabilities:
+            browserName: phantomjs
+        </code></pre>
+        </section>
+
+        <section>
+            <p>Конфигурация</p>
+        <pre><code data-trim>
+rootUrl: http://yandex.com
+gridUrl: http://selenium.example.com:4444/wd/hub
+
+browsers:
+    chrome:
+        desiredCapabilities:
+            browserName: chrome
+            version: "45.0"
+
+    firefox:
+        desiredCapabilities:
+            browserName: firefox
+            version: "39.0"
+
+        </code></pre>
+        </section>
+
+        <section>
+            <p>Пример теста</p>
+        <pre class="highlight javascript"><code data-trim>
+var gemini = require('gemini');
+
+gemini.suite('init', function(suite) {
+    suite
+        .setUrl('/')
+        .setCaptureElements('body')
+        .capture('plain');
+});
+
+        </code></pre>
+        </section>
+        <section>
+            <p>Генерация эталонов</p>
+        <pre class="fragment"><code data-trim>
+gemini update [путь до директории с тестами]
+        </code></pre>
+        </section>
+        <section>
+        <pre><code data-trim>
+gemini test --reporter html [путь до тестов]
+        </code></pre>
+            <img class="fragment" src="i/4.png"/>
+        </section>
+
+        <section>
+            <h2>Как писать тесты на вёрстку?</h2>
+        </section>
+        <section>
+            <img src="i/5.png"/>
+        </section>
+        <section>
+            <h2>Правильно тестировать блоки, а не страницы</h2>
+        </section>
+
+        <section>
+        <pre class="highlight javascript"><code data-trim>var gemini = require('gemini');
+
+gemini.suite('main url', function(suite) {
+    suite.setUrl('/');
+</code></pre>
+<pre class="fragment highlight javascript"><code>    gemini.suite('header', function (suite) {
+        suite
+            .setCaptureElements('header')
+            .capture('header');
+    });</code></pre>
+<pre class="fragment highlight javascript"><code>    gemini.suite('main', function (suite) {
+        suite
+            .setCaptureElements('main')
+            .capture('main');
+    });
+</code></pre>
+<pre class="fragment highlight javascript"><code>    gemini.suite('footer', function (suite) {
+        suite
+            .setCaptureElements('footer')
+            .capture('footer');
+    });
+});</code></pre>
+        </section>
+        <section>
+            <img src="i/6.png"/>
+        </section>
+        <section>
+            <h3>Возможности</h3>
+            <ul>
+                <li class="fragment">Захват конкретной части страницы</li>
+                <li class="fragment">Эмуляция JS событий</li>
+                <li class="fragment">Selenium</li>
+                <li class="fragment">Пропуск тестов для выбранных браузеров</li>
+                <li class="fragment">Эмуляция действий пользователя</li>
+                <li class="fragment">Игнорирование части страницы с не постоянными данными</li>
+                <li class="fragment">Отчёт о покрытии CSS тестами</li>
+            </ul>
+        </section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
