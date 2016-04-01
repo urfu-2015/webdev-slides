@@ -1,0 +1,1304 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Принципы и приемы написания эффективного кода</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="large">
+            <h3>Принципы и приемы написания эффективного кода</h3>
+            <p class="author">
+                <small>Александр Завьялов,</small>
+                <small>Евгений Мокеев</small>
+            </p>
+        </section>
+
+        <section>
+            <h4>Сервис «Заметки»</h4>
+<pre>
+<span class="fragment">blocks/</span>
+<span class="fragment">bundles/</span>
+<span class="fragment">controllers/</span>
+<span class="fragment"><span class="grey">└──</span> notes.js</span>
+<span class="fragment"><span class="grey">└──</span> pages.js</span>
+<span class="fragment">models/</span>
+<span class="fragment"><span class="grey">└──</span> note.js</span>
+<span class="fragment">app.js</span>
+<span class="fragment">routes.js</span>
+</pre>
+
+<pre class="fragment">
+
+    <span class="green">GET</span>  /
+    <span class="green">GET</span>  /notes
+    <span class="green">POST</span> /notes
+    <span class="green">GET</span>  /notes/:name
+</pre>
+        </section>
+
+        <section>
+            <h3>Задача</h3>
+        </section>
+
+        <section>
+            <h4>Аутентификация пользователя</h4>
+            <ul>
+                <li class="fragment">Проверка логина/пароля</li>
+                <li class="fragment">Страница с формой</li>
+                <li class="fragment">Редирект при успешной проверке</li>
+                <li class="fragment">Вывод ошибки при неудачной попытке</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Как это работает</h3>
+            <img src="img/cheme.png" alt="">
+        </section>
+
+        <section>
+            <h4>Страница аутентификации</h4>
+
+<pre class="fragment">
+controllers/
+<span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+exports.login = (req, res) => {
+    res.render('login/login');
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+<span class="red">routes.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+const user = require('./controllers/user');
+
+module.exports = function (app) {
+    app.get('/login', user.login);
+}
+</code></pre>
+
+<pre class="fragment">
+
+<span class="green">GET</span> /login
+</pre>
+        </section>
+
+        <section>
+<pre>
+bundles/
+<span class="grey">└──</span> login
+    <span class="red"><span class="grey">└──</span> login.hbs</span>
+
+</pre>
+<pre class="fragment"><code class="hljs javascript size-XXS" data-trim>
+<form action="/login" method="post">
+    <div>
+        <label>Логин:</label>
+        <input type="text" name="username"/>
+    </div>
+    <div>
+        <label>Пароль:</label>
+        <input type="password" name="password"/>
+    </div>
+    <div>
+        <input type="submit" value="Войти"/>
+    </div>
+</form>
+</code></pre>
+        </section>
+
+        <section>
+            <h4>Модель пользователя</h4>
+<pre class="fragment">
+models/
+<span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+const users = [
+    {id: 1, username: 'admin', password: 'admin'}
+];
+
+class User {
+    static find(username, password) {}
+
+    static findById(id) {}
+}
+
+module.exports = User;
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Сессии</h3>
+        </section>
+
+        <section>
+            Способность сохранять и восстанавливать окружение посетителя между запросами к сайту.
+        </section>
+
+        <section>
+            <h4>Сессии</h4>
+<pre class="fragment">
+<span class="red">package.json</span>
+
+</pre>
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+"dependencies": {
+    "express-session": "^1.13.0",
+}
+</code></pre>
+
+<pre class="fragment">
+
+<span class="red">app.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.use(require('express-session')({}));
+</code></pre>
+            <br>
+            <span class="fragment">req.session</span>
+        </section>
+
+        <section>
+            <h4>Библиотека passport</h4>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XS" data-trim>
+const User = require('../../models/user');
+
+exports.authenticate = (req, res) => {};
+
+exports.onlyAuth = (req, res) => {};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = (req, res) => {
+    <span class="fragment">const user = User.find(
+        req.body.username,
+        req.body.password
+    );</span>
+
+    <span class="fragment">if (!user) {
+        req.session.authFailMessage =
+            'Пользователь не найден';
+        res.redirect('/login');
+        return;
+    }</span>
+
+    <span class="fragment">req.session.auth = { id: user.id };</span>
+
+    <span class="fragment">res.redirect('/');</span>
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XS" data-noescape data-trim>
+exports.onlyAuth = (req, res, next) => {
+    <span class="fragment">const auth = req.session.auth;</span>
+
+    <span class="fragment">if (auth && auth.id) {
+        if (User.findById(auth.id)) {
+            return next();
+        }
+    }</span>
+
+    <span class="fragment">res.sendStatus(401);</span>
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+controllers/
+<span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+
+<pre class="fragment prev"><code class="hljs javascript size-XS" data-trim>
+exports.login = (req, res) => {
+    res.render('login/login');
+};
+</code></pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+exports.login = (req, res) => {
+    const data = {};
+
+    if (req.session.authFailMessage) {
+        data.error = req.session.authFailMessage;
+    }
+
+    res.render('login/login', data);
+};
+</code></pre>
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+exports.profile = (req, res) => {
+    res.send('Страница профиля');
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+<span class="red">routes.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.post('/login', passport.authenticate);
+</code></pre>
+<pre class="fragment">
+
+<span class="green">POST</span> /login
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.get('/profile', passport.onlyAuth, user.profile);
+</code></pre>
+
+<pre class="fragment">
+
+<span class="green">GET</span>  /profile
+</pre>
+        </section>
+
+        <section>
+            <h3>Задание выполнено</h3>
+        </section>
+
+        <section>
+            <h3>Новые фичи</h3>
+        </section>
+
+        <section>
+            <ul>
+                <li class="fragment">Данные пользователя на странице профиля</li>
+                <li class="fragment">Аутентифицировать через социальные сети</li>
+                <li class="fragment">Увеличить надежность проверки пароля</li>
+                <li class="fragment">Редиректить на другую страницу</li>
+                <li class="fragment">Показать другое сообщение об ошибке</li>
+                <li class="fragment red">Прикрутить к трем других проектам</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Переписывать весь код?</h3>
+        </section>
+
+        <section>
+            <h3>Почему?</h3>
+        </section>
+
+        <section>
+            <h4>Проблемы нашей бибиотеки</h4>
+            <ul>
+                <li class="fragment">Много обязанностей</li>
+                <li class="fragment">Много знаний о внешних объектах</li>
+                <li class="fragment">Нет точек расширения/эволюции</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Ароматы плохого модуля</h4>
+            <ul>
+                <li>Жесткий дизайн</li>
+                <li>Хрупкость</li>
+                <li>Монолитность</li>
+                <li>Сложность</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>SOLID</h2>
+        </section>
+
+        <section class="left">
+            <p class="fragment">S <span class="green">- Single responsibility principle</span></p>
+            <p class="fragment">O <span class="green">- Open/closed principle</span></p>
+            <p class="fragment">L <span class="green">- Liskov substitution principle</span></p>
+            <p class="fragment">I <span class="green">- Interface segregation principle</span></p>
+            <p class="fragment">D <span class="green">- Dependency inversion principle</span></p>
+        </section>
+
+        <section>
+            <h3>Зачем?</h3>
+        </section>
+
+        <section>
+            <img src="img/solid-1.jpg" alt="">
+        </section>
+
+        <section>
+            <blockquote class="left">На каждую сущность должна быть возложена одна единственная ответственность.</blockquote>
+        </section>
+
+        <section>
+            <h3 class="red">God Object</h3>
+        </section>
+
+        <section>
+            <h4>Результат</h4>
+            <ul>
+                <li class="fragment">Маленькие модули</li>
+                <li class="fragment">Простое тестирование</li>
+                <li class="fragment">Четкая структура приложения</li>
+                <li class="fragment">Реиспользование модулей</li>
+                <li class="fragment">Меньше проблем при доработках</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Middleware</h4>
+<pre>
+<span class="red">routes.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.get(
+    '/profile',
+    passport.onlyAuth,
+    user.profile
+);
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/pattern.png" alt="" width="200"><br><br>
+            <h3>Chain of Responsibility</h3>
+            <blockquote>Делит ответственность за обработку между несколькими обработчиками</blockquote>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XS" data-noescape data-trim>
+    exports.onlyAuth = (req, res, next) => {
+    const auth = req.session.auth;
+
+    if (auth && auth.id) {
+        <span class="fragment highlight yellow init_visible">if (User.findById(auth.id)) {</span>
+            return next();
+        }
+    }
+
+    <span class="fragment highlight yellow init_visible">res.sendStatus(401);</span>
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre  class="fragment"><code class="hljs javascript size-XS"  data-trim>
+exports.initUser = (req, res, next) => {
+    const auth = req.session.auth;
+
+    if (auth && auth.id) {
+        req.user = User.findById(auth.id);
+    }
+
+    next();
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XS" data-trim>
+exports.onlyAuth = (req, res, next) => {
+    if (!req.user) {
+        res.sendStatus(401);
+        return;
+    }
+
+    next();
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+<span class="red">app.js</span>
+
+</pre>
+<pre  class="fragment"><code class="hljs javascript size-XS" data-trim>
+const passport = require('./lib/passport');
+
+app.use(passport.initUser);
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+controllers/
+<span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+
+<pre  class="fragment prev"><code class="hljs javascript size-XS" data-trim>
+exports.profile = (req, res) => {
+    res.send('Страница профиля');
+};
+</code></pre>
+<pre  class="fragment"><code class="hljs javascript size-XS" data-trim>
+exports.profile = (req, res) => {
+    res.send(`Привет, ${req.user.username}!`);
+};
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/solid-2.jpg" alt="">
+        </section>
+
+        <section>
+            <blockquote class="left">Сущности (классы, модули, функции) должны быть открыты к раширению, но закрыты от модификаций.</blockquote>
+        </section>
+
+        <section>
+            <h4>Результат</h4>
+            <ul>
+                <li class="fragment">Гибкие сущности</li>
+                <li class="fragment">Простое тестирование</li>
+                <li class="fragment">Меньше сильных связей</li>
+                <li class="fragment">Нет правок в базовых сущностях</li>
+            </ul>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = (req, res) => {
+    const user = User.find(
+        req.body.username,
+        req.body.password
+    );
+
+    if (!user) {
+        req.session.authFailMessage =
+            <span class="fragment highlight yellow init_visible">'Пользователь не найден';</span>
+        res.redirect(<span class="fragment highlight yellow init_visible">'/login'</span>);
+        return;
+    }
+
+    req.session.auth = { id: user.id };
+
+    res.redirect(<span class="fragment highlight yellow init_visible">'/'</span>);
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+<span class="red">routes.js</span>
+
+</pre>
+<pre  class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.post('/login', passport.authenticate);
+</code></pre>
+<br>
+<pre  class="fragment"><code class="hljs javascript size-XS" data-trim>
+app.post('/login', passport.authenticate({
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureMessage: 'Неправильный логин или пароль'
+}));
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+
+<pre class="fragment"><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = (req, res) => {};
+</code></pre>
+<br>
+<pre class="fragment"><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = options => {
+    return (req, res) => {};
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = options => {
+    return (req, res) => {
+        const user = User.find(
+            req.body.username,
+            req.body.password
+        );
+
+        if (!user) {
+            req.session.authFailMessage =
+                <span class="will-show fragment highlight yellow init_visible">options.failureMessage</span><span class="will-fade">'Пользователь не найден'</span>;
+            res.redirect(<span class="will-show fragment highlight yellow init_visible">options.failureRedirect</span><span class="will-fade">'/login'</span>);
+            return;
+        }
+
+        req.session.auth = { id: user.id };
+
+        res.redirect(<span class="will-show fragment highlight yellow init_visible">options.successRedirect</span><span class="will-fade">'/'</span>);
+    }
+};
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/pattern.png" alt="" width="200"><br><br>
+            <h3>Factory</h3>
+            <blockquote>Создает однотипные объекты</blockquote>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+    exports.authenticate = options => {
+    return (req, res) => {
+        const user = User.find(
+            req.body.username,
+            req.body.password
+        );
+
+        if (!user) {
+            req.session.authFailMessage =
+                options.failureMessage ;
+            res.redirect( options.failureRedirect );
+            return;
+        }
+
+        req.session.auth = <span class="fragment highlight yellow init_visible">{ id: user.id };</span>
+
+        res.redirect(options.successRedirect);
+    }
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre class="fragment"><code class="hljs javascript size-XS" data-noescape data-trim>
+exports.initUser = (req, res, next) => {
+    const auth = req.session.auth;
+
+    if (auth && auth.id) {
+        req.user = <span class="fragment highlight yellow init_visible">User.findById(auth.id);</span>
+    }
+
+    next();
+};
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Сильные связи</h3>
+        </section>
+
+        <section>
+<h3>Умные вещи</h3>
+<pre class="fragment"><code class="hljs javascript size-XS" data-noescape data-trim>
+// Сериализация пользователя
+auth = { id: user.id }
+</code></pre>
+<br>
+<pre class="fragment"><code class="hljs javascript size-XS" data-noescape data-trim>
+// Десериализация пользователя
+user = User.findById(auth.id)
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre class="fragment"><code class="hljs javascript size-XS" data-noescape data-trim>
+let serialize = () => {};
+let deserialize = () => {};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = options => {
+    return (req, res) => {
+        const user = User.find(
+            req.body.username,
+            req.body.password
+        );
+
+        if (!user) {
+            req.session.authFailMessage =
+                options.failureMessage ;
+            res.redirect( options.failureRedirect );
+            return;
+        }
+
+        req.session.auth = { id: <span class="will-show fragment highlight yellow init_visible">serialize(user)</span><span class="will-fade">user.id</span> }
+
+        res.redirect(options.successRedirect);
+    }
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.initUser = (req, res, next) => {
+    const auth = req.session.auth;
+
+    if (auth && auth.id) {
+        req.user = <span class="will-show fragment highlight yellow init_visible">deserialize(auth.id)</span><span class="will-fade">User.findById(auth.id)</span>
+    }
+
+    next();
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.registerSerializer = fn => {
+    serialize = fn;
+};
+
+exports.registerDeserializer = fn => {
+    deserialize = fn;
+};
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Кто знает о пользователе?</h3>
+        </section>
+
+        <section>
+<pre>
+models/
+<span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+class User {
+    static getSerializator() {
+        return user => user.id;
+    }
+
+    static getDeserializator() {
+        return id => User.findById(id);
+    }
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Что осталось?</h3>
+        </section>
+
+        <section>
+<pre>
+<span class="red">app.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+const User = require('./models/user');
+const passport = require('./lib/passport/index');
+
+passport.registerSerializer(User.getSerializator());
+passport.registerDeserializer(User.getDeserializator());
+</code></pre>
+        </section>
+
+        <section data-background-image='img/modules.jpg'></section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+    passport.js
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+const User = require('../models/user');
+const passport = require('./passport/index');
+
+passport.registerSerializer(User.getSerializator());
+passport.registerDeserializer(User.getDeserializator());
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/pattern.png" alt="" width="200"><br><br>
+            <h3>Decorator</h3>
+            <blockquote>Расширение базовой функциональности без наследования</blockquote>
+        </section>
+
+        <section>
+            <h3>require кеширует результат</h3>
+        </section>
+
+        <section>
+            <img src="img/pattern.png" alt="" width="200"><br><br>
+            <h3>Singleton</h3>
+            <blockquote>Создание уникальных объектов, существующих только в одном экземпляров</blockquote>
+        </section>
+
+        <section>
+            <img src="img/solid-3.jpg" alt="">
+        </section>
+
+        <section>
+            <blockquote class="left">Сущности, которые используют базовый тип, должны иметь возможность использовать подтипы базового типа не зная об этом.</blockquote>
+        </section>
+
+        <section>
+            <blockquote class="left">Подкласс не должен требовать от вызывающего кода больше, чем базовый класс, и не должен предоставлять вызывающему коду меньше, чем базовый класс.</blockquote>
+        </section>
+
+        <section>
+            <h4>Результат</h4>
+            <ul>
+                <li>Предсказуемое поведение потомков</li>
+            </ul>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = options => {
+    return (req, res) => {
+        <span class="fragment highlight yellow init_visible">const user = User.find(</span>
+            <span class="fragment highlight yellow init_visible">req.body.username,</span>
+            <span class="fragment highlight yellow init_visible">req.body.password</span>
+        <span class="fragment highlight yellow init_visible">);</span>
+
+        <span class="fragment highlight yellow init_visible">if (!user) {</span>
+            req.session.authFailMessage =
+                options.failureMessage ;
+            res.redirect( options.failureRedirect );
+            return;
+        <span class="fragment highlight yellow init_visible">}</span>
+
+        req.session.auth = { id: serialize(user) }
+
+        res.redirect(options.successRedirect);
+    }
+};
+</code></pre>
+        </section>
+
+        <section data-background-image='img/killer.jpg'></section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="red"><span class="grey">└──</span> index.js</span>
+
+</pre>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+const strategies = {};
+
+exports.registerStrategy = (name, strategy) => {
+    strategies[name] = strategy;
+};
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Что делает стратегия?</h3>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = options => {
+    return (req, res) => {
+        <span class="will-show fragment yellow init_visible">/* поиск пользователя */</span><span class="will-fade">const user = User.find(
+            req.body.username,
+            req.body.password
+        );</span>
+
+        if (!user) { <span class="fragment">/* проверка пользователя */</span>
+            <span class="will-show fragment yellow init_visible">/* обработка ошибки */</span><span class="will-fade">req.session.authFailMessage =
+                options.failureMessage;
+            res.redirect( options.failureRedirect );
+            return;</span>
+        }
+
+        <span class="will-show fragment yellow init_visible">/* обработка успешного результата */</span><span class="will-fade">req.session.auth = { id: serialize(user) }
+
+        res.redirect(options.successRedirect);</span>
+    }
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+exports.authenticate = (name, options) => {
+    return (req, res) => {
+        const strategy = strategies[name];
+
+        /* проверка пользователя */
+        strategy.authenticate(req, (err, user) => {
+            if (err) {
+                /* обработка ошибки */
+            }
+
+            /* обработка успешного результата */
+        });
+    }
+};
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> strategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+class Strategy {
+    <span class="fragment">constructor(verify) {
+        this._verify = verify;
+    }</span>
+
+    <span class="fragment">authenticate(req, done) {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        this._verify(username, password, done);
+    }</span>
+}
+
+<span class="fragment">module.exports = Strategy;</span>
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="red"><span class="grey">└──</span> passport.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+<span class="fragment">const Strategy = require('./passport/strategies/strategy');</span>
+
+<span class="fragment">passport.registerStrategy(
+    'local',
+    new Strategy((username, password, done) => {
+        const user = User.find(username, password);
+
+        const err = user ? null : new Error('...');
+
+        done(err, user);
+}));</span>
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Задаем стратегию при вызове</h3>
+        </section>
+
+        <section>
+<pre>
+<span class="red">routes.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+app.post('/login', passport.authenticate(<span class="will-show highlight fragment yellow init_visible">'local', </span>{
+    successRedirect: '/',
+    failureRedirect: '/login'
+}));
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/pattern.png" alt="" width="200"><br><br>
+            <h3>Strategy</h3>
+            <blockquote>Выбор алгоритма поведения независимо от клиентов, которые его используют</blockquote>
+        </section>
+
+        <section>
+            <h3>Нужна еще одна стратегия?</h3>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> anotherStrategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+var Strategy = require('./strategy');
+
+class AnotherStrategy extends Strategy  {
+    constructor(verify) {}
+
+    authenticate(req, done) {}
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h4>Passport зависит от Strategy</h4>
+            <h4>AnotherStrategy зависит от Strategy</h4>
+        </section>
+
+        <section>
+            <h3>Плохо</h3>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> BaseStrategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+class BaseStrategy {
+    constructor(verify) {
+        this._verify = verifgoog
+    }
+
+    authenticate(req, done) {
+        done(new Error('Такого пользователя нет'));
+    }
+}
+
+module.exports = BaseStrategy;
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> LocalStrategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+var BaseStrategy = require('./base');
+
+class LocalStrategy extends BaseStrategy {
+    authenticate(req, done) {
+        const username = req.body.username;
+        const password = req.body.password;
+
+        this._verify(username, password, done);
+    }
+}
+
+module.exports = LocalStrategy;
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> CookieStrategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+var BaseStrategy = require('./base');
+
+class CookieStrategy extends BaseStrategy {
+    authenticate(req, done) {
+        userId = req.cookies.userId;
+
+        this._verify(userId, done);
+    }
+}
+
+module.exports = CookieStrategy;
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib/
+<span class="grey">└──</span> passport
+    <span class="grey">└──</span> strategies
+        <span class="red"><span class="grey">└──</span> AnotherStrategy.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+    var BaseStrategy = require('./base');
+
+class BadStrategy extends BaseStrategy {
+    authenticate(req, done) {
+        userId = req.cookies.userId;<span class="will-show fragment yellow init_visible">
+
+        if (userId === 9) {
+            throw new Error('...');
+        }</span>
+
+        this._verify(userId, done);
+    }
+}
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/solid-4.jpg" alt="">
+        </section>
+
+        <section>
+            <blockquote class="left">Маленькие интерфесы лучше больших</blockquote>
+        </section>
+
+        <section>
+            <h3>Интерфейсы и JS</h3>
+        </section>
+
+        <section>
+            <h4>Результат</h4>
+            <ul>
+                <li class="fragment">Один интерфейс = одна роль</li>
+                <li class="fragment">Маленькие интерфейсы</li>
+            </ul>
+        </section>
+
+        <section>
+<pre>
+models
+    <span class="red"><span class="grey">└──</span> user.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+class User {
+    <span class="will-show fragment yellow init_visible">static findByName(username) {}
+
+    static checkPassword(password){}</span><span class="will-fade">static find(username, password) {}</span>
+}
+</code></pre>
+        </section>
+
+        <section>
+<pre>
+lib
+<span class="red"><span class="grey">└──</span> passport.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+passport.registerStrategy('local', new Strategy((username, password, done) => {
+    const user = User.findByName(username);
+
+    if (!user) {
+        done(new Error('Пользователя не существует'));
+        return;
+    }
+
+    if (!user.checkPassword(password)) {
+        done(new Error('Неправильный пароль'));
+        return;
+    }
+
+    done(null, user);
+}));
+</code></pre>
+        </section>
+
+        <section>
+            <img src="img/solid-5.jpg" alt="">
+        </section>
+
+        <section>
+            <blockquote class="left">Модули верхнего уровня не должны зависеть от модулей нижнего уровня. Оба должны зависеть от абстракции.</blockquote>
+        </section>
+
+        <section>
+            <img src="img/di-1.png" alt="">
+        </section>
+
+        <section>
+            <img src="img/di-2.png" alt="">
+        </section>
+
+        <section>
+            <h4>Результат</h4>
+            <ul>
+                <li class="fragment">Модули не имеют жестких связей</li>
+                <li class="fragment">Изменения локализованны</li>
+                <li class="fragment">Изменения не ломают систему</li>
+            </ul>
+        </section>
+
+        <section data-background-image='img/inject.jpg'></section>
+
+        <section>
+<pre>
+lib/
+<span class="red"><span class="grey">└──</span> passport.js</span>
+
+</pre>
+
+<pre><code class="hljs javascript size-XXS" data-noescape data-trim>
+// Инъекция через метод
+passport.registerSerializer(...);
+passport.registerDeserializer(...);
+passport.registerStrategy(...);
+
+// Инъекция через конструктор
+passport.registerStrategy('local', new LocalStartegy(...));
+
+// Инъекция через свойство
+passport.strategy = ...;
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Что мы получили?</h3>
+        </section>
+
+        <section>
+            <ul>
+                <li class="fragment green">Данные пользователя на странице профиля</li>
+                <li class="fragment green">Аутентифицировать через социальные сети</li>
+                <li class="fragment green">Увеличить надежность проверки пароля</li>
+                <li class="fragment green">Редиректить на другую страницу</li>
+                <li class="fragment green">Показать другое сообщение об ошибке</li>
+                <li class="fragment green">Прикрутить к трем других проектам</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Без фанатизма!</h3>
+        </section>
+
+        <section style="font-size: 1.2em">
+            <a href="https://github.com/urfu-2015/webdev-slides/tree/gh-pages/4-expressjs/examples">Авторизация в «Заметках»</a>
+<br>
+<br>
+            <h4>Книги</h4>
+            <p><a href="http://www.ozon.ru/context/detail/id/31079082/">Паттерны проектирования</a></p>
+            <p><a href="http://www.ozon.ru/context/detail/id/31567996/">Node.js Design Patterns</a></p>
+            <p><a href="https://addyosmani.com/resources/essentialjsdesignpatterns/book/">Learning JavaScript Design Patterns</a></p>
+            <p><a href="http://www.ozon.ru/context/detail/id/6287517/">JavaScript. Шаблоны</a></p>
+            <p><a href="http://www.ozon.ru/context/detail/id/135466040/">Приемы объектно-ориентированного<br>проектирования</a></p>
+        </section>
+        
+        <section>
+            <img src="img/book.jpg" alt="">
+        </section>
+
+        <script src="../lib/js/head.min.js"></script>
+        <script src="../js/reveal.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                slideNumber: true,
+                history: true,
+                center: true,
+                hideAddressBar: true,
+                transition: 'slide',
+                dependencies: [
+                    {
+                        src: '../plugin/highlight/highlight.js',
+                        async: true,
+                        condition: function() {
+                            return Boolean(document.querySelector('pre code'));
+                        },
+                        callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }
+                    }
+                ]
+            });
+        </script>
+</body>
+</html>
