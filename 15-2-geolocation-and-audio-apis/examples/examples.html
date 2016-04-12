@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Examples</title>
+    <link rel="stylesheet" href="https://yastatic.net/bem-components/latest/desktop/bem-components.css">
+    <script src="https://yastatic.net/bem-components/latest/desktop/bem-components.js+bh.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"
+            integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="examples.css">
+</head>
+<body>
+<div class="simple-play">
+    0. Without modules: <br>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<br>
+<div class="gain">
+    1. Gain: <br>
+    <span class="input input_theme_islands input_size_m i-bem" data-bem='{"input":{}}'>
+        <span class="input__box">
+            <input class="input__control gain-value" placeholder="Gain"/>
+        </span>
+    </span>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<br>
+<div class="delay">
+    2. Delay: <br>
+    <span class="input input_theme_islands input_size_m i-bem" data-bem='{"input":{}}'>
+        <span class="input__box">
+            <input class="input__control delay-value" placeholder="Delay"/>
+        </span>
+    </span>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<br>
+<div class="convolution">
+    3. Convolution: <br>
+
+    <span class="radio-group radio-group_theme_islands radio-group_size_m radio-group_type_line control-group i-bem"
+          data-bem='{"radio-group":{}}' role="radiogroup">
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="1"/>
+            </span>
+            <span class="radio__text" role="presentation">Telephone</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="2"/>
+            </span>
+            <span class="radio__text" role="presentation">Muffler</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="3"/>
+            </span>
+            <span class="radio__text" role="presentation">Echo</span>
+        </label>
+    </span>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<br>
+<div class="filter">
+    4. Filter: <br>
+    Type:
+    <span class="radio-group radio-group_theme_islands radio-group_size_m radio-group_type_line control-group i-bem"
+          data-bem='{"radio-group":{}}' role="radiogroup">
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="lowpass"/>
+            </span>
+            <span class="radio__text" role="presentation">lowpass</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="highpass"/>
+            </span>
+            <span class="radio__text" role="presentation">highpass</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="bandpass"/>
+            </span>
+            <span class="radio__text" role="presentation">bandpass</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="lowshelf"/>
+            </span>
+            <span class="radio__text" role="presentation">lowshelf</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="highshelf"/>
+            </span>
+            <span class="radio__text" role="presentation">highshelf</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="peaking"/>
+            </span>
+            <span class="radio__text" role="presentation">peaking</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="notch"/>
+            </span>
+            <span class="radio__text" role="presentation">notch</span>
+        </label>
+        <label class="radio radio_type_line radio_theme_islands radio_size_m i-bem" data-bem='{"radio":{}}'>
+            <span class="radio__box">
+                <input class="radio__control" type="radio" autocomplete="off" name="radio-line" value="allpass"/>
+            </span>
+            <span class="radio__text" role="presentation">allpass</span>
+        </label>
+    </span>
+    <br>
+    Frequency: <br>
+    <span class="name">Value:</span><input class="frequency-value" type="range" min=10 max=22050><br>
+    <span class="name">Q:</span><input class="q-value" type="range" min=0 max=20><br>
+    <span class="name">Gain:</span><input class="gain-value" type="range" min=0 max=10><br>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<br>
+<br>
+<div class="echo">
+    5. Echo: <br>
+    <span class="input input_theme_islands input_size_m i-bem" data-bem='{"input":{}}'>
+        <span class="input__box">
+            <input class="input__control gain-value" placeholder="Gain"/>
+        </span>
+    </span>
+    <span class="input input_theme_islands input_size_m i-bem" data-bem='{"input":{}}'>
+        <span class="input__box">
+            <input class="input__control delay-value" placeholder="Delay"/>
+        </span>
+    </span>
+    <a class="button start-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Start</span>
+    </a>
+    <a class="button stop-button button_theme_islands button_size_m button_type_link button__control i-bem"
+       data-bem='{"button":{}}'>
+        <span class="button__text">Stop</span>
+    </a>
+</div>
+<script src="examples.js"></script>
+</body>
+</html>
