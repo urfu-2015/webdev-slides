@@ -1,0 +1,1738 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+
+    <link rel="stylesheet" href="./css/fun.css">
+    <link rel="stylesheet" href="./css/animations.css">
+    <link rel="stylesheet" href="./css/monsta.css">
+
+    <script src="https://code.jquery.com/jquery-2.2.3.min.js"
+            integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+
+</head>
+<body class="yandex">
+<div class="reveal">
+    <div class="slides">
+
+        <section>
+            <h1>Fun APIs</h1>
+
+            <p class="author">
+                <small>Семичев Олег</small>
+            </p>
+        </section>
+
+        <section>
+            <h3>А почему, собственно, фан?</h3>
+
+            <div class="fragment monsta monsta__sleep">
+                <div class="a-zzz">
+                    <div class="z"></div>
+                    <div class="z"></div>
+                    <div class="z"></div>
+                    <div class="z"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Speech recognition -->
+        <section>
+            <section>
+                <h2>Speech Recognition</h2>
+
+                <small>
+                    Позволяет распознавать человеческую<br>
+                    или синтезированную речь в браузере
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-med" src="img/i-desktop.svg">
+                        <img class="icon-bad" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/speech-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+var SpeechRecognition = window.SpeechRecognition     ||
+                        window.webkitSpeechRecognition;
+                </code></pre>
+                <br/>
+                <pre class="fragment"><code>
+var recognizer = new SpeechRecognition();
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Params</h4>
+                <pre><code>
+recognizer.lang = 'en-US';
+
+// продолжает слушать и расопзнавать речь даже после паузы
+recognizer.continuous = true;     // false по умолчанию
+
+// повзоляет получать промежуточные результаты
+recognizer.interimResults = true; // false по умолчанию
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Methods</h4>
+                <pre><code>
+recognizer
+    .start()
+    .stop()
+                </code></pre>
+
+                <div class="fragment">
+                    <h4>Events</h4>
+                    <pre><code>
+recognizer
+    .onstart
+    .onend
+    .onerror
+    .onresult
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <h4>Event object</h4>
+                <pre><code>
+{
+    resultIndex: 0,        // индекс текущего результата
+    results : [            // 2d-массив результатов/слов
+        [
+            isFinal: true, // – законченный результат
+            0: {           // [0] - самое вероятное слово
+                confidence: 0.91233,
+                transcript: 'Hi'
+            },
+            ...
+        ],
+        ...
+    ]
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code class="html">
+&lt;div id=&quot;speech-log&quot;&gt;Click to start!&lt;/div&gt;
+                </code></pre>
+
+                <pre class="fragment"><code>
+var log = document.getElementById('speech-log');
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+var recognizer = new SpeechRecognition();
+
+recognizer.lang = 'en-US';
+recognizer.continious = true;
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+log.onclick = function () {
+    log.innerHTML = 'Recognition started';
+    recognizer.start();
+};
+                </code></pre>
+
+                <pre class="fragment"><code>
+recognizer.onresult = function (e) {
+    var index = e.resultIndex;
+    var result = e.results[index][0].transcript.trim();
+
+    log.innerHTML = result;
+
+    if (result.toLowerCase() === 'tequila') {
+        log.innerHTML += '<br>Recognition stopped';
+        recognizer.stop();
+    }
+};
+                </code></pre>
+            </section>
+
+            <section>
+                <div id="speech-log">Click to start recognizing</div>
+
+                <div class="speech-monsta">
+                    <div class="fragment monsta monsta__sleep">
+                        <div class="a-zzz">
+                            <div class="z"></div>
+                            <div class="z"></div>
+                            <div class="z"></div>
+                            <div class="z"></div>
+                        </div>
+                    </div>
+                    <div class="monsta monsta__wakeup">
+                        <div class="bubble">
+                            <span class="q">???</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Speech Recognition</h3>
+                <a href="https://dvcs.w3.org/hg/speech-api/raw-file/tip/webspeechapi.html" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=speech-recognition" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://www.sitepoint.com/introducing-web-speech-api/" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="https://www.audero.it/demo/web-speech-api-demo.html" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <!-- Stream -->
+        <section>
+            <section>
+                <h2>Streams<br> (getUserMedia)</h2>
+
+                <small>
+                    Позволяет получать данные с различных устройств,<br> например микрофона или веб-камеры
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-med" src="img/i-desktop.svg">
+                        <img class="icon-med" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                DISCLAIMER
+                <small>
+                    <br/>
+                    Стоит сразу заметить, что <code class="magenta">Streams</code> это очень крупная, крайне специфичная
+                    и нестабильная тема,
+                    поэтому в контексте данной лекции будет рассказано о методе <code class="blue">navigator.getUserMedia</code>,
+                    который можно уже считать <span class='red'>"legacy"</span>,
+                    ибо в будущем он будет переписан и попадет в <code class="blue">MediaDevices</code>.
+                </small>
+                <small class="fragment">
+                    <br>
+                    Тем не менее, этот метод всецело дает вам понять,<br>
+                    что умеют браузеры уже сейчас.
+                </small>
+            </section>
+
+            <section data-background-image="img/media-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+var getUserMedia = navigator.getUserMedia     ||
+                   navigator.mozGetUserMedia  ||
+                   navigator.webkitGetUserMedia;
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Params</h4>
+                <pre><code>
+getUserMedia(
+    options,
+    function successCallback(stream) {},
+    function errorCallback(error) {}
+);
+                </code></pre>
+
+                <pre class="fragment"><code>
+options = {
+    video: true,
+    audio: true
+}
+                </code></pre>
+            </section>
+
+
+            <section>
+                <h4>Constraints</h4>
+                <pre><code>
+options = {
+    video: {
+        // обязательные условия, которые должен
+        // выполнить UA, иначе вызовется errorCallback
+        mandatory: {
+            minWidth    : 1280,
+            minHeight   : 720,
+            minFrameRate: 30
+        },
+        optional: [
+            { minFrameRate: 60 }
+        ]
+    }
+}
+                </code></pre>
+                <small class="fragment">
+                    <a href="https://www.w3.org/TR/mediacapture-streams/" target="_blank">
+                        Подробнее в спеке
+                    </a>
+                </small>
+            </section>
+
+            <section>
+                <pre class="html"><code>
+&lt;video id=&quot;media-video&quot;&gt;&lt;/video&gt;
+                </code></pre>
+
+                <pre class="fragment"><code>
+var video = document.getElementById('media-video');
+                </code></pre>
+
+                <pre class="fragment"><code>
+var localStream = null;
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+video.onclick = function () {
+    if (// поток активен) {
+        // вырубаем его
+    }
+
+    // включаем
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+video.onclick = function () {
+    if (// поток активен) {
+        // вырубаем его
+    }
+
+    getUserMedia(
+        { video: true, audio: false },
+        function(mediaStream) {
+            localStream = mediaStream;
+
+            video.src = URL.createObjectURL(mediaStream);
+            video.play();
+        },
+        function (error) { console.log(error); }
+    );
+};
+                </code></pre>
+                <small class="fragment">
+                    <a href="https://developer.mozilla.org/ru/docs/Web/API/URL/createObjectURL" target="_blank">
+                        О createObjectURL на MDN
+                    </a>
+                </small>
+            </section>
+
+            <section>
+                <pre><code>
+video.onclick = function () {
+    if (localStream && localStream.active) {
+        var track = localStream.getTracks()[0];
+        track.stop();
+
+        video.pause();
+
+        return;
+    }
+
+    // включаем
+};
+                </code></pre>
+
+            </section>
+
+            <section>
+                <div class="media-monsta">
+                    <video id="media-video" height="300" width="400"></video>
+
+                    <div class="monsta monsta__stat">
+                        <div class="bubble">
+                            <span class="q">???</span>
+                        </div>
+                    </div>
+                    <div class="monsta monsta__hi">
+                        <div class="a-hearts">
+                            <div class="h"></div>
+                            <div class="h"></div>
+                            <div class="h"></div>
+                            <div class="h"></div>
+                            <div class="h"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <section>
+                <h3>Streams<br>(getUserMedia)</h3>
+                <a href="https://www.w3.org/TR/mediacapture-streams/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=stream" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://www.sitepoint.com/introduction-getusermedia-api/" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="https://www.audero.it/demo/getusermedia-api-demo.html" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <!-- Ambient Light-->
+        <section>
+            <section>
+                <h2>Ambient Light</h2>
+
+                <small>
+                    Позволяет получать данные об уровне освещенности <br/>
+                    с датчика света устройства
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-bad" src="img/i-desktop.svg">
+                        <img class="icon-bad" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/light-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <small>
+                    На данный момент конструктор <code class="green">AmbientLightSensor</code>, описанный
+                    в спецификации, не реализован нигде. Но существуют два события:<br>
+                    <code class="green">ondevicelight</code> и
+                    <code class="green">onlightlevel</code>,
+                    из которых работает<br> только одно – <code class="green">ondevicelight</code>.
+                </small>
+                <br/>
+                <small class="fragment">
+                    <br/>
+                    Второе событие – <code class="green">onlightlevel</code>, которое в event.value хранит
+                    уровень яркости, как
+                    <code class="magenta">'dim'</code>,
+                    <code class="magenta">'normal'</code> или
+                    <code class="magenta">'light'</code>, сейчас не поддерживается.
+                </small>
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre class="fragment"><code>
+if ('ondevicelight' in window) {}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code class="html">
+&lt;div id=&quot;light-value&quot;&gt;&lt;/div&gt;
+                </code></pre>
+
+                <pre class="fragment"><code>
+var lightValue = document.getElementById('light-value');
+
+window.ondevicelight = function(e) {
+    lightValue.innerHTML = 'Light is ' + e.value + ' lux';
+};
+                </code></pre>
+
+                <div class="fragment" id="light-value"></div>
+            </section>
+
+            <section class="a-light-demo">
+                <div class="sun"></div>
+                <div class="moon"></div>
+
+                <div class="monsta">
+                    <div class="glasses"></div>
+                    <div class="vision"></div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Ambient Light</h3>
+                <a href="https://www.w3.org/TR/ambient-light/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=ambient-light" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://modernweb.com/2014/05/27/introduction-to-the-ambient-light-api/" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="https://www.audero.it/demo/ambient-light-api-demo.html" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <!-- Gamepad -->
+        <section>
+            <section>
+                <h2>Gamepad</h2>
+
+                <small>
+                    Интерфейс для обработки данных от usb-контроллера
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-good" src="img/i-desktop.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/gamepad-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+if (navigator.getGamepads) {}
+                </code></pre>
+
+                <br/>
+                <pre class="fragment"><code>
+var gamepads = navigator.getGamepads();
+// Chromes - { 0, 1, 2, 3, length}
+// Firefox - [ 0 ... n ]
+// Edge    - [ undefined, undefined, undefined, undefined ]
+                </code></pre>
+                <pre class="fragment"><code>
+var gamepad = gamepads[0];
+// ???
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Gamepad Props</h4>
+                <pre><code>
+gamepad
+    .index
+    .connected // true, если геймпад подключен
+    .id        // информация о геймпаде,
+               // напр. производитель, модель
+    .timestamp // t последнего изменения состояния
+               // (некоторые модели постоянно
+               // пингуют браузер)
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Gamepad Axes</h4>
+                <pre><code>
+gamepad
+    // массив осей со значениями от -1 до 1:
+    // -1 – вверх/влево
+    //  1 – вниз/вправо
+    //  0 – не нажато
+    .axes [
+        0: -1, // крестовина - горизонтальная ось
+        1:  1, // крестовина - вертикальная ось
+        ...
+    ]
+                </code></pre>
+
+                <small class="fragment">
+                    <br/>
+                    Возможны дробные значения для аналоговых стиков
+                </small>
+            </section>
+
+            <section>
+                <h4>Gamepad Buttons</h4>
+                <pre><code>
+gamepads
+    .buttons: [
+        0: {
+            pressed: true,
+            value: 1
+        },
+        ...
+    ]
+                </code></pre>
+
+                <small class="fragment">
+                    <br/>
+                    Аналоговые кнопки тоже имеют место быть
+                </small>
+            </section>
+
+            <section>
+                <h4>Gamepad Events</h4>
+                <pre><code>
+window.addEventListener('gamepadconnected', callback);
+window.addEventListener('gamepaddisconnected', callback);
+// e.gamepad - Gamepad Object
+                </code></pre>
+
+                <pre class="fragment"><code>
+// Firefox only
+window.addEventListener('gamepadbuttondown', callback);
+window.addEventListener('gamepadbuttonup', callback);
+// e.button – индекс нажатой кнопки
+                </code></pre>
+
+                <pre class="fragment"><code>
+// Firefox Nightly only
+window.addEventListener('gamepadaxismove', callback);
+// e.axis – индекс оси, e.value – ее значение
+                </code></pre>
+            </section>
+
+            <section>
+                <small>
+                    Реализуем простенький логгер управления c геймпада.<br>
+                    Для этого выделим 4 действия:
+                    <br/>
+                    <br/>
+                </small>
+
+                <small style="display: block;">
+                    <ul>
+                        <li class="fragment">идти влево (←)</li>
+                        <li class="fragment">идти вправо (→)</li>
+                        <li class="fragment">прыгнуть (B2)</li>
+                        <li class="fragment">атаковать (B3)</li>
+                    </ul>
+                </small>
+
+                <small class="fragment">
+                    <br/><br/>
+                    А как определять нажатие кнопок, <br>
+                    если события-хэлперы есть только в Firefox?
+                </small>
+            </section>
+
+            <section>
+                <pre class="html"><code>
+&lt;pre id=&quot;gamepad-logger&quot;&gt;&lt;/pre&gt;
+                </code></pre>
+
+                <pre class="fragment"><code>
+var logger = document.getElementById('gamepad-logger');
+                </code></pre>
+
+                <pre class="fragment"><code>
+// какой-то хитрый бесконечный цикл в котором...
+var gamepads = navigator.getGamepads()[0];
+var gamepad = gamepads[0]; // ...получим геймпад
+log(gamepad);              // ...и залогируем его
+                </code></pre>
+
+                <small class="fragment">
+                    Это, в нашем случае, так называемый <span class="green">Game loop</span>
+                </small>
+            </section>
+
+            <section>
+                <h4>Как мы можем реализовать этот game loop?</h4>
+                <small class="fragment">
+                    <br/>
+                    <span class="fragment nope">X</span>
+                    while (true) { loop }
+                    <br/>
+                    <br/>
+                </small>
+                <br/>
+
+                <small class="fragment">
+                    <br/>
+                    <span class="fragment nope">X</span>
+                    setInterval(loop, 10);
+                    <br/>
+                    <br/>
+                </small>
+                <br/>
+
+                <small class="fragment">
+                    <br/>
+                    <span class="fragment nope">X</span>
+                    (loop { ... setTimeout(loop, 10) })();
+                    <br/>
+                    <br/>
+                </small>
+            </section>
+
+            <section>
+                <h4>window.requestAnimationFrame, дай мне сил!</h4>
+                <pre class="fragment"><code>
+(function loop() {
+    var gamepad = navigator.getGamepads()[0];
+
+    gamepad && log(gamepad);
+
+    window.requestAnimationFrame(loop);
+})();
+                </code></pre>
+
+                <a href="http://html5.by/blog/what-is-requestanimationframe/" target="_blank" class="fragment">
+                    Шо таке rAF?
+                </a>
+            </section>
+
+            <section>
+                <pre><code>
+var AXS_MOVE = 0;
+var BTN_JUMP = 1;
+var BTN_ATK  = 2;
+                </code></pre>
+
+                <pre class="fragment"><code>
+function isPressed(value) { return value ? '[X]' : '[ ]'; }
+                </code></pre>
+
+                <pre class="fragment"><code>
+function log(gp) {
+    logger.innerHTML = [
+        isPressed(gp.axes[AXS_MOVE] < -.5)      + ' Left',
+        isPressed(gp.axes[AXS_MOVE] >  .5)      + ' Right',
+        isPressed(gp.buttons[BTN_JUMP].pressed) + ' Jump',
+        isPressed(gp.buttons[BTN_ATK].pressed)  + ' Atk'
+    ].join('\n');
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre id="gamepad-logger"></pre>
+                <br/>
+
+                <div class="game-monsta fragment monsta"></div>
+            </section>
+
+            <section>
+                <h3>Gamepad</h3>
+                <a href="https://www.w3.org/TR/gamepad/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=gamepad" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="https://www.smashingmagazine.com/2015/11/gamepad-api-in-web-games/" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="http://html5gamepad.com/" target="_blank">
+                    Demo 1
+                </a>
+                <br/>
+                <a href="http://charliejwalter.net/gamepad/demos/main/" target="_blank">
+                    Demo 2
+                </a>
+                <br/>
+                <a href="http://phaser.io/" target="_blank">
+                    Better to use smth like this
+                </a>
+                <br>
+            </section>
+
+            <section>
+                <div class="monsta monsta__starve">
+                    <div class="bubble">
+                        <span>
+                            <img class="food" src="img/food.png"/>
+                        </span>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Battery Status -->
+        <section>
+            <section>
+                <h2>Battery Status</h2>
+
+                <small>
+                    Позволяет получать данные о состоянии батареи устройства
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-good" src="img/i-desktop.svg">
+                        <img class="icon-med" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/battery-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+if (navigator.getBattery) {}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+navigator
+    .getBattery()
+    .then(initBattery);
+
+function initBattery(battery) {
+    console.log(battery);
+}
+                </code></pre>
+
+                <pre class="fragment"><code>
+battery {
+    level          : 0.94
+    charging       : false
+    chargingTime   : Infinity
+    dischargingTime: 11460
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Properties</h4>
+                <pre><code>
+battery
+    .level           // заряд батареи от 0 до 1
+    .chagring        // true, если заряжяется
+    .chagringTime    // ~время до полной зарядки, сек
+    .dischagringTime // ~время до полной разрядки, сек
+                </code></pre>
+
+                <div class="fragment">
+                    <h4>Events</h4>
+                    <pre><code>
+battery
+    .onlevelchange
+    .onchagringchange
+    .onchagringtimechange
+    .ondischagringtimechange
+                    </code></pre>
+                </div>
+            </section>
+
+            <section>
+                <pre class="html"><code>
+&lt;div id=&quot;battery-level&quot;&gt;&lt;/div&gt;
+&lt;div id=&quot;battery-charging&quot;&gt;&lt;/div&gt;
+                </code></pre>
+
+                <pre class="fragment"><code>
+var level    = document.getElementById('battery-level');
+var charging = document.getElementById('battery-charging');
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+navigator
+    .getBattery()
+    .then(initBattery);
+
+function initBattery(battery) {
+    battery.onlevelchange = updateLevel;
+    battery.onlevelchange();
+
+    battery.onchargingchange = updateCharging;
+    battery.onchargingchange();
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+function updateLevel() {
+    level.innerHTML = (this.level * 100).toFixed(2) + '%';
+}
+                </code></pre>
+
+                <pre class="fragment"><code>
+function updateCharging() {
+    var color = this.charging ? '#0a0' : '#a00';
+    charging.style.background = color;
+
+    var onOff = this.charging ? 'on' : 'off';
+    charging.innerHTML = 'Charger is ' + onOff;
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <div id="battery-level"></div>
+                <div id="battery-charging"></div>
+            </section>
+
+            <section>
+                <div class="bat-monsta">
+                    <div class="monsta monsta__starve">
+                        <div class="bubble">
+                            <span>
+                                <img class="food" src="img/food.png"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="monsta monsta__eat"></div>
+
+                    <div class="tatum"></div>
+                    <div class="censored"></div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Battery Status</h3>
+                <a href="https://www.w3.org/TR/battery-status/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=battery-status" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://pazguille.github.io/demo-battery-api/" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <!-- Page Visibility -->
+        <section>
+            <section>
+                <h2>Page Visibility</h2>
+
+                <small>
+                    Позволяет определить видима вкладка браузера или нет
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-good" src="img/i-desktop.svg">
+                        <img class="icon-good" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/visibility-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+var hidden           = null;
+var visibilityState  = null;
+var visibilityChange = null;
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+if ('hidden' in document) {
+    hidden           = 'hidden';
+    visibilityState  = 'visibilityState';
+    visibilityChange = 'visibilitychange';
+} else if ('mozHidden' in document) {
+    hidden           = 'mozHidden';
+    visibilityState  = 'mozVisibilityState';
+    visibilityChange = 'mozvisibilitychange';
+} else if ('webkitHidden' in document) {
+    hidden           = 'webkitHidden';
+    visibilityState  = 'webkitVisibilityState';
+    visibilityChange = 'webkitvisibilitychange';
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Properties</h4>
+
+                <pre><code>
+document[hidden]
+// true - неактивная вкладка, окно не в фокусе или свернуто
+                </code></pre>
+
+                <pre class="fragment"><code>
+document[visibilityState]
+// 'visible'   – значение видимой/активной вкладки
+// 'hidden'    - значение скрытой вкладки или
+//               неактивного/свернутого окна браузера
+//
+// Необязательные к поддержке значения:
+// 'unloaded'  - значение вкладки, которую хотят
+//               закрыть/перейти на другую страницу
+// 'prerender' - значение пререндереной вкладки
+                </code></pre>
+
+                <small>
+                    <a class="fragment" href="https://habrahabr.ru/company/surfingbird/blog/151197/" target="_blank">
+                        Подробнее о "магическом" пререндере
+                    </a>
+                </small>
+            </section>
+
+            <section>
+                <h4>Event</h4>
+
+                <pre><code>
+document.addEventListener(visibilityChange, function () {
+    console.log([
+        '----------------',
+        'Hidden: ' + document[hidden],
+        'State : ' + document[visibilityState],
+        '----------------'
+    ].join('\n'));
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Page Visibility</h3>
+                <a href="https://www.w3.org/TR/page-visibility/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=pagevisibility" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="http://daniemon.com/tech/webapps/page-visibility/" target="_blank">
+                    Demo 1
+                </a>
+                <br>
+                <a href="https://www.audero.it/demo/page-visibility-api-demo.html" target="_blank">
+                    Demo 2
+                </a>
+                <br>
+            </section>
+
+            <section>
+                <div class="monsta monsta__sleep">
+                    <div class="a-zzz">
+                        <div class="z"></div>
+                        <div class="z"></div>
+                        <div class="z"></div>
+                        <div class="z"></div>
+                    </div>
+
+                    <div class="gore"></div>
+                </div>
+            </section>
+        </section>
+
+        <!-- Web Notifications -->
+        <section>
+            <section>
+                <h2>Web Notifications</h2>
+
+                <small>
+                    Позволяет сообщать пользователю что-либо<br>
+                    вне страницы с помощью карточек-оповещений
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-med" src="img/i-desktop.svg">
+                        <img class="icon-bad" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/notification-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>DISCLAIMER</h4>
+                <small class="fragment">
+                    <br/>
+                    Не стоит пугаться, что в мобильном хроме данное API не поддерживается –
+                    все это можно реализовать с помощью
+                    <a href="https://developers.google.com/web/updates/2015/03/push-notifications-on-the-open-web"
+                                                           target="_blank">serviceWorker</a>.
+                </small>
+                <small class="fragment">
+                    <br>
+                    И даже в Safari это реально, но включает в себя много танцев с бубнами.
+                </small>
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+var Notification = window.Notification     ||
+                   window.webkitNotification;
+                </code></pre>
+                <div class="fragment">
+                    and then...
+                </div>
+                <pre class="fragment"><code>
+Notification.requestPermission(callback);
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Params</h4>
+                <pre><code>
+new Notification(title, options);
+                </code></pre>
+
+                <pre class="fragment"><code>
+title   = 'Hi'; // обязательный параметр
+options = {
+    body: 'My name is',
+    tag : 'SlimShady', // своеобразный id
+    dir : 'ltr',       // или 'rtl'
+    lang: 'en-US',
+    icon: 'img/eminem.jpg'
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Events</h4>
+                <pre><code>
+var notification = new Notification(title);
+                </code></pre>
+
+                <pre class="fragment"><code>
+notification
+    .onclick  // при клике на оповещение
+    .onclose  // при закрытии, в т.ч. браузером
+    .onshow   // при появлении оповещения
+    .onerror  // при ошибке, чаще всего, если
+              // пользователь запретил оповещения
+                </code></pre>
+            </section>
+
+            <section>
+                <h4>Итого</h4>
+                <pre><code>
+var notification = new Notification('Hi', {
+    body: 'My name is',
+    icon: 'img/eminem.jpg',
+});
+
+notification.onerror = function () {
+    alert('Probably, blocked :\'C');
+}
+                </code></pre>
+
+                <div class="fragment" id="notification-button">Let's try!</div>
+            </section>
+
+            <section>
+                <h4>Настройки оповещений</h4>
+                <small>
+                    Настройки
+                    <br/>
+                    ▼
+                    <br/>
+                    Дополнительные настройки
+                    <br/>
+                    ▼
+                    <br/>
+                    Личные Данные
+                    <br/>
+                    ▼
+                    <br/>
+                    Настройки Контента
+                    <br/>
+                    ▼
+                    <br/>
+                    Оповещения
+                    <br/>
+                    ▼
+                    <br/>
+                    Настроить исключения
+                    <br/>
+                </small>
+            </section>
+
+            <section>
+                <h3>Web Notifications</h3>
+                <a href="https://www.w3.org/TR/notifications/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=notifications" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://www.sitepoint.com/introduction-web-notifications-api/" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="https://www.audero.it/demo/web-notifications-api-demo.html" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <!-- Vibration -->
+        <section>
+            <section>
+                <h2>Vibration</h2>
+
+                <small>
+                    Позволяет управлять вибромотором устройства
+                </small>
+
+                <div class="fragment">
+                    <div class="icons">
+                        <img class="icon-med" src="img/i-mobile.svg">
+                    </div>
+                </div>
+            </section>
+
+            <section data-background-image="img/vibration-support.png" data-background-size="contain">
+            </section>
+
+            <section>
+                <h4>Feature detection</h4>
+                <pre><code>
+var vibrate = navigator.vibrate     ||
+              navigator.mozVibrate  ||
+              navigator.webkitVibrate;
+                </code></pre>
+            </section>
+
+            <section>
+                <pre><code>
+// вибрация длительностью 500ms
+vibrate(500); // === [500]
+                </code></pre>
+
+                <pre class="fragment"><code>
+// 500ms вибрация, 250ms пауза, 500ms вибрация
+vibrate([500, 250, 500]);
+                </code></pre>
+
+                <pre class="fragment"><code>
+// останавливает вибрацию
+vibrate(0);   // === []
+                </code></pre>
+
+                <small class="fragment">
+                    Вибрация не блокирует поток выполнения
+                </small>
+            </section>
+
+            <section>
+                <h3>Vibration</h3>
+                <a href="https://www.w3.org/TR/vibration/" target="_blank">
+                    Specification
+                </a>
+                <br>
+                <a href="http://caniuse.com/#feat=vibration" target="_blank">
+                    Support
+                </a>
+                <br>
+                <a href="http://code.tutsplus.com/tutorials/html5-vibration-api--mobile-22585" target="_blank">
+                    Article
+                </a>
+                <br>
+                <a href="http://html5.by/blogdemo/vibration/" target="_blank">
+                    Demo
+                </a>
+                <br>
+            </section>
+        </section>
+
+        <section>
+            <h2>Web APIs</h2>
+            <p>
+                <a href="http://diveinto.html5doctor.com/" target="_blank">Dive into HTML5</a>
+            </p>
+            <p>
+                <a href="http://htmlbook.ru/html5/" target="_blank">О HTML5 на htmlbook.ru</a>
+            </p>
+            <p>
+                <a href="https://github.com/AurelioDeRosa/HTML5-API-demos" target="_blank">HTML5 API demos</a>
+            </p>
+        </section>
+
+        <section>
+            <h2>FIN</h2>
+
+            <div class="monsta monsta__hi">
+                <div class="a-hearts">
+                    <div class="h"></div>
+                    <div class="h"></div>
+                    <div class="h"></div>
+                    <div class="h"></div>
+                    <div class="h"></div>
+                </div>
+
+                <div class="gore"></div>
+            </div>
+        </section>
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: false,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({ languages: ['javascript'] });
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+<script>
+    $('.icons img').each(function () {
+        var $img = $(this);
+        var imgID = $img.attr('id');
+        var imgClass = $img.attr('class');
+        var imgURL = $img.attr('src');
+
+        $.get(imgURL, function (data) {
+            // Get the SVG tag, ignore the rest
+            var $svg = $(data).find('svg');
+
+            // Add replaced image's ID to the new SVG
+            if (typeof imgID !== 'undefined') {
+                $svg = $svg.attr('id', imgID);
+            }
+            // Add replaced image's classes to the new SVG
+            if (typeof imgClass !== 'undefined') {
+                $svg = $svg.attr('class', imgClass + ' replaced-svg');
+            }
+
+            // Remove any invalid XML tags as per http://validator.w3.org
+            $svg = $svg.removeAttr('xmlns:a');
+
+            // Replace image with new SVG
+            $img.wrap('<div class="icon-one" />');
+            $img.replaceWith($svg);
+
+        }, 'xml');
+
+    });
+</script>
+<script>
+    initSpeech();
+    function initSpeech() {
+        window.SpeechRecognition = window.SpeechRecognition ||
+                window.webkitSpeechRecognition;
+
+        if (!window.SpeechRecognition) {
+            console.warn('Speech Recognition is not supported!');
+
+            return;
+        }
+
+        var log = document.getElementById('speech-log');
+        var recognizer = new window.SpeechRecognition();
+
+        recognizer.lang = 'en-US';
+        recognizer.continuous = true;
+
+        log.onclick = function () {
+            recognizer.start();
+            log.innerHTML = 'Recognition started';
+            log.classList.add('speech-started');
+        };
+
+        recognizer.onresult = function (e) {
+            var index = e.resultIndex;
+            var result = e.results[index][0].transcript.trim();
+
+            log.innerHTML = result;
+
+            if (result.toLowerCase() === 'tequila') {
+                recognizer.stop();
+                log.innerHTML += '<br>Recognition stopped';
+                log.classList.remove('speech-started');
+            }
+
+            if (result.toLowerCase() === 'wake up') {
+                $('.speech-monsta').addClass('speech-wake');
+            }
+        }
+    }
+</script>
+<script>
+    initMedia();
+    function initMedia() {
+        navigator.getUserMedia = navigator.getUserMedia ||
+                navigator.mozGetUserMedia ||
+                navigator.webkitGetUserMedia;
+
+        if (!navigator.getUserMedia) {
+            console.warn('getUserMedia is not supported!');
+
+            return;
+        }
+
+        var video = document.getElementById('media-video');
+
+        var localStream = null;
+
+        video.onclick = function () {
+            if (localStream && localStream.active) {
+                var track = localStream.getTracks()[0];
+
+                track.stop();
+                video.pause();
+
+                return;
+            }
+
+            navigator.getUserMedia(
+                    { video: true, audio: false },
+                    function (mediaStream) {
+                        localStream = mediaStream;
+
+                        setTimeout(function () {
+                            $('.media-monsta').addClass('media-hi');
+                        }, 2000);
+
+                        video.src = URL.createObjectURL(mediaStream);
+                        video.play();
+                    },
+                    function (error) {
+                        console.log(error);
+                    }
+            );
+        };
+    }
+</script>
+<script>
+    initLight();
+    function initLight() {
+        if (!'ondevicelight' in window) {
+            console.warn('\'ondevicelight\' is not supported!');
+
+            return;
+        }
+        
+        setTimeout(function () {
+            var demo = $('.a-light-demo');
+            var lightValue = document.getElementById('light-value');
+            
+            window.addEventListener('devicelight', function (event) {
+                lightValue.innerHTML = 'Light is ' + event.value + ' lux';
+
+                demo.removeClass('a-light-demo_sun a-light-demo_moon');
+
+                if (event.value < 10) {
+                    demo.addClass('a-light-demo_moon');
+                } else if (event.value > 200) {
+                    demo.addClass('a-light-demo_sun');
+                }
+            });    
+        }, 1000);
+    }
+</script>
+<script>
+    initGamepad();
+    function initGamepad() {
+        if (!navigator.getGamepads) {
+            console.warn('Gamepads are not supported!');
+
+            return;
+        }
+
+        var BTN_JUMP = 1;
+        var BTN_ATTACK = 2;
+        var AXIS_HOR = 0;
+
+        var SPEED = 5;
+
+        var DURATIONS = {
+            attack: 1000,
+            jump: 1000,
+            walking: 50
+        };
+
+        var state = {
+            position: 0,
+            acting: false
+        };
+
+        var walkTimer = null;
+
+        var logger = document.getElementById('gamepad-logger');
+        var character = $('.game-monsta')[0];
+
+        (function loop() {
+            var gamepad = navigator.getGamepads()[0];
+
+            if (gamepad) {
+                var actions = {
+                    left: gamepad.axes[AXIS_HOR] < -.5,
+                    right: gamepad.axes[AXIS_HOR] > .5,
+                    jump: gamepad.buttons[BTN_JUMP].pressed,
+                    attack: gamepad.buttons[BTN_ATTACK].pressed
+                };
+
+                log(actions);
+                act(actions);
+            }
+
+            window.requestAnimationFrame(loop);
+        })();
+
+        function isActive(value) {
+            return '[' + (value ? '<b>X</b>' : ' ') + ']';
+        }
+
+        function log(actions) {
+            logger.innerHTML = [
+                isActive(actions.left) + ' Left',
+                isActive(actions.right) + ' Right',
+                isActive(actions.jump) + ' Jump',
+                isActive(actions.attack) + ' Attack'
+            ].join('\n');
+        }
+
+        function act(actions) {
+            actions.left && move(-1);
+            actions.right && move(1);
+            actions.attack && action('attack');
+            actions.jump && action('jump');
+        }
+
+        function move(delta) {
+            if (walkTimer) {
+                clearTimeout(walkTimer);
+            }
+
+            if (!state.acting) {
+                walkTimer = setTimeout(function () {
+                    character.classList.remove('monsta__walk');
+                }, DURATIONS.walking);
+
+                character.classList.add('monsta__walk');
+            }
+
+            state.position += delta * SPEED;
+            character.style.left = state.position + 'px';
+        }
+
+        function action(type) {
+            character.classList.remove('monsta__walk');
+
+            if (state.acting) {
+                return;
+            }
+
+            var className = 'monsta__' + type;
+
+            state.acting = true;
+            character.classList.add(className);
+
+            setTimeout(function () {
+                state.acting = false;
+                character.classList.remove(className);
+            }, DURATIONS[type]);
+        }
+    }
+</script>
+<script>
+    initBattery();
+    function initBattery() {
+        if (!navigator.getBattery) {
+            console.warn('Battery is not supported!');
+
+            return;
+        }
+
+        var level = document.getElementById('battery-level');
+        var charging = document.getElementById('battery-charging');
+
+        var monsta = false;
+
+        navigator
+                .getBattery()
+                .then(initBattery);
+
+        function initBattery(battery) {
+            battery.onlevelchange = updateLevel;
+            battery.onlevelchange();
+
+            battery.onchargingchange = updateCharging;
+            battery.onchargingchange();
+
+            Reveal.addEventListener('slidechanged', function (e) {
+                if (e.indexh === 6 && e.indexv === 9 && !monsta) {
+                    battery.addEventListener('chargingchange', function () {
+                        if (!battery.charging) {
+                            return;
+                        }
+
+                        monsta = true;
+
+                        $('.bat-monsta').addClass('bat-eat');
+                    });
+                }
+            });
+        }
+
+        function updateLevel() {
+            level.innerHTML = (this.level * 100).toFixed(2) + '%';
+        }
+
+        function updateCharging() {
+            charging.style.background = this.charging ? '#0a0' : '#a00';
+            charging.innerHTML = 'Charger is ' + (this.charging ? 'on' : 'off');
+        }
+    }
+</script>
+<script>
+    initVisibility();
+    function initVisibility() {
+        var hidden = null;
+        var visibilityState = null;
+        var visibilityChange = null;
+
+        if ('hidden' in document) {
+            hidden = 'hidden';
+            visibilityState = 'visibilityState';
+            visibilityChange = 'visibilitychange';
+        } else if ('mozHidden' in document) {
+            hidden = 'mozHidden';
+            visibilityState = 'mozVisibilityState';
+            visibilityChange = 'mozvisibilitychange';
+        } else if ('webkitHidden' in document) {
+            hidden = 'webkitHidden';
+            visibilityState = 'webkitVisibilityState';
+            visibilityChange = 'webkitvisibilitychange';
+        }
+
+        if (!hidden) {
+            console.warn('Page Visibility is not supported!');
+
+            return;
+        }
+
+        var demo = false;
+        var monsta = false;
+
+        Reveal.addEventListener('slidechanged', function (e) {
+            if (e.indexh === 7 && e.indexv === 6 && !monsta) {
+                document.addEventListener(visibilityChange, function () {
+                    if (!document[hidden] || monsta) {
+                        return;
+                    }
+
+                    monsta = true;
+
+                    Reveal.next();
+
+                    setTimeout(function () {
+                        new Notification('Breaking news!', {
+                            body: 'Monsta is sleeping now, and Tatum is not so lucky :C',
+                            icon: 'monsta/monsta-note.png'
+                        });
+                    }, 7500);
+                });
+            }
+
+            if (e.indexh === 7 && e.indexv === 5 && !demo) {
+                demo = true;
+
+                document.addEventListener(visibilityChange, function () {
+                    console.log([
+                        '----------------',
+                        'Hidden: ' + document[hidden],
+                        'State : ' + document[visibilityState],
+                        '----------------'
+                    ].join('\n'));
+                });
+            }
+        });
+    }
+</script>
+<script>
+    initNotifications();
+    function initNotifications() {
+        window.Notification = window.Notification ||
+                window.webkitNotification;
+
+        if (!window.Notification) {
+            console.warn('Notifications are not supported!');
+
+            return;
+        }
+
+        var notificationButton = document.getElementById('notification-button');
+
+        notificationButton.onclick = function () {
+            Notification.requestPermission(function () {
+                var notification = new Notification('Hi', {
+                    body: 'My name is',
+                    icon: 'img/eminem.jpg'
+                });
+
+                notification.onerror = function () {
+                    alert('Probably, blocked :\'C');
+                }
+            });
+        };
+    }
+</script>
+</body>
+</html>
