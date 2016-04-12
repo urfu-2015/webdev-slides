@@ -13,6 +13,7 @@
 11. [Client rendering](https://urfu-2015.github.io/webdev-slides/11-clientside/)
 12. [Паттерны](https://urfu-2015.github.io/webdev-slides/12-patterns/)
 13. [Тестирование. Эпизод II](https://urfu-2015.github.io/webdev-slides/13-client-tests/)
+15. [Storage APIs](https://urfu-2015.github.io/webdev-slides/15-1-storage-apis/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)
