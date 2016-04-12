@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Browser APIs</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex" style="">
+<div class="reveal">
+    <div class="slides">
+
+        <section>
+            <h4><a href="https://www.w3.org/TR/geolocation-API/" target="_blank">Geolocation API</a></h4>
+        </section>
+
+        <section data-background-image="img/geolocation.png" data-background-size="contain"></section>
+
+        <section>
+            <h4>Geolocation API</h4>
+            <pre class="flat"><code>if (navigator.geolocation) {
+  // ...
+} else {
+  alert('Geolocation API не поддерживается');
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>Geolocation API</h4>
+
+            <pre class="fragment flat"><code>navigator.geolocation.getCurrentPosition(
+                function (position) { ... },
+                function (error) { ... },
+                options
+);</code></pre>
+
+            <pre class="fragment flat"><code>var options = {
+    enableHighAccuracy: true,
+    maximumAge: 50000,
+    timeout: 10000
+};
+            </code></pre>
+            <div class="fragment">
+            <pre class="flat"><code>var id = navigator.geolocation.watchPosition(...);
+navigator.geolocation.clearWatch(id);</code></pre>
+                <br>
+                <a href="//taxi.yandex.ru" target="_blank">
+                    <small>Яндекс.Такси</small>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h4><a href="https://dev.w3.org/geo/api/spec-source.html#coordinates" target="_blank">Coordinates</a></h4>
+            <pre class="flat"><code>{
+    coords: {
+        accuracy: 45,
+        altitude: null,
+        altitudeAccuracy: null,
+        heading: null,
+        latitude: 56.783005499999994,
+        longitude: 60.54139849999999,
+        speed: null
+    },
+    timestamp: 1459788138892
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>Geolocation API</h4>
+            <ul>
+                <li class="fragment">GPS - Global Positioning System</li>
+                <li class="fragment">Google's Geolocation Service
+                    <small class="grey" style="line-height: 2.5;">Chrome, Firefox, Opera</small>
+                </li>
+                <li class="fragment"><a href="http://www.skyhookwireless.com/" target="_blank">skyhookwireless.com</a>
+                    <small class="grey" style="line-height: 2.5;">Safari</small>
+                </li>
+                <li class="fragment">Microsoft Location Service
+                    <small class="grey" style="line-height: 2.5;">Internet Explorer, Edge</small>
+                </li>
+            </ul>
+            <br><br>
+            <div class="fragment">
+                <small><a href="https://support.google.com/chrome/answer/142065?hl=en" target="_blank">How Chrome determines your
+                    location</a></small>
+                <br>
+                <small><a href="http://www.mozilla.org/en-GB/firefox/geolocation/" target="_blank">Firefox's "How does it work"</a>
+                </small>
+            </div>
+        </section>
+
+        <section>
+            <h2>Аудио в браузере</h2>
+        </section>
+
+        <section>
+            <h4>Немного истории</h4>
+            <ul>
+                <li class="fragment"><code>&lt;bgsound&gt;<span class="fragment">, &lt;embed&gt;</code></span></li>
+                <li class="fragment">Flash, Silverlight, QuickTime ...</li>
+                <li class="fragment"><code>&lt;audio&gt;</code></li>
+                <li class="fragment">Web Audio API</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>HTML5 Audio</h4>
+            <ul>
+                <li class="fragment">Простой аудио плеер</li>
+                <li class="fragment">Однопоточное фоновое аудио</li>
+                <li class="fragment">Аудио подсказки, капчи и т.п.</li>
+            </ul>
+        </section>
+
+        <section data-background-image="img/html5-audio.png" data-background-size="contain"></section>
+
+        <section>
+            <h4>HTML5 Audio</h4>
+            <pre class="flat"><code>if (document.createElement('audio').canPlayType) {
+    // ...
+} else {
+    alert('&lt;audio&gt; не поддерживается!');
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>HTML5 Audio</h4>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio src="sound.mp3" autoplay&gt;&lt;/audio&gt;</code></pre>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio src="sound.mp3" autoplay loop&gt;&lt;/audio&gt;</code></pre>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio src="sound.mp3" controls&gt;&lt;/audio&gt;</code></pre>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio src="sound.mp3" controls preload="none"&gt;&lt;/audio&gt;</code></pre>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio src="sound.mp3" controls preload="auto"&gt;&lt;/audio&gt;</code></pre>
+            <pre class="flat fragment"><code
+                    class="html">&lt;audio src="sound.mp3" controls preload="metadata"&gt;&lt;/audio&gt;</code></pre>
+            <div class="fragment">
+        <pre class="flat"><code class="html">&lt;audio controls&gt;
+    &lt;source src="sound.ogg" type="audio/ogg"&gt;
+    &lt;source src="sound.mp3" type="audio/mp3"&gt;
+    &lt;a href="sound.mp3" download>Скачать!&lt;/a&gt;
+&lt;/audio&gt;</code></pre>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Supported_media_formats" target="_blank">
+                    <small>Supported media formats</small>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h4>HTML5 Audio Methods</h4>
+            <pre class="fragment flat"><code
+                    class="html">&lt;audio id="player" src="sound.mp3" controls&gt;&lt;/audio&gt;</code></pre>
+            <pre class="fragment flat"><code>var player = document.getElementById('player');</code></pre>
+        <pre class="fragment flat"><code>player.play();
+player.pause();</code></pre>
+            <pre class="fragment flat"><code>player.canPlayType('audio/mp3'); // 'probably', 'maybe', ''</code></pre>
+        <pre class="fragment flat"><code>player.src = "new_sound.mp3"
+player.load();</code></pre>
+            <div class="fragment">
+                <pre class="flat"><code>player.addTextTrack(kind, label, language);</code></pre>
+                <br>
+                <a href="https://www.w3.org/TR/html5/embedded-content-0.html#dom-media-addtexttrack" target="_blank">
+                    <small>Подробнее об addTextTrack</small>
+                </a>
+            </div>
+        </section>
+
+        <section>
+            <h4>HTML5 Audio Properties</h4>
+            <ol>
+                <li class="fragment">
+                    <pre class="flat"><code>buffered, ended, muted, paused, played ...</code></pre>
+                </li>
+                <li class="fragment">
+                    <pre class="flat"><code>duration, audioTracks, readyState ...</code></pre>
+                </li>
+                <li class="fragment">
+                    <pre class="flat"><code>playbackRate, volume, currentTime ...</code></pre>
+                </li>
+            </ol>
+            <br><br>
+            <a class="fragment" href="http://www.w3schools.com/tags/ref_av_dom.asp" target="_blank">
+                <small>Полный список</small>
+            </a>
+        </section>
+
+        <section>
+            <h4>HTML5 Audio Events</h4>
+            <ol>
+                <li class="fragment">
+                    <pre class="flat"><code>canplay, canplaythrough ...</code></pre>
+                </li>
+                <li class="fragment">
+                    <pre class="flat"><code>error, play, pause, ended ...</code></pre>
+                </li>
+                <li class="fragment">
+                    <pre class="flat"><code>volumechange, ratechange ...</code></pre>
+                </li>
+            </ol>
+            <br><br>
+            <a class="fragment" href="http://www.w3schools.com/tags/ref_av_dom.asp" target="_blank">
+                <small>Полный список</small>
+            </a>
+        </section>
+
+        <section>
+            <h4><a href="https://www.w3.org/TR/webaudio/" target="_blank">Web Audio API</a></h4>
+        </section>
+
+        <section>
+            <h4>Web Audio API</h4>
+            <ul>
+                <li>Объемный звук для игр и интерактивных веб приложений</li>
+                <li class="fragment">Приложения для обработки звука</li>
+                <li class="fragment">Аудио синтез</li>
+                <li class="fragment">Визуализация аудио</li>
+                <li class="fragment">...</li>
+            </ul>
+        </section>
+
+        <section data-background-image="img/web-audio-api.png" data-background-size="contain"></section>
+
+        <section>
+            <h4>Web Audio API</h4>
+            <img src="img/audio-graph.png" alt="audio-graph">
+        </section>
+
+        <section>
+            <h4>Web Audio API Context</h4>
+        <pre class="fragment flat"><code>var AudioContext = window.AudioContext ||
+                   window.webkitAudioContext;
+
+if (AudioContext) {
+    var context = new AudioContext();
+    // ...
+} else {
+    alert('Ваш браузер не поддерживает Web Audio API');
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>Web Audio Sources</h4>
+            <ol>
+                <li class="fragment">Аудио буфер</li>
+                <li class="fragment"><code class="html">&lt;audio&gt;</code> или <code class="html">&lt;video&gt;</code>
+                </li>
+                <li class="fragment">Внешний аудио поток</li>
+            </ol>
+        </section>
+
+        <section>Web Audio Modules</section>
+
+        <section>
+            <h4 class="left"><a href="http://webaudio.github.io/web-audio-api/#idl-def-GainNode" target="_blank">Gain</a></h4>
+            <pre class="flat"><code>var gainNode = context.createGain();
+gainNode.gain.value = 0.5;</code></pre>
+        </section>
+
+        <section>
+            <h4 class="left"><a href="http://webaudio.github.io/web-audio-api/#idl-def-DelayNode" target="_blank">Delay</a></h4>
+                <pre class="flat"><code>var delayNode = context.delayNode();
+delayNode.delayTime.value = 0.5;</code></pre>
+        </section>
+
+        <section>
+            <h4 class="left"><a href="http://webaudio.github.io/web-audio-api/#idl-def-ConvolverNode" target="_blank">Convolution</a>
+            </h4>
+            <pre class="flat"><code>var convolverNode = context.createConvolver();
+var impulseResponse = ... ;
+convolverNode.buffer = impulseResponse;</code></pre>
+            <img src="img/convolve.png" alt="">
+        </section>
+
+        <section>
+            <h4 class="left"><a
+                    href="http://webaudio.github.io/web-audio-api/#the-biquadfilternode-interface" target="_blank">Filter</a></h4>
+            <pre class="flat"><code>var filterNode = context.createBiquadFilter();
+filterNode.type = 'lowpass';
+filterNode.frequency.value = 1000;
+filterNode.Q.value = 1;
+filterNode.gain.value = 300;
+</code></pre>
+        </section>
+
+        <section>
+            <h4 class="left"><a href="http://webaudio.github.io/web-audio-api/#idl-def-PannerNode" target="_blank">Panner</a></h4>
+            <pre class="flat"><code>var pannerNode = context.createPanner();
+
+panner.setPosition(pos.x, pos.y, pos.z);
+panner.setOrientation(vec.x, vec.y, vec.z);
+panner.setVelocity(dx/dt, dy/dt, dz/dt);
+
+context.listener.setPosition(pos.x, pos.y, pos.z);
+context.setOrientation(vec.x, vec.y, vec.z);
+context.setVelocity(dx/dt, dy/dt, dz/dt);</code></pre>
+        </section>
+
+        <section>
+            <h4>Web Audio Destinations</h4>
+            <ol>
+                <li class="fragment">Стандартный аудио выход</li>
+                <li class="fragment">Аудио поток</li>
+            </ol>
+        </section>
+
+        <section>
+            <a href="http://webaudioplayground.appspot.com/#" target="_blank">Web Audio Playground</a>
+        </section>
+
+        <section>
+            <h4>Web Audio API</h4>
+            <img src="img/echo.png " alt="echo-graph">
+            <div class="parts">
+                <div class="fade-in fragment">
+                    <div class="fragment fade-out">
+                <pre class="flat "><code data-noescape>// Создаем контекст, источник и приемник
+var context = new AudioContext();
+var source = context.createBufferSource();
+source.buffer = getBufferFromUrl(someUrl);
+var destination = context.destination;</code></pre>
+
+                    <a href="http://www.html5rocks.com/en/tutorials/webaudio/intro/js/buffer-loader.js" target="_blank"><small>BufferLoader</small></a>
+                    </div>
+                </div>
+
+                <div class="fade-in fragment">
+                <pre class="fragment flat fade-out"><code data-noescape="">// Создаем модули и конфигурируем их
+var gainNode = context.createGain();
+var delayNode = context.createDelay();
+gainNode.gain.value = 0.5;
+delayNode.delayTime.value = 0.75;
+                </code></pre>
+                </div>
+
+                <div class="fade-in fragment">
+                <pre class="flat"><code>// Описываем необходимую нам схему и воспроизводим
+source.connect(gainNode);
+gainNode.connect(delayNode);
+delayNode.connect(gainNode);
+gainNode.connect(destination);
+source.start(0);
+                </code></pre>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <ul>
+                <div class="fragment"><a href="http://kolber.github.io/audiojs/" target="_blank">audio.js</a></div>
+                <div class="fragment"><a href="http://buzz.jaysalvat.com/" target="_blank">buzz.js</a></div>
+                <div class="fragment"><a href="http://goldfirestudios.com/blog/104/howler.js-Modern-Web-Audio-Javascript-Library" target="_blank">howler.js</a></div>
+                <div class="fragment"><a href="http://www.createjs.com/soundjs" target="_blank">SoundJS</a></div>
+                <div class="fragment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;...</div>
+            </ul>
+        </section>
+
+        <section>
+                <a href="https://yandex.ru/autopoet/poroshki/9" target="_blank">Яндекс.Автопоет</a><br>
+                <a href="examples/examples.html" target="_blank">Web Audio Modules</a><br>
+                <a href="http://webaudiodemos.appspot.com/" target="_blank">Web Audio Demos</a><br>
+                <a href="https://developers.google.com/web/updates/2012/02/HTML5-audio-and-the-Web-Audio-API-are-BFFs" target="_blank">HTML5 &lt;audio&gt; and the Web Audio API</a>
+        </section>
+
+        <section>
+            <h4><a href="https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#tts-section" target="_blank">Speech Synthesis API</a></h4>
+        </section>
+
+        <section data-background-image="img/speech-synthesis.png" data-background-size="contain"></section>
+
+        <section>
+            <h4>Speech Synthesis API</h4>
+        <pre class="flat"><code>if (window.speechSynthesis) {
+    // ...
+} else {
+    alert('Speech Synthesis API не поддерживается');
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>Speech Synthesis API</h4>
+        <pre class="flat fragment"><code data-noescape>// Создаем фразу и воспроизводим ее
+var msg = new SpeechSynthesisUtterance('Hello World');
+window.speechSynthesis.speak(msg);</code></pre>
+        <pre class="fragment flat"><code data-noescape>// Меняем голос
+var voices = window.speechSynthesis.getVoices();
+msg.voice = voices[10];</code></pre>
+            <pre class="fragment flat"><code>msg.rate = 1; // Скорость от 0 до 10</code></pre>
+            <pre class="fragment flat"><code>msg.pitch = 2; // Высота от 0 до 2</code></pre>
+            <pre class="fragment flat"><code>msg.text = 'Hello World';</code></pre>
+            <pre class="fragment flat"><code>msg.lang = 'en-US';</code></pre>
+        </section>
+
+        <section>
+            <h4><a href="https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechsynthesisvoice" target="_blank">Speech Synthesis Voice</a></h4>
+            <pre class="flat"><code>SpeechSynthesisVoice {
+    voiceURI: "Milena",
+    name: "Milena",
+    lang: "ru-RU",
+    localService: true,
+    default: true
+}</code></pre>
+        </section>
+
+        <section>
+            <h4>Speech Synthesis Events</h4>
+            <pre class="flat"><code>play, pause, resume, end, error
+
+soundstart, soundend, speechstart, speechend
+
+boundary // Достижение границ слова или предложения
+
+mark // Достижение именованой метки в SSML разметке</code></pre>
+
+            <a href="https://www.w3.org/TR/speech-synthesis11/" class="fragment" target="_blank"><small>SSML</small></a>
+        </section>
+
+        <section>
+            <a href="https://www.audero.it/demo/speech-synthesis-api-demo.html" target="_blank">Демо</a>
+        </section>
+
+        <section>
+            <h4><a href="https://tech.yandex.ru/speechkit/" target="_blank">Яндекс.SpeechKit</a></h4>
+        </section>
+
+        <section>
+            <h4>Яндекс.SpeechKit</h4>
+            <pre class="flat"><code class="fragment">// Создаем экземпляр класса `Text to speech`
+// и передаем настройки синтеза
+var tts = new ya.speechkit.Tts({
+        apikey: 'abcd..',
+        emotion: 'good',
+        speed: 1.5,
+        speaker: 'jane'
+});
+</code><code class="fragment">// Озвучиваем текст передавая его в метод speak()
+tts.speak('Вы используете технологию SpeechKit', {
+        speaker: 'omazh',
+        emotion: 'neutral',
+        stopCallback: function () {
+            console.log("Озвучивание текста завершено.");
+        }
+});</code></pre>
+        </section>
+    </div>
+    </div>
+
+    <script src="../lib/js/head.min.js"></script>
+    <script src="../js/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            slideNumber: true,
+            history: true,
+            center: true,
+            hideAddressBar: true,
+            transition: 'slide',
+            dependencies: [
+                {
+                    src: '../plugin/highlight/highlight.js',
+                    condition: function () {
+                        return Boolean(document.querySelector('pre code'));
+                    },
+                    callback: function () {
+                        hljs.configure({
+                            languages: ['javascript']
+                        });
+                        hljs.initHighlightingOnLoad();
+                    }
+                }
+            ]
+        });
+    </script>
+</body>
+</html>

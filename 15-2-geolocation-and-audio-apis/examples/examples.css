@@ -1,0 +1,20 @@
+@font-face {
+    font-family: textbook-light;
+    font-weight: 200;
+    src: local(textbook-light);
+    src: url('../../css/textbook-light.woff'),
+    url('../../css/textbook-light.ttf');
+}
+
+body {
+    font-family: textbook-light, Arial;
+}
+
+.input {
+    width: 70px;
+}
+
+.name {
+    display: inline-block;
+    width: 75px;
+}
