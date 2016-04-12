@@ -1,0 +1,629 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Web APIs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section></section>
+
+<section data-background="img/music.png" data-background-size="60%"></section>
+<section data-background="img/maps.png" data-background-size="60%"></section>
+
+<section>
+    <h4>Web APIs</h4>
+    <p class="authores">
+        <br><small>Гоголев Сергей</small>
+        <br><small>Воронцов Максим</small>
+        <br><small>Семичев Олег</small>
+    </p>
+</section>
+
+<section>
+    <h4 class="orange">Storage APIs</h4>
+</section>
+
+<section data-background="img/cookie.jpg"></section>
+
+<section>
+    <h4 class="green">Cookies</h4>
+    <p><small class="grey">since 1994</small></p>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: создание</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">document.cookie = 'name=Sergey';</span>
+
+<span class="fragment">document.cookie = 'age=30';</span>
+
+<span class="fragment">document.cookie = 'name=' + encodeURIComponent('Сергей');</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: уникальность</h4>
+    <p class="fragment"><span class="blue">name</span> + <span class="blue">path</span> + <span class="blue">domain</span></p>
+
+    <pre class="flat"><code data-noescape>
+<span class="fragment">document.cookie = 'age=30; path=/';</span>
+
+<span class="fragment">document.cookie = 'age=30; path=/forum';</span>
+
+<span class="fragment">document.cookie = 'age=30; domain=example.org';</span>
+
+<span class="fragment">document.cookie = 'age=30; domain=forum.example.org';</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: path</h4>
+
+    <pre class="flat"><code data-noescape>
+document.cookie = 'age=30; path=/blog';
+    </code></pre>
+
+    <pre class="fragment flat">
+<span class="green">GET</span> <span class="grey">/blog</span>
+
+<span class="green">GET</span> <span class="grey">/blog</span>/list
+
+<span class="green">GET</span> <span class="grey">/blog</span>/page/2
+
+<del class="fragment"><span class="green">GET</span> <span class="grey">/blog</span>list</del>
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: устаревание</h4>
+
+    <pre class="flat"><code data-noescape>
+<span class="fragment">document.cookie = 'name=Sergey;' +
+    'expires=Tue, 19 Apr 2016 00:00:00 GMT';</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: удаление</h4>
+
+    <pre class="flat"><code data-noescape>
+<span>document.cookie = 'name=Sergey;' +
+    'expires=Tue, <span class="fragment highlight init_visible">19 Apr 1970</span> 00:00:00 GMT';</span>
+    </code></pre>
+
+    <p class="fragment grey">Устанавливаем дату устаревания в прошлом</p>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: чтение</h4>
+    <pre><code data-noescape>
+<span>document.cookie = 'age=30; path=/';</span>
+
+<span>document.cookie = 'age=30; path=/forum';</span>
+    </code></pre>
+    <pre class="fragment"><code data-noescape>
+<span>var cookies = document.cookie;</span>
+    </code></pre>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">age=30; age=30</span>
+<span class="fragment grey">/forum      /</span>
+    </code></pre>
+</section>
+
+<section>
+    <a href="https://github.com/js-cookie/js-cookie">js-cookie</a>
+
+    <pre class="flat"><code data-noescape>
+<span class="fragment">Cookies.set('name', 'Sergey', { expires: 7, path: '' });</span>
+
+<span class="fragment">Cookies.get('name');</span>
+
+<span class="fragment">Cookies.remove('name');</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: отправка на сервер</h4>
+    <pre class="fragment">
+
+<span class="green">GET</span> /forum <span class="grey">HTTP/1.1</span>
+
+<span class="magenta">Host:</span> example.org
+<span class="magenta">Cookie:</span> name=Sergey; age=30
+    </pre>
+
+    <pre class="fragment"><code data-noescape>
+var express = require('express')
+var app = express();
+
+app.use(require('cookie-parser')())
+
+app.use((res, req) => {
+    const cookies = req.cookies;
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: получение с сервера</h4>
+
+    <pre class="fragment"><code data-noescape>
+var express = require('express')
+var app = express();
+
+app.use((res, req) => {
+    res.cookie('age', 30, {
+        path: '/forum'
+    })
+});
+    </code></pre>
+
+    <pre class="fragment">
+
+<span class="grey">HTTP/1.1</span> <span class="green">200</span> OK
+
+<span class="magenta">Set-Cookie:</span> age=30; path=/forum
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">HTTP-only</span> cookies</h4>
+
+    <pre class="fragment"><code data-noescape>
+var express = require('express')
+var app = express();
+
+app.use((res, req) => {
+    res.cookie('age', 30, {
+        <span class="fragment highlight init_visible">httpOnly: true</span>
+    })
+});
+    </code></pre>
+
+    <pre class="fragment">
+
+<span class="grey">HTTP/1.1</span> <span class="green">200</span> OK
+
+<span class="magenta">Set-Cookie:</span> age=30; path=/forum; <span class="fragment highlight init_visible">HttpOnly</span>
+    </pre>
+
+    <p class="fragment blue">Не доступны в js-скриптах на клиенте</p>
+</section>
+
+<section>
+    <h4><span class="green">Secure</span> cookies</h4>
+
+    <pre class="fragment"><code data-noescape>
+var express = require('express')
+var app = express();
+
+app.use((res, req) => {
+    res.cookie('age', 30, {
+        <span class="fragment highlight init_visible">secure: true</span>
+    })
+});
+    </code></pre>
+
+    <pre class="fragment">
+
+<span class="grey">HTTP/1.1</span> <span class="green">200</span> OK
+
+<span class="magenta">Set-Cookie:</span> age=30; path=/forum; <span class="fragment highlight init_visible">secure</span>
+    </pre>
+
+    <p class="fragment blue">Не доступны по HTTP</p>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: Особенности</h4>
+    <p class="left pros fragment"> Устаревание из коробки</p>
+    <p class="left pros fragment"> Доступ с сервера из коробки</p>
+    <p class="left cons fragment"> 4kb</p>
+    <p class="left cons fragment"> Передаются с каждым запросом</p>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: best practice</h4>
+    <p class="left pros fragment"> Cookieless домены для статики <span class="grey">(CDN)</span></p>
+    <p class="left pros fragment"> Храните <span class="green">id</span>, а не полноценные данные</p>
+    <p class="left pros fragment"> Обфусцируйте <span class="grey">(01100101)</span></p>
+</section>
+
+<section>
+    <h4><span class="green">Cookies</span>: chrome dev tools</h4>
+    <img class="fragment" src="img/cookies-dev.png">
+    <h4 class="fragment"><span class="green">Cookies</span>: Применение</h4>
+    <p class="fragment grey">Инициализация состояния клиента</p>
+    <p class="fragment grey">Авторизация</p>
+    <a class="fragment"href="https://tools.ietf.org/html/rfc6265">tools.ietf.org/html/rfc6265</a>
+</section>
+
+
+<section>
+    <h4 class="green">Web Storage</h4>
+</section>
+
+<section data-background="img/localstorage.jpg" data-background-size="85%" data-background-color="white"></section>
+
+<section>
+    <h4><span class="green">WebStorage</span>: ограничение</h4>
+    <p><span class="blue">10MB</span></p>
+    <p class="fragment grey">5MB (Safari, iOS Safari)</p>
+    <p class="fragment grey">2MB (Android Browser)</p>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span> vs <span class="green">SessionStorage</span></h4>
+    <p class="left"><span class="blue">SessionStorage</span> – хранит данные до окончании сессии (закрытие вкладки)</p>
+    <p class="left"><span class="blue">LocalStorage</span> – хранит данные перманентно, пока скрипт или пользователь не удалит их</p>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: хранение</h4>
+    <pre class="fragment">
+
+<span class="blue">IE: </span>../DOMStore/YPHP6VDO/www.bing[0].xml
+
+<span class="blue">Firefox: </span>%profile/webappsstore.sqlite
+
+<span class="blue">Chrome: </span>User Data/Default/Local Storage/http_vk.com_0.localstorage
+    </pre>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: api</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">localStorage.setItem('name', 'Sergey');</span>
+
+<span class="fragment">localStorage.getItem('name');</span>
+
+<span class="fragment">localStorage.removeItem('name')</span>
+
+<span class="fragment">localStorage.clear();</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: api</h4>
+    <pre class="flat"><code data-noescape>
+<span>localStorage.name = 'Sergey';</span>
+
+<span>localStorage.name; // Sergey</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: api</h4>
+    <pre class="flat"><code data-noescape>
+<span>localStorage.data = JSON.stringify({ name: 'Sergey' });</span>
+
+<span>JSON.parse(localStorage.name); // { name: 'Sergey' }</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: api</h4>
+    <pre class="flat"><code data-noescape>
+window.addEventListener('storage', function (e) {
+   console.log(e);
+});
+    </code></pre>
+
+    <pre class="flat fragment"><code data-noescape>
+{
+    key: 'name',
+    oldValue: 'Sergey',
+    newValue: 'Sergey Gogoleff'
+}
+    </code></pre>
+
+    <p class="fragment">Общение между окнами!</p>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: api</h4>
+
+    <p class="fragment red">QUOTA_EXCEEDED_ERROR</p>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: определение поддержки</h4>
+    <div class="fragment">Можно:
+    <pre class="flat"><code data-noescape>localStorage in window
+    </code></pre></div>
+<div class="fragment">Но лучше:
+    <pre class="flat"><code data-noescape>
+try {
+    localStorage.setItem('key', 'value');
+    localStorage.removeItem('key');
+} catch (error) {}
+    </code></pre></div>
+    <p class="fragment">Private Browsing mode:<br>
+        <span class="red">Error: SecurityError: DOM Exception 18</span>
+    </p>
+</section>
+
+<section>
+    <div>Ещё лучше:<br>
+        <a href="https://modernizr.com/">Modernizr</a>
+    </div>
+    <pre class="fragment flat"><code data-noescape>
+
+Modernizr.localstorage
+
+<span class="fragment">Modernizr.cookies</span>
+
+<span class="fragment">Modernizr.audio</span>
+
+<span class="fragment">Modernizr.flash</span>
+    </code></pre>
+
+    <pre class="flat"><code data-noescape>
+
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: поддержка</h4>
+    <img src="img/localstorage-ciu.png">
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: chrome dev tools</h4>
+    <img class="fragment" src="img/localstorage-dev.png">
+    <h4 class="fragment"><span class="green">LocalStorage</span>: Применение</h4>
+    <p class="fragment grey">Хранение настроек</p>
+    <p class="fragment grey">Хранение промежуточных данных</p>
+    <p class="fragment grey">Кеширование</p>
+</section>
+
+<section>
+    <img src="img/localstorage-dev-2.png">
+</section>
+
+<section>
+    <h4><span class="green">LocalStorage</span>: особенности</h4>
+    <p class="left pros fragment"> 10MB</p>
+    <p class="left pros fragment"> Не передаёт данные на сервер</p>
+    <p class="left pros fragment"> Сессионное хранилище из коробки</p>
+    <p class="left pros fragment"> Общение между окнами</p>
+    <p class="left cons fragment"> Строго ограничен доменом и схемой</p>
+    <p class="left cons fragment"> Синхронный</p>
+    <a class="fragment" href="https://html.spec.whatwg.org/multipage/webstorage.html">html.spec.whatwg.org/multipage/webstorage.html</a>
+</section>
+
+<section>
+    <h4 class="green">WebSQL</h4>
+</section>
+
+<section>
+    <h4><span class="green">WebSQL</span>: поддержка</h4>
+    <p>Асинхронный интерфейс к SQLite базе</p>
+    <img class="fragment" src="img/websql-ciu.png">
+</section>
+
+<section>
+    <h4><span class="green">WebSQL</span>: api</h4>
+    <pre class="flat"><code data-noescape>
+var db = window.openDatabase("db", "1", "database", 32768);
+
+db.transaction(function (t) {
+    t.executeSql(
+        'create table if not exists notes(' +
+        'id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+        'title TEXT,' +
+        'created DATE)'
+    );
+
+    t.executeSql(
+        'insert into notes(title, created) values(' +
+        '"' + title + '","' + Date.now() +'")'
+    );
+}, onError, onSuccess);
+    </code></pre>
+</section>
+
+<section data-background="img/frozen.jpg" data-background-size="80%"></section>
+
+<section>
+    <h4 class="green">IndexedDB</h4>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: поддержка</h4>
+    <img src="img/indexeddb-ciu.png">
+    <p class="fragment">Абстракция над SQLite</p>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: особенности</h4>
+    <p class="left pros fragment"> Нет ограничений на размер<span class="grey">*</span></p>
+    <p class="left pros fragment"> Асинхронная</p>
+    <p class="left bullet fragment"> Не реляционная, а key-object</p>
+    <p class="left bullet fragment"> Не SQL, а API</p>
+    <p class="left cons fragment"> Строго ограничен доменом и схемой</p>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Database</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">var request = window.indexedDB.open('db', 3);</span>
+<span class="fragment">
+request.onerror = function(event) {
+    console.log(event.target.errorCode);
+};
+
+request.onsuccess = function(event) {
+    var db = event.target.result;
+};
+</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Object Store</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">var request = window.indexedDB.open('db', 3);</span>
+<span class="fragment">
+request.onupgradeneeded = function (event) {
+    var db = event.target.result;
+
+    if (!db.objectStoreNames.contains('notes')) {
+        var store = db.createObjectStore('notes', {
+            keyPath: 'id'
+            // autoIncrement: true
+        });
+
+        store.createIndex('public', 'public', { unique: false });
+        store.createIndex('name, public', ['name', 'public']);
+    }
+}
+</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Add</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">var transaction = db.transaction(['notes'], 'readwrite');</span>
+<span class="fragment">var store = transaction.objectStore('notes');</span>
+<span class="fragment">
+var note = {
+    id: 'films'
+    title: 'Films',
+    public: true
+}
+
+var request = store.add(note);</span>
+<span class="fragment">
+request.onerror = function (e) {}
+request.onsuccess = function (e) {}
+</span>
+<span class="fragment">transaction.abort();</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Get</h4>
+    <pre class="flat"><code data-noescape>
+<span>var transaction = db.transaction(['notes'], 'readonly');</span>
+<span>var store = transaction.objectStore('notes');</span>
+<span class="fragment">
+var request = store.get('films')
+<span class="fragment">
+request.onsuccess = function (e) {}
+</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Get all</h4>
+    <pre class="flat"><code data-noescape>
+<span>var transaction = db.transaction(['notes'], 'readonly');</span>
+<span>var store = transaction.objectStore('notes');</span>
+<span class="fragment">
+var cursor = store.openCursor();</span>
+<span class="fragment">
+cursor.onsuccess = function(e) {
+    var cursor = e.target.result;
+    if (cursor) {
+        console.log('Key: ', cursor.key);
+        console.dir('Data: ', cursor.value);
+        cursor.continue();
+    }
+}
+</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: Where</h4>
+    <pre class="flat"><code data-noescape>
+<span>var transaction = db.transaction(['notes'], 'readonly');</span>
+<span>var store = transaction.objectStore('notes');</span>
+<span class="fragment">
+var cursor = store
+    .index('name, public')
+    .openCursor(IDBKeyRange.only(['films', true]));</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">IndexedDB</span>: производительность</h4>
+    <img src="img/perf.png">
+</section>
+
+<section>
+    <a href="http://dexie.org/">dexie.org</a>
+    <pre class="flat"><code data-noescape>
+var db = new Dexie('MyDatabase');
+
+db.version(1).stores({
+    notes: 'name, text'
+});
+
+db.open().catch(function (error){});
+
+db
+    .notes
+    .where('name')
+    .equals(['Films'])
+    .each(function (note){
+        console.log(note.name);
+    });
+    </code></pre>
+</section>
+
+<section style="font-size: 1.4em">
+    <h4>Storage APIs</h4>
+    <p><a href="https://www.nczonline.net/blog/2009/05/05/http-cookies-explained/">HTTP cookies explained</a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Storage_API">Web Storage API</a></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB">Using IndexedDB</a></p>
+    <p><a href="http://www.amazon.com/Client-Side-Data-Storage-Keeping-Local/dp/1491935111">Html5 Local Storage How-To</a></p>
+    <p><a href="http://www.amazon.com/Instant-HTML5-Local-Storage-How-ebook/dp/B00C1COMDG">Client-side Data Storage</a></p>
+</section>
+
+<!-- <section>
+    <h4>Web APIs</h4>
+    <p><a href="http://diveinto.html5doctor.com/">Dive into HTML5</a></p>
+    <p><a href="http://htmlbook.ru/html5/">Погружение в HTML5.</a></p>
+    <p><a href="https://github.com/AurelioDeRosa/HTML5-API-demos">HTML5 API demos</a></p>
+</section> -->
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
