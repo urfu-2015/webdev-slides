@@ -1,0 +1,233 @@
+.monsta
+{
+    width: 300px;
+    height: 300px;
+    background-size: auto 300px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    background-position: 0 0;
+    position: relative;
+    background-image: url('../monsta/walk.png');
+}
+
+.monsta__sleep
+{
+    background-image: url('../monsta/sleep.png');
+    animation: sprite 2s steps(49) infinite;
+}
+
+.monsta__wakeup
+{
+    background-image: url('../monsta/wakeup.png');
+    animation: sprite 1s steps(19) forwards;
+}
+
+.monsta__walk
+{
+    background-image: url('../monsta/walk.png');
+    animation: sprite 1s steps(19) infinite;
+}
+
+.monsta__jump
+{
+    background-image: url('../monsta/jump.png');
+    animation: jump-sprite 1s steps(23) infinite;
+}
+
+.monsta__starve
+{
+    background-image: url('../monsta/starve.png');
+    animation: halftime-sprite 2s steps(15) infinite;
+}
+
+.monsta__attack
+{
+    background-image: url('../monsta/attack.png');
+    animation: sprite 1s steps(19) infinite;
+}
+
+.monsta__hi
+{
+    background-image: url('../monsta/hi.png');
+    animation: sprite 2s steps(44) infinite;
+}
+
+.monsta__eat
+{
+    background-image: url('../monsta/eat.png');
+    animation: sprite 1.2s 1.5s steps(11) forwards;
+}
+
+@keyframes sprite
+{
+    0%
+    {
+        background-position: 0 0;
+    }
+
+    100%
+    {
+        background-position: 100% 0;
+    }
+}
+
+@keyframes jump-sprite
+{
+    0%
+    {
+        background-position: 0 0;
+    }
+
+    20%
+    {
+        transform: translateY(0);
+    }
+
+    50%
+    {
+        transform: translateY(-100px);
+    }
+
+    100%
+    {
+        background-position: 100% 0;
+        transform: translateY(0);
+    }
+}
+
+@keyframes halftime-sprite
+{
+    0%
+    {
+        background-position: 0 0;
+    }
+
+    50%
+    {
+        background-position: 0 0;
+    }
+
+    100%
+    {
+        background-position: 100% 0;
+    }
+}
+
+.glasses
+{
+    background-image: url(../monsta/glasses.png);
+    background-size: 175px auto;
+}
+
+.vision
+{
+    background-image: url(../monsta/vision.png);
+    background-size: 175px auto;
+}
+
+.glasses,
+.vision
+{
+    position: absolute;
+    transition: all .5s ease-in-out;
+    opacity: 0;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: 80px;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    transform: translateY(-50px) rotate(15deg);
+}
+
+.a-light-demo_sun .glasses,
+.a-light-demo_moon .vision
+{
+    transform: none;
+    opacity: 1;
+}
+
+.speech-monsta .monsta__wakeup,
+.speech-monsta.speech-wake .monsta__sleep
+{
+    display: none;
+}
+
+.speech-monsta.speech-wake .monsta__wakeup
+{
+    display: inline-block;
+}
+
+.media-monsta .monsta__hi,
+.media-monsta.media-hi .monsta__stat
+{
+    display: none;
+}
+
+.media-monsta.media-hi .monsta__hi
+{
+    display: inline-block;
+}
+
+.a-light-demo .monsta
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.game-monsta.current-fragment
+{
+    transition: none !important;
+}
+
+.gore
+{
+    position: absolute;
+    bottom: -130px;
+    left: 50%;
+    opacity: .5;
+    transform: translateX(-50%);
+    width: 1500px;
+    height: 260px;
+    background: url(../monsta/blood.png) 50% 50% / auto 260px no-repeat;
+}
+
+.tatum
+{
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) scale(2.5);
+    width: 150px;
+    height: 150px;
+    position: absolute;
+    background: url(../img/tatum.png) 50% 50% / cover no-repeat;
+    transition: transform .5s 1.5s ease-in-out, opacity .5s ease-in;
+}
+
+.bat-monsta .monsta__eat,
+.bat-monsta .censored,
+.bat-monsta.bat-eat .monsta__starve,
+.bat-monsta.bat-eat .bubble
+{
+    display: none;
+}
+
+.bat-monsta.bat-eat .monsta__eat,
+.bat-monsta.bat-eat .censored,
+.bat-monsta.bat-eat .tatum
+{
+    display: inline-block;
+}
+
+.bat-monsta .tatum {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.bat-monsta.bat-eat .tatum {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) scale(1);
+}

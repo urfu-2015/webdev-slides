@@ -1,0 +1,94 @@
+#battery-level {
+    font-size: 172px;
+}
+
+#battery-charging {
+    transition: background .5s ease-in-out;
+}
+
+#notification-button {
+    background: #700;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: inline-block;
+    margin-top: 20px;
+}
+
+#notification-button:hover {
+    opacity: .9;
+}
+
+#speech-log {
+    position: relative;
+    z-index: 1;
+    display: inline-block;
+    transition: all .5s ease-in-out;
+    cursor: pointer;
+}
+
+#speech-log:hover {
+    opacity: .75;
+}
+
+#speech-log.speech-started {
+    transform: scale(1.2);
+
+    color: #0a0;
+    cursor: default;
+    opacity: 1;
+    pointer-events: none;
+}
+
+#gamepad-logger {
+    font-size: 40px !important;
+    display: inline-block !important;
+    width: auto !important;
+    padding: .5em !important;
+    border: 2px solid #eee;
+}
+
+html body #media-video {
+    box-shadow: 0 0 5px 0 #fff;
+    height: 300px;
+    width: 400px;
+
+    cursor: pointer;
+    margin-right: 50px;
+}
+
+.creature {
+    /*display: none !important;*/
+}
+
+
+.nope {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    font-size: 100px !important;
+    color: red;
+    text-align: center;
+}
+
+div.icon-one {
+    display: inline-block;
+    margin: 50px 30px 0;
+}
+
+.icon-one svg {
+    height: 200px;
+    width: auto;
+}
+
+.icon-good path {
+    fill: green;
+}
+
+.icon-med path {
+    fill: yellow;
+}
+
+.icon-bad path {
+    fill: red;
+}
