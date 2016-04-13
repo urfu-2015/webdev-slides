@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Производительный NodeJS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <h2>Производительный NodeJS</h2>
+    <p class="author">
+        <small>Мокеев Евгений</small>
+    </p>
+    <div class="fragment">
+        <a href="#/7" class="">Объединение запросов</a><br>
+        <a href="#/13" class="">Кэширование</a><br>
+        <a href="#/29" class="">Масштабирование приложения</a><br>
+    </div>
+</section>
+
+<section class="size-S">
+    <h4><a href="http://localhost:8080" target="_blank">Пример</a></h4>
+    <p class="grey">Просмотрщик домашних заданий</p>
+    <ul class="fragment">
+        <li class="">Навигация по домашним задачам</li>
+        <li class="green">Должно быть быстро</li>
+        <li class="green">Держать высокую нагрузку</li>
+    </ul>
+    <img class="fragment" src="img/example.png" alt="Example">
+</section>
+
+<section>
+    <h4><span class="green">getTasks(category)</span></h4>
+    <pre class="size-S"><code>
+function getTasks(category) {
+    return github.getRepos('urfu-2015')
+        .then(tasks => {
+            return filterTasks(tasks, category)
+        })
+        .then(getTasksInfo);
+};
+    </code></pre>
+</section>
+<section>
+    <h4>Пример. Главная страница</h4>
+    <pre><code>
+Promise
+    .all([
+        getTasks('javascript'),
+        getTasks('verstka'),
+        getTasks('webdev')
+    ])
+    .then(results => {
+        res.render(...);
+    });
+    </code></pre>
+</section>
+<section>
+    <pre><code data-noescape>
+Promise
+    .all([
+        <span class="fragment highlight blue init_visible" data-fragment-index="2">getTasks('javascript')</span>,
+        <span class="fragment highlight blue init_visible" data-fragment-index="2">getTasks('verstka')</span>,
+        <span class="fragment highlight blue init_visible" data-fragment-index="2">getTasks('webdev')</span>
+    ]);
+    </code></pre>
+
+    <pre class="fragment" data-fragment-index="1"><code data-noescape>
+function getTasks(category) {
+    return <span class="fragment highlight blue init_visible" data-fragment-index="2">github.getRepos('urfu-2015')</span>
+        .then(...)
+        .then(...);
+};
+    </code></pre>
+</section>
+
+<section class="size-S">
+    <h4>Три одновременных пользователя</h4>
+    <pre><code data-trim>
+require('debug-http')();
+    </code></pre>
+    <pre class="fragment size-S"><code data-trim>
+GET https://api.github.com/orgs/urfu-2015/repos 891ms
+GET https://api.github.com/orgs/urfu-2015/repos 889ms
+GET https://api.github.com/orgs/urfu-2015/repos 902ms
+GET https://api.github.com/orgs/urfu-2015/repos 933ms
+GET https://api.github.com/orgs/urfu-2015/repos 953ms
+GET https://api.github.com/orgs/urfu-2015/repos 1,003ms
+GET https://api.github.com/orgs/urfu-2015/repos 1,018ms
+GET https://api.github.com/orgs/urfu-2015/repos 1,067ms
+GET https://api.github.com/orgs/urfu-2015/repos 1,072ms
+    </code></pre>
+    <p class="fragment red">Много одинаковых запросов</p>
+</section>
+
+<section>
+    <h4>Объединение запросов</h4>
+</section>
+
+<section>
+    <h4>Объединение запросов</h4>
+    <img src="img/requests.png" alt="Over requests">
+</section>
+
+<section>
+    <h4>Объединение запросов</h4>
+    <img src="img/batching.png" alt="Batching">
+</section>
+
+<section>
+    <h4>Объединяем запросы за репозиториями</h4>
+<div class="multiple-pre">
+    <pre class="fragment" data-fragment-index="1"><code>let reposQuery;</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>function getReposBatch() {</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    if (!reposQuery) {</code></pre>
+    <pre class="fragment" data-fragment-index="3"><code>        reposQuery = github.getRepos('urfu-2015')</code></pre>
+    <pre class="fragment" data-fragment-index="4"><code>            .then(res => {</code></pre>
+    <pre class="fragment" data-fragment-index="4"><code>                reposQuery = null;</code></pre>
+    <pre class="fragment" data-fragment-index="4"><code>                return res;</code></pre>
+    <pre class="fragment" data-fragment-index="4"><code>            });</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    }</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    return reposQuery;</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>}</code></pre>
+</div>
+</section>
+
+<section>
+    <h4>Объединяем запросы за репозиториями</h4>
+    <pre class="size-S"><code>
+function getTasks(category) {
+    return getReposBatch()
+        .then(tasks => {
+            return filterTasks(tasks, category)
+        })
+        .then(getTasksInfo);
+};
+    </code></pre>
+</section>
+
+
+<section class="size-S">
+    <h4>Объединение запросов</h4>
+    <p class="pros left">Уменьшили количество запросов</p>
+    <p class="pros left">Быстрее отвечаем <i>некоторым</i> пользователям</p>
+    <p class="fragment question left">Если запрос завершился ошибкой, то для всех</p>
+</section>
+
+<section>
+    <h4>Кэширование</h4>
+</section>
+
+<section class="size-S">
+    <h4>Кэширование</h4>
+    <p class="fragment left">Данные ближе к месту использования</p>
+    <p class="fragment left">Хранение результатов вычислений</p>
+    <p class="fragment left green">Оптимизация скорости получения данных</p>
+</section>
+
+<section class="size-S">
+    <h4>Кэширование. Решаемые проблемы</h4>
+    <p class="fragment left" data-fragment-index="1">Низкая производительность</p>
+    <p class="fragment left" data-fragment-index="2">Избыточность запросов</p>
+    <p class="fragment left" data-fragment-index="3">Высокая нагрузка на внешний источник</p>
+    <p class="fragment left" data-fragment-index="4">Узкий сетевой канал</p>
+    <p class="fragment left" data-fragment-index="4">Высокие сетевые задержки</p>
+</section>
+
+<section class="size-S">
+    <h4>Кэш</h4>
+    <ul>
+        <li class="fragment">Промежуточное хранилище c быстрым доступом</li>
+        <li class="fragment">Ограничен по размеру</li>
+        <li class="fragment">Наиболее часто запрашиваемые данные</li>
+        <li class="fragment">Данные не всегда актуальные</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Эффективность кэша</h4>
+    <p class="left">Количество попаданий</p>
+    <pre class="green">Hit Rate = Попадание в кэш / Количество запросов</pre>
+    <p class="left">Скорость получения данных</p>
+    <p class="fragment left green">“Разогретый” кэш</p>
+</section>
+
+<section class="size-S">
+    <h4>Инвалидация кэша</h4>
+    <p class="grey">Данные устарели (“протухли”) и их нужно убрать из кэша</p>
+    <p class="left">Данные удаляются вручную</p>
+    <p class="left">Данные заменяются новыми</p>
+    <p class="left">Данные вытесняются автоматически по алгоритму</p>
+    <p class="fragment left green">Одна из самых сложных задач в программировании</p>
+</section>
+
+<section class="size-S">
+    <h4>Алгортимы кэширования</h4>
+    <p class="grey">Алгортим вытеснения из кэша</p>
+    <p class="fragment left"><span class="green">Time period</span> - Вытеснение по времени</p>
+    <p class="fragment left"><span class="green">LFU</span> - Вытеснение редко используемых</p>
+    <p class="fragment left"><span class="green">LRU</span> - Вытеснение давно неиспользуемых</p>
+    <p class="fragment left"><span class="green">Segmented LRU</span> - Многоуровневый LRU</p>
+    <p class="fragment grey">От алгортима зависит быстродействие кэша</p>
+</section>
+
+<section>
+    <h4>Когда не кэшировать</h4>
+    <ul>
+        <li class="fragment">Большая вариация данных</li>
+        <li class="fragment">Персонализированные данные</li>
+        <li class="fragment">Есть другие оптимизации</li>
+    </ul>
+</section>
+<section>
+    <h4><a href="https://ru.wikipedia.org/wiki/Мемоизация">Мемоизация</a></h4>
+    <p class="left">Сохранение результата выполнения функции</p>
+    <pre class="fragment"><code>
+const cache = {};
+function memoize(key, fn) {
+    if (!cache.hasOwnProperty(key)) {
+        cache[key] = fn();
+    }
+    return cache[key];
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4>Кэшируем задачи</h4>
+    <pre><code>
+const LRU = require('lru-cache');
+const cache = new LRU();
+    </code></pre>
+    <pre><code>cache.set(key, value, maxAge);</code></pre>
+    <pre><code>cache.get(key);</code></pre>
+    <pre><code>cache.del(key);</code></pre>
+    <pre><code>cache.has(key);</code></pre>
+</section>
+
+<section>
+    <pre><code>
+class Cache {
+    constructor() {
+        this._cache = new LRU();
+    }
+
+    memoize(key, maxAge, fn) {
+        // ...
+    }
+}
+    </code></pre>
+</section>
+
+<section>
+    <div class="multiple-pre">
+        <pre class="fragmen-" data-fragment-index="1"><code>memoize(key, maxAge, fn) {</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>    const cache = this._cache;</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>    const value = cache.get(key);</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>    if (value) {</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>        return Promise.resolve(value);</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>    }</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>&nbsp;</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>    return Promise.resolve()</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>        .then(fn)</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>        .then(results => {})</code></pre>
+        <pre class="fragment" data-fragment-index="6"><code>            cache.set(key, result, maxAge * 1000);</code></pre>
+        <pre class="fragment" data-fragment-index="7"><code>            return result;</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>        });</code></pre>
+        <pre class="fragmen-" data-fragment-index="1"><code>}</code></pre>
+    </div>
+</section>
+
+<section>
+    <pre><code>
+function getTasks(category) {
+    return getReposBatch()
+        .then(tasks => {
+            return filterTasks(tasks, category)
+        })
+        .then(getTasksInfo);
+};
+    </code></pre>
+</section>
+
+<section class="size-S">
+    <div class="multiple-pre">
+        <pre class="fragmen- size-S" data-fragment-index="1"><code>const cache = new Cache();</code></pre>
+        <pre class="fragmen- size-S" data-fragment-index="1"><code>function getTasksCached(category) {</code></pre>
+        <pre class="fragment size-S" data-fragment-index="2"><code>    const cacheKey = `tasks.${category}`;</code></pre>
+        <pre class="fragment size-S" data-fragment-index="2"><code>&nbsp;</code></pre>
+        <pre class="fragment size-S" data-fragment-index="3"><code>    return cache.memoize(cacheKey, 5 * 60, () => {</code></pre>
+        <pre class="fragment size-S" data-fragment-index="3"><code>        return getTasks(category);</code></pre>
+        <pre class="fragment size-S" data-fragment-index="3"><code>    });</code></pre>
+        <pre class="fragmen- size-S" data-fragment-index="1"><code>}</code></pre>
+    </div>
+</section>
+
+<section>
+    <h4>Результаты кэширования</h4>
+    <pre class="fragment size-S"><code data-noescape>
+GET https://api.github.com/orgs/urfu-2015/repos 990ms
+GET / 200 1249.771 ms
+GET / 200 1254.626 ms
+GET / 200 1236.532 ms
+GET / 200 11.003 ms
+GET / 200 18.849 ms
+GET / 200 25.639 ms
+    </code></pre>
+</section>
+
+<section class="size-S">
+    <h4>Еще раз о кэшировнии</h4>
+    <ul>
+        <li>Не решение всех проблем</li>
+        <li>Кэшировать только после всех оптимизаций</li>
+        <li class="fragment" data-fragment-index="2">Кэш должен быть вспомогательной компонентой</li>
+        <li class="fragment" data-fragment-index="2">Кэш должен легко включаться и отключаться</li>
+        <li class="fragment" data-fragment-index="2">Все должно работать и без кэша</li>
+        <li class="fragment red" data-fragment-index="4">Кэш не постоянное хранилище!</li>
+    </ul>
+</section>
+
+<section>
+    <h4>Масштабирование</h4>
+</section>
+
+<section class="size-S">
+    <h4>Масштабирование</h4>
+    <p class="fragment left">Процесс увеличения производительности и отказоустойчивости системы</p>
+    <p class="fragment left">Распределение нагрузки между несколькими процессами и машинами</p>
+</section>
+
+<section>
+    <h4>Масштабирование</h4>
+    <p class="fragment left pros">Увеличивает доступность</p>
+    <p class="fragment left pros">Увеличивает производительность</p>
+    <p class="fragment left pros">Увеличивает отказоустойчивость</p>
+    <p class="fragment left cons">Увеличивает сложность</p>
+</section>
+<section>
+    <h4>Масштабируемость</h4>
+    <p class="fragment left" data-fragment-index="1">
+        <span class="green">Сильная.</span> Система “легко” масштабируется</p>
+    <p class="fragment left" data-fragment-index="2">
+        <span class="green">Слабая.</span> Очень тяжело масштабируется</p>
+    <p class="fragment grey size-XS" data-fragment-index="2">Масштабируемость ~ Монолитность</p>
+</section>
+<section>
+    <h4>Масштабирование</h4>
+    <p class="fragment left"><span class="green">Вертикальное.</span> Добавление мощностей</p>
+    <p class="fragment left"><span class="green">Горизонтальное.</span> Разбиение приложения на несколько частей</p>
+</section>
+<section class="size-XS">
+    <h4>Scale cube</h4>
+    <img src="img/scale-cube.png" alt="scale cube" width="40%">
+    <div style="margin-left: 25%;">
+        <p class="left"><span class="green">ось X:</span> Клонирование приложения</li>
+        <p class="left"><span class="green">ось Y:</span> Декомпозиция приложения</li>
+        <p class="left"><span class="green">ось Z:</span> Разделение в зависимости от данных</li>
+    </div>
+    <p class="grey">The Art of Scalability. Martin L. Abbott and Michael T. Fisher</p>
+</section>
+
+<section>
+    <h4>Клонирование NodeJS-приложения</h4>
+    <ul>
+        <li class="fragment">Запуск в разных процессах</li>
+        <li class="fragment">Запуск на разных машинах</li>
+        <li class="fragment">Решить вопрос балансировки запросов</li>
+    </ul>
+</section>
+<section class="size-S">
+    <h4>Cluster</h4>
+    <img src="img/cluster.png" alt="cluster">
+    <p class="fragment">Round-robin алгоритм балансировки</p>
+</section>
+
+<section class="size-S">
+    <h4>Cluster</h4>
+<div class="multiple-pre">
+    <pre class="fragment" data-fragment-index="1"><code>const cluster = require('cluster');</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>const os = require('os');</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>&nbsp;</code></pre>
+
+    <pre class="fragment" data-fragment-index="1"><code>if (cluster.isMaster) {</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    const cpus = os.cpus().length;</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    for (let i = 0; i < cpus; i++) {</code></pre>
+    <pre class="fragment" data-fragment-index="3"><code>        cluster.fork();</code></pre>
+    <pre class="fragment" data-fragment-index="2"><code>    }</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>} else {</code></pre>
+    <pre class="fragment" data-fragment-index="4"><code>    require('./app.js');</code></pre>
+    <pre class="fragment" data-fragment-index="1"><code>}</code></pre>
+</div>
+</section>
+
+<section class="size-S">
+    <h4>Cluster</h4>
+    <p class="fragment left pros" data-fragment-index="1">Распараллелена нагрузка</p>
+    <p class="fragment left cons" data-fragment-index="2">При ошибке приложение не доступно</p>
+    <pre class="fragment" data-fragment-index="2"><code>
+siege -t20S http://localhost:8080
+
+Availability:              10.89 %
+Successful transactions:   61
+Failed transactions:       499
+    </code></pre>
+</section>
+
+<section>
+    <h4>Cluster</h4>
+    <pre><code data-noescape>
+if (cluster.isMaster) {
+    // ...
+    cluster.on('exit', (worker, code) => {
+        if (<span class="fragment highlight blue init_visible">code !== 0 && !worker.suicide</span>) {
+            console.log('Worker crashed');
+            cluster.fork();
+        }
+    });
+}
+    </code></pre>
+    <pre><code>
+Availability:              87.10 %
+Successful transactions:   243
+Failed transactions:       36
+    </code></pre>
+</section>
+
+<section>
+    <h4>Масштабирование</h4>
+    <p class="fragment pros left">Высокая доступность</p>
+    <p class="fragment pros left">Отказоустойчивость</p>
+    <p class="fragment question left">Изолированная память</p>
+</section>
+
+<section>
+    <img src="img/cache-1.png" alt="cache. first request">
+    <img class="fragment" src="img/cache-2.png" alt="cache. second request">
+</section>
+
+<section>
+    <img src="img/shared-cache-1.png" alt="shared cache. first request">
+    <img src="img/shared-cache-2.png" alt="shared cache. second request">
+</section>
+
+<section>
+    <h4>Единый кэш</h4>
+    <p class="grey">Shared cache</p>
+</section>
+
+<section>
+    <h4>Единый кэш</h4>
+
+    <p><a href="http://redis.io/"><img src="img/redis.png" alt="Redis"></a></p>
+    <p><a href="http://memcached.org/"><img src="img/memcached.png" alt="Memcached"></a></p>
+</section>
+
+<section class="size-S">
+    <h4><a href="http://redis.io/">Redis</a></h4>
+
+    <p class="fragment left pros">Хорошая документация</p>
+    <p class="fragment left pros">Данные в памяти</p>
+    <p class="fragment left pros">Транзакции</p>
+    <p class="fragment left pros">Пакетная обработка команд</p>
+    <p class="fragment left pros">Механизм pub/sub из коробки</p>
+    <p class="fragment left pros">Поддержка LRU алгортима</p>
+    <p class="fragment left pros green">Встроенный мониторинг команд</p>
+</section>
+
+<section class="left">
+    <h4><a href="http://redis.io/">Redis</a></h4>
+    <p><a href="http://try.redis.io/">Try redis</a></p>
+    <p><a href="https://github.com/karlseguin/the-little-redis-book">The Little Redis Book</a></p>
+    <p><a href="http://redis.io/topics/lru-cache">Using Redis as an LRU cache</a></p>
+</section>
+
+<section>
+    <h4><a href="http://redis.io/download">Установка Redis</a></h4>
+    <p class="left"><a href="https://github.com/MSOpenTech/redis">Redis on Windows</a></p>
+    <p class="left"><a href="https://www.nuget.org/"><img src="img/nuget.png" alt="Nuget"></a></p>
+    <p class="left"><a href="https://chocolatey.org/"><img src="img/chocolatey.png" alt="Chocolatey"></a></p>
+</section>
+
+<section class="size-S">
+    <h4>Командная строка</h4>
+    <pre><code>redis-cli</code></pre>
+    <pre><code>telnet localhost 6379</code></pre>
+    <p class="left"><a href="http://redis.io/commands">Список команд</a></p>
+</section>
+
+<section class="size-XS">
+    <h4>Работа с ключами</h4>
+    <p class="left grey">Установка значения:</p>
+    <pre><code>SET tasks.javascript "[{ name: ... }]"</code></pre>
+
+    <p class="left grey">Проверка существования ключа:</p>
+    <pre><code>EXISTS tasks.javascript</code></pre>
+
+    <p class="left grey">Получение ключа:</p>
+    <pre><code>GET tasks.javascript</code></pre>
+
+    <p class="left grey">Удаление ключа:</p>
+    <pre><code>DEL tasks.javascript</code></pre>
+</section>
+
+<section class="size-XS">
+    <h4>Временные ключи</h4>
+    <p class="left grey">Установка времени жизни ключа:</p>
+    <pre><code>EXPIRE tasks.javascript 30</code></pre>
+
+    <p class="left grey">Получение времени жизни ключа:</p>
+    <pre><code>TTL tasks.javascript</code></pre>
+
+    <p class="left grey">Установка значения вместе с временем жизни:</p>
+    <pre><code>SETEX tasks.javascript 30 "[{ name: ... }]"</code></pre>
+</section>
+
+<section>
+    <pre><code>
+const Redis = require("ioredis");
+class Cache {
+    constructor() {
+        this._cache = new Redis(6379, '127.0.0.1');
+    }
+}
+    </code></pre>
+</section>
+
+<section>
+    <pre><code>
+memoize(key, maxAge, fn) {
+    const cache = this._cache;
+    const value = cache.get(key)
+    if (value) {
+        return Promise.resolve(value)
+    }
+
+    return Promise.resolve()
+        .then(fn)
+        .then(results => {
+            cache.set(key, result, maxAge * 1000)
+            return result;
+        }
+}
+    </code></pre>
+</section>
+
+<section class="">
+    <div class="multiple-pre">
+        <pre class="fragmen-" data-fragment-index="1"><code>memoize(key, maxAge, fn) {</code></pre>
+        <pre class="fragmen-" data-fragment-index="1"><code>    const cache = this._cache;</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>    return cache.get(key)</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>        .then(value => {</code></pre>
+        <pre class="fragment" data-fragment-index="3"><code>            if (value) {</code></pre>
+        <pre class="fragment" data-fragment-index="3"><code>                return JSON.parse(value);</code></pre>
+        <pre class="fragment" data-fragment-index="3"><code>            }</code></pre>
+        <pre class="fragment" data-fragment-index="3"><code>&nbsp;</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>            return Promise.resolve()</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>                .then(fn)</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>                .then(result => {</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>                    cache.setex(</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>                        key, maxAge,</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>                        JSON.stringify(result));</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>                    return result;</code></pre>
+        <pre class="fragment" data-fragment-index="4"><code>                });</code></pre>
+        <pre class="fragment" data-fragment-index="2"><code>        });</code></pre>
+        <pre class="fragmen-" data-fragment-index="1"><code>}</code></pre>
+    </div>
+</section>
+
+<section>
+    <h4>Итоги</h4>
+    <p class="fragment left green">Объединение запросов</p>
+    <p class="fragment left green">Кэширование</p>
+    <p class="fragment left green">Масштабирование</p>
+    <p class="fragment red">Всегда нужно отталкиваться от задачи</p>
+</section>
+
+<section>Вопросы?</section>
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>

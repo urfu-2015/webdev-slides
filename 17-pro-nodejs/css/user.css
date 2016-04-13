@@ -1,0 +1,175 @@
+img {
+    background: none !important;
+    max-width: 100%;
+    max-height: 100%;
+    border: 0 !important;
+}
+
+.textbook {
+    font-family: 'textbook-light';
+}
+
+.progress {
+    height: 5px !important;
+}
+
+.slide-number {
+    font-size: 35px !important;
+}
+
+.author {
+    text-align: center;
+}
+
+.author small::first-letter {
+    color: red;
+}
+
+.demo {
+    color: #FFDA44
+}
+
+.demo img {
+    position: relative; top: -4px;
+}
+
+.reveal section .fragment.init_visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.reveal section .fragment.highlight {
+    transition-duration: .3s;
+}
+
+.highlight.fragment.visible,
+.highlight.static {
+    color: #000;
+}
+
+.highlight.blue.fragment.visible,
+.highlight.blue.static {
+    background-color: rgb(68, 97, 142);
+}
+
+.fragment.highlight-grey {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.fragment.highlight-grey.visible {
+  color: #777;
+}
+
+.fragment.highlight-green.visible {
+    color: #a1b56c !important;
+}
+
+
+pre {
+    font-size: 26px !important;
+    font-family: 'sourcecodepro-light' !important;
+
+    margin: 10px 15px !important
+}
+
+pre code {
+    font-size: 26px !important;
+    font-family: 'sourcecodepro-light' !important;
+    padding: 0 25px !important;
+    line-height: 35px !important;
+    border: 3px solid rgba(63, 63, 63, 0.4) !important;
+    background: rgba(63, 63, 63, 0.25) !important;
+    max-height: 100% !important;
+}
+
+pre.size-S code {
+    font-size: 22px !important;
+}
+
+
+
+.multiple-pre pre:not(:last-child) {
+    margin-bottom: 0 !important;
+}
+
+.multiple-pre pre ~ pre {
+    margin-top: 0 !important;
+}
+
+.multiple-pre pre:not(:last-child) code {
+    border-bottom: none !important;
+}
+
+.multiple-pre pre ~ pre code {
+    border-top: none !important;
+}
+
+h4 span {
+    color: #a0a0f0 !important;
+}
+
+.red {
+    color: #ab4642 !important;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.magenta {
+    color: #a0a0f0 !important;
+}
+
+.grey {
+    color: #777;
+}
+
+.hljs-comment {
+    color: #999 !important;
+}
+
+.hljs-string {
+    color: #a1b56c !important;
+}
+
+.left {
+    text-align: left;
+}
+
+.pros,
+.cons,
+.question {
+    padding-left: 50px !important;
+}
+
+.pros:before,
+.cons:before,
+.question:before {
+    margin-right: 15px;
+}
+
+.pros:before {
+    content: '✓';
+    color: #a1b56c !important;
+}
+
+.cons:before {
+    content: '✗';
+    color: #992200 !important;
+}
+
+.question:before {
+    content: '?';
+    color: #546BD2 !important;
+}
+
+.cache-image {
+    display: inline-block;
+    width: 30%;
+}
+.images:after {
+    display: inline-block;
+    width: 100%;
+    content: "";
+}
