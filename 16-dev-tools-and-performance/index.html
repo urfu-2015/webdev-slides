@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Производительность</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script>
+        /**
+         * Dark theme for Highcharts JS
+         * @author Torstein Honsi
+         */
+
+        // Load the fonts
+        Highcharts.theme = {
+           colors: ["#2b908f", "#90ee7e", "#f45b5b", "#7798BF", "#aaeeee", "#ff0066", "#eeaaee",
+              "#55BF3B", "#DF5353", "#7798BF", "#aaeeee"],
+           chart: {
+              backgroundColor: 'transparent',
+              plotBorderColor: '#606063'
+           },
+           title: {
+              style: {
+                 color: '#E0E0E3',
+                 fontSize: '30px'
+              }
+           },
+           subtitle: {
+              style: {
+                 color: '#E0E0E3',
+              }
+           },
+           xAxis: {
+              gridLineColor: '#707073',
+              labels: {
+                 style: {
+                    color: '#E0E0E3'
+                 }
+              },
+              lineColor: '#707073',
+              minorGridLineColor: '#505053',
+              tickColor: '#707073',
+              title: {
+                 style: {
+                    color: '#A0A0A3'
+
+                 }
+              }
+           },
+           yAxis: {
+              gridLineColor: '#707073',
+              labels: {
+                 style: {
+                    color: '#E0E0E3'
+                 }
+              },
+              lineColor: '#707073',
+              minorGridLineColor: '#505053',
+              tickColor: '#707073',
+              tickWidth: 1,
+              title: {
+                 style: {
+                    color: '#A0A0A3'
+                 }
+              }
+           },
+           tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              style: {
+                 color: '#F0F0F0'
+              }
+           },
+           plotOptions: {
+              series: {
+                 dataLabels: {
+                    color: '#B0B0B3'
+                 },
+                 marker: {
+                    lineColor: '#333'
+                 }
+              },
+              boxplot: {
+                 fillColor: '#505053'
+              },
+              candlestick: {
+                 lineColor: 'white'
+              },
+              errorbar: {
+                 color: 'white'
+              }
+           },
+           legend: {
+              itemStyle: {
+                 color: '#E0E0E3'
+              },
+              itemHoverStyle: {
+                 color: '#FFF'
+              },
+              itemHiddenStyle: {
+                 color: '#606063'
+              }
+           },
+           credits: {
+              style: {
+                 color: '#666'
+              }
+           },
+           labels: {
+              style: {
+                 color: '#707073'
+              }
+           },
+
+           drilldown: {
+              activeAxisLabelStyle: {
+                 color: '#F0F0F3'
+              },
+              activeDataLabelStyle: {
+                 color: '#F0F0F3'
+              }
+           },
+
+           navigation: {
+              buttonOptions: {
+                 symbolStroke: '#DDDDDD',
+                 theme: {
+                    fill: '#505053'
+                 }
+              }
+           },
+
+           // scroll charts
+           rangeSelector: {
+              buttonTheme: {
+                 fill: '#505053',
+                 stroke: '#000000',
+                 style: {
+                    color: '#CCC'
+                 },
+                 states: {
+                    hover: {
+                       fill: '#707073',
+                       stroke: '#000000',
+                       style: {
+                          color: 'white'
+                       }
+                    },
+                    select: {
+                       fill: '#000003',
+                       stroke: '#000000',
+                       style: {
+                          color: 'white'
+                       }
+                    }
+                 }
+              },
+              inputBoxBorderColor: '#505053',
+              inputStyle: {
+                 backgroundColor: '#333',
+                 color: 'silver'
+              },
+              labelStyle: {
+                 color: 'silver'
+              }
+           },
+
+           navigator: {
+              handles: {
+                 backgroundColor: '#666',
+                 borderColor: '#AAA'
+              },
+              outlineColor: '#CCC',
+              maskFill: 'rgba(255,255,255,0.1)',
+              series: {
+                 color: '#7798BF',
+                 lineColor: '#A6C7ED'
+              },
+              xAxis: {
+                 gridLineColor: '#505053'
+              }
+           },
+
+           scrollbar: {
+              barBackgroundColor: '#808083',
+              barBorderColor: '#808083',
+              buttonArrowColor: '#CCC',
+              buttonBackgroundColor: '#606063',
+              buttonBorderColor: '#606063',
+              rifleColor: '#FFF',
+              trackBackgroundColor: '#404043',
+              trackBorderColor: '#404043'
+           },
+
+           // special colors for some of the
+           legendBackgroundColor: 'rgba(0, 0, 0, 0.5)',
+           background2: '#505053',
+           dataLabelsColor: '#B0B0B3',
+           textColor: '#C0C0C0',
+           contrastTextColor: '#F0F0F3',
+           maskColor: 'rgba(255,255,255,0.3)'
+        };
+
+        // Apply the theme
+        Highcharts.setOptions(Highcharts.theme);
+    </script>
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <img src="img/aerotwist_on_performance.png" alt="" class="stretch">
+</section>
+
+<section>
+    <h4>Производительность</h4>
+    <p class="authors"><small>Артём Кувалдин, Роман Парадеев</small></p>
+</section>
+
+<section>
+    <ol>
+        <li>Что это?</li>
+        <li>Как измерить?</li>
+        <li>Как улучшить?</li>
+    </ol>
+</section>
+
+<section>
+    <section>Что значит «высокая производительность»?</section>
+
+    <section>
+        <img src="img/rail.png" alt="" class="stretch">
+    </section>
+
+    <section>
+        <h4>RAIL</h4>
+        <ul>
+            <li>Response: откликнуться за <span class="green">100 мс</span></li>
+            <li>Animation: рисовать кадр каждые <span class="green">16 мс</span></li>
+            <li>Idle: использовать время простоя</li>
+            <li>Load: доставить контент за <span class="green">1000 мс</span></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>LIAR</h4>
+        <ul>
+            <li>Load: доставить контент за <span class="green">1000 мс</span></li>
+            <li>Idle: использовать время простоя</li>
+            <li>Animation: рисовать кадр каждые <span class="green">16 мс</span></li>
+            <li>Response: откликнуться за <span class="green">100 мс</span></li>
+        </ul>
+    </section>
+
+    <section>
+        <p class="left">Ускорение сайта уменьшает расходы на бэкенд.</p>
+        <p class="left">Производительность <a hreg="http://radar.oreilly.com/2009/06/bing-and-google-agree-slow-pag.html">влияет</a> на поведение пользователей</p>
+        <p class="left">Поисковые движки <a href="https://webmasters.googleblog.com/2010/04/using-site-speed-in-web-search-ranking.html">учитывают</a> скорость сайта при ранжировании.</p>
+        <p class="left">Мобильных пользователей <a href="http://www.smartinsights.com/mobile-marketing/mobile-marketing-analytics/mobile-marketing-statistics/">уже больше</a>, чем десктопных</p>
+    </section>
+</section>
+
+<section>
+    <section>Как измерить скорость веб-приложения?</section>
+
+    <section>
+        <ul>
+            <li><a href="https://ngrok.com/">ngrok</a> – туннель для localhost</li>
+            <li><a href="http://www.webpagetest.org/">WebPageTest</a> – посмотреть на сайт из Рио</li>
+            <li><a href="https://developer.chrome.com/devtools/docs/network">DevTools Network</a> – скриншоты и цифры</li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Navigation_timing_API">Navigation Timing API</a> – реальные данные</li>
+        </ul>
+    </section>
+
+    <section>
+        <img src="img/problem_1.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/problem_4.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/problem_3.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/problem_2.png" alt="">
+    </section>
+
+    <section>
+        <h4>Navigation Timing API</h4>
+        <pre><code>
+var performance = window.performance || 
+                  window.webkitPerformance || 
+                  window.msPerformance || 
+                  window.mozPerformance;
+
+console.log(performance.timing);
+        </code></pre>
+        <pre><code>
+connectEnd: 1460572234112
+connectStart: 1460572234112
+domComplete: 1460572255927
+...
+        </code></pre>
+        <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/PerformanceTiming">Список событий</a></p>
+    </section>
+</section>
+
+<section>
+    <section>Оптимизация времени загрузки</section>
+
+    <section>
+        <pre class="flat"><code data-noescape>
+<span class="fragment" data-fragment-index=0>                   RTT + Backend</span>
+<span class="fragment" data-fragment-index=0>                         ↕</span>
+DNS → TCP → Request → Waiting → Response → Render
+<span class="fragment" data-fragment-index=1> ↑                                 ↓</span>
+<span class="fragment" data-fragment-index=1> ↑   ←   ←   ←   ←   ←   ←   ← Resources</span>
+        </code></pre>
+    </section>
+
+    <section>
+        <h4>Средний размер страницы</h4>
+        <img src="img/http-archive-trends.png" alt="" class="stretch">
+    </section>
+
+    <section>
+        <script>
+            $(function () {
+                $('#alexa-sizes').highcharts({
+                    chart: {
+                        plotBackgroundColor: null,
+                        plotBorderWidth: null,
+                        plotShadow: false,
+                        type: 'pie'
+                    },
+                    title: {
+                        text: 'Соотношение объёма ресурсов страницы по типам'
+                    },
+                    tooltip: {
+                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                    },
+                    plotOptions: {
+                        pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                            dataLabels: {
+                                enabled: true,
+                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                                style: {
+                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black',
+                                    fontSize: '20px'
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Размер',
+                        colorByPoint: true,
+                        data: [
+                            { name: 'HTML', y: 54 },
+                            { name: 'Изображения', y: 2384, sliced: true, selected: true },
+                            { name: 'JavaScript', y: 587 },
+                            { name: 'CSS', y: 108 },
+                            { name: 'Прочее', y: 353 }
+                        ]
+                    }]
+                });
+            });
+        </script>
+        <center>
+           <div id="alexa-sizes" style="height: 600px; width: 900px;"></div>
+        </center>
+    </section>
+
+    <section>
+        <pre class="flat"><code data-noescape style="font-size: 2em !important; line-height: 1.2 !important">
+Bytes/Characters/Tokens/Nodes
+<span class="fragment" data-fragment-index=0> ↓</span>
+<span class="fragment" data-fragment-index=0>DOM</span><span class="fragment" data-fragment-index=1> → B/C/T/N</span><span class="fragment" data-fragment-index=2> → CSSOM</span>
+<span class="fragment" data-fragment-index=3> ↓                ↓</span>
+<span class="fragment" data-fragment-index=3>     Render Tree</span>
+<span class="fragment" data-fragment-index=4>          ↓</span>
+<span class="fragment" data-fragment-index=4>        Paint</span>
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/progressive-rendering.png" alt="" class="stretch">
+    </section>
+
+    <section>
+        <p class="left">Про сеть – <a href="https://urfu-2015.github.io/webdev-slides/9-rest/#/8">HTTP и REST. Сергей Гоголев</a></p>
+        <p class="left">Про браузер – <a href="https://rawgit.com/urfu-2015/verstka-slides/master/09-browser/index.html#/7">Браузер. Олег Мохов</a></p>
+        <p class="left">Про картинки – <a href="https://rawgit.com/urfu-2015/verstka-slides/master/10-graphics/index.html#/">Графика. Кувалдин Артем</a></p>
+    </section>
+</section>
+
+<section>
+    <section>Developer Tools: Network</section>
+
+    <section>
+        <img src="img/alot_of_icon_requests.png" alt="" class="stretch">
+    </section>
+
+    <section>
+        <h4>65 из 77 запросов – иконки</h4>
+    </section>
+
+    <section>
+        <ol>
+            <li>Используем svg вместо png</li>
+            <li>Минифицируем svg</li>
+            <li>Инлайним иконки</li>
+        </ol>
+    </section>
+
+    <section>
+        <pre class="flat"><code class="nohighlight" data-noescape>
+> svgo -f static/img/emoji/svg
+
+Processing directory 'static/img/emoji/svg':
+
+amused-black-face-with-closed-eyes-and-mouth.svg:
+Done in 56 ms!
+1.12 KiB - <span class="green">53.4%</span> = 0.522 KiB
+
+amused-black-solid-emoticon-face-for-interface.svg:
+Done in 21 ms!
+1.122 KiB - <span class="green">53.5%</span> = 0.521 KiB
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="flat"><code class="nohighlight" data-noescape>
+<span class="grey"># собираем все векторные иконки в один файл</span>
+> cat static/img/emoji/svg/* > static/img/emoji/svg/_bundle.svg
+
+<span class="grey"># итоговый размер векторных иконок</span>
+> du -h static/img/emoji/svg/_bundle.svg
+<span class="green"> 48K</span>    static/img/emoji/svg/_bundle.svg
+
+<span class="grey"># исходный расмер растровых иконок</span>
+> du -h static/img/emoji/png
+<span class="red">544K</span>    static/img/emoji/png
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="xml">
+&lt;section class="emoji-list">
+    &lt;img src="img/emoji/png/amused-black-face-with-closed-eyes-and-mouth.png">
+
+    &lt;img src="img/emoji/png/amused-black-solid-emoticon-face-for-interface.png">
+
+    &lt;img src="img/emoji/png/amused-smiling-black-emoticon-face.png">
+
+    &lt;img src="img/emoji/png/angry-black-emoticon-face.png">
+
+    &lt;img src="img/emoji/png/angry-black-face-1.png">
+
+    &lt;img src="img/emoji/png/angry-black-face.png">
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="xml">
+&lt;section class="emoji-list">
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="478.125" height="478.125" viewBox="0 0 478.125 478.125">
+        &lt;path d="M239.062 0C107.1 0 0 107.1 0 239.062c0 131.963 107.1 239.062 239.062 239.062 131.963 0 239.062-107.1 239.062-239.062C478.125 107.1 371.025 0 239.062 0zM116.663 175.95l63.112-42.075 11.475 15.3-65.025 42.075-9.562-15.3zm122.399 187.425C172.125 363.375 153 306 153 306s28.688 19.125 86.062 19.125S325.125 306 325.125 306 306 363.375 239.062 363.375zM351.9 191.25l-63.113-42.075 11.476-15.3 63.112 42.075-11.475 15.3z"/>&lt;/svg>
+    
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="478.125" height="478.125" viewBox="0 0 478.125 478.125">
+        &lt;path d="M239.062 0C107.1 0 0 107.1 0 239.062c0 131.963 107.1 239.062 239.062 239.062 131.963 0 239.062-107.1 239.062-239.062C478.125 107.1 371.025 0 239.062 0zM126.225 133.875l63.112 42.075-9.562 15.3-63.112-42.075 9.562-15.3zm112.837 229.5C172.125 363.375 153 306 153 306s28.688 19.125 86.062 19.125S325.125 306 325.125 306 306 363.375 239.062 363.375zM298.35 191.25l-11.475-15.3 63.112-42.075 11.476 15.3-63.113 42.075z"/>&lt;/svg>
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="478.125" height="478.125" viewBox="0 0 478.125 478.125">
+        &lt;path d="M239.062 0C107.1 0 0 107.1 0 239.062c0 131.963 107.1 239.062 239.062 239.062 131.963 0 239.062-107.1 239.062-239.062C478.125 107.1 371.025 0 239.062 0zM114.75 172.125h76.5v19.125h-76.5v-19.125zm124.312 191.25C172.125 363.375 153 306 153 306s28.688 19.125 86.062 19.125S325.125 306 325.125 306 306 363.375 239.062 363.375zM363.375 191.25h-76.5v-19.125h76.5v19.125z"/>&lt;/svg>
+
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="478.125" height="478.125" viewBox="0 0 478.125 478.125">
+        &lt;path d="M239.062 0C107.1 0 0 107.1 0 239.062c0 131.963 107.1 239.062 239.062 239.062 131.963 0 239.062-107.1 239.062-239.062C478.125 107.1 371.025 0 239.062 0zm93.713 114.75l11.475 15.3-65.025 42.075-11.475-15.3 65.025-42.075zm-187.425 0l63.112 42.075-9.562 15.3-63.112-42.075 9.562-15.3zm-11.475 76.5c0-11.475 7.65-19.125 19.125-19.125s19.125 7.65 19.125 19.125-7.65 19.125-19.125 19.125-19.125-7.65-19.125-19.125zm105.187 153c-57.375 0-86.062 19.125-86.062 19.125S172.125 306 239.062 306s86.062 57.375 86.062 57.375-28.686-19.125-86.062-19.125zm86.063-133.875c-11.475 0-19.125-7.65-19.125-19.125s7.65-19.125 19.125-19.125 19.125 7.65 19.125 19.125-7.65 19.125-19.125 19.125z"/>&lt;/svg>
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/after-svg-inlining.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/unoptimized_png.png" alt="">
+    </section>
+
+    <section>
+        <h4>2/3 размера страницы – jpeg-изображения</h4>
+    </section>
+
+    <section>
+        <ol>
+            <li>Уменьшаем размер изображений</li>
+            <li>Вырезаем метаданные</li>
+            <li>Конвертируем в pregressive jpeg</li>
+        </ol>
+    </section>
+
+    <section>
+        <pre class="flat"><code class="nohighlight" data-noescape>
+> du -h static/img/cats
+<span class="red">2,9M</span>    static/img/cats
+
+<span class="grey"># уменьшаем размер с помощью imagemagick</span>
+> mogrify -resize 600 static/img/cats/*.jpg
+
+<span class="grey"># вырезаем exif и конвертируем в pregressive</span>
+> imagemin --progressive static/img/cats/* static/img/cats
+
+> du -h static/img/cats
+<span class="green">260K</span>    static/img/cats
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/after-png-optimize.png" alt="">
+    </section>
+
+    <section>
+        <h4>Приближаем момент первой отрисовки</h4>
+    </section>
+
+    <section>
+        <ol>
+            <li>Отключаем ненужные ресурсы</li>
+            <li>Стили наверх, скрипты вниз</li>
+            <li>Удаляем неиспользуемый код</li>
+            <li>Откладыввем загрузку на потом</li>
+        </ol>
+    </section>
+
+    <section>
+        <pre><code class="diff">
+     &lt;script src="vendor/jquery/dist/jquery.js">&lt;/script>
+-    &lt;script src="vendor/jqueryui-browser/ui/jquery-ui.js">&lt;/script>
+
+     &lt;link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css">
+-    &lt;script src="vendor/bootstrap/dist/js/bootstrap.js">&lt;/script>
+
+     &lt;script src="js/main.js">&lt;/script>
+     &lt;link rel="stylesheet" href="css/style.css">
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="html">
+&lt;head>
+    &lt;link rel="stylesheet" href="vendor/bootstrap/dist/css/bootstrap.css">
+    &lt;link rel="stylesheet" href="css/style.css">
+&lt;/head>
+&lt;body>
+    &lt;script src="vendor/jquery/dist/jquery.js">&lt;/script>
+    &lt;script src="vendor/timing.js/timing.js">&lt;/script>
+    &lt;script src="js/main.js">&lt;/script>
+&lt;/body>
+        </code></pre>
+    </section>
+
+    <section>
+        <pre class="flat"><code class="nohighlight" data-noescape>
+> uncss http://localhost:8080/showcase > static/css/bundle.css
+
+<span class="grey"># исходный размер одного библиотечного файла</span>
+> du -h node_modules/bootstrap/dist/css/bootstrap.css
+<span class="red">144K</span>    node_modules/bootstrap/dist/css/bootstrap.css
+
+<span class="grey"># итоговый размер всей сборки целиком</span>
+> du -h static/css/bundle.css
+<span class="green">4,0K</span>    static/css/bundle.css
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code class="html">
+&lt;img data-src="img/cats/angry.jpg">
+&lt;img data-src="img/cats/hangover.jpg">
+&lt;img data-src="img/cats/wise.jpg">
+        </code></pre>
+        <pre><code>
+window.onload = function () {
+    $('img').each(function () {
+        var $img = $(this);
+
+        $img.attr('src', $img.data('src'));
+    });
+};
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/after-resources-cleanup.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/need-server-tuning.png" alt="">
+    </section>
+
+    <section>
+        <h4>Ускоряем загрузку ресурсов</h4>
+    </section>
+
+    <section>
+        <ol>
+            <li>Включаем компрессию</li>
+            <li>Включаем кэширование</li>
+            <li>Используем CDN</li>
+        </ol>
+    </section>
+
+    <section>
+        <pre><code>
+// включаем GZIP
+app.use(require('compression')());
+
+// включаем кэширование на 30 дней
+app.use(express.static('static', {
+    maxAge: 1000 * 60 * 60 * 24 * 30
+}));
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/after-server-tweaks.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/with-cdn.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/without-cdn.png" alt="">
+    </section>
+</section>
+
+<section>
+    <p class="left pros">Уменьшайте количество запросов</p>
+    <p class="left pros">Оптимизируйте контент</p>
+    <p class="left pros">Используйте GZIP</p>
+    <p class="left pros">Настройте кэширование</p>
+    <p class="left pros">Используйте CDN</p>
+</section>
+
+<section>
+    <section>Developer Tools: Timeline</section>
+
+    <section>
+        <img src="img/timeline-intro.png" alt="">
+    </section>
+
+    <section>
+        <img src="img/timeline-focused.png" alt="">
+    </section>
+
+    <section>
+        <pre><code>
+setInterval(writeRandomFibonacciNumber, 10 * 1000);
+
+function writeRandomFibonacciNumber() {
+   var number = getRandomInt(35, 42);
+   var result = fib(number);
+
+   console.log('Fib(' + number + ') = ' + result);
+}
+
+function fib(n) {
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+    return fib(n - 2) + fib(n - 1);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h4>Избавляемся от блокирующих операций</h4>
+    </section>
+
+    <section>
+        <ul>
+            <li>Разбиваем тяжёлую работу на итерации</li>
+            <li>Выносим её в <a href="https://developer.mozilla.org/ru/docs/DOM/Using_web_workers">Web Worker</a></li>
+            <li>Используем <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback">requestIdleCallback</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <pre><code>
+// worker.js
+onmessage = function (event) {
+    var number = event.data;
+    var result = fib(number);
+
+    postMessage([number, result]);
+}
+
+function fib(n) {
+    if (n === 0) return 0;
+    if (n === 1) return 1;
+
+    return fib(n - 2) + fib(n - 1);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <pre><code>
+// main.js
+var myWorker = new Worker("js/worker.js");
+
+setInterval(function () {
+    var number = getRandomInt(35, 42);
+
+    worker.postMessage(number);
+}, 10 * 1000);
+
+myWorker.onmessage = function (event) {
+    var number = event.data[0]
+    var result = event.data[1];
+
+    console.log('Fib(' + number + ') = ' + result);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <img src="img/web-worker.png" alt="">
+    </section>
+</section>
+
+<section>
+    <p class="left">Размер страницы: <span class="red">4 MB</span> → <span class="green">300 KB</span></p>
+    <p class="left">Время загрузки: <span class="red">22 s</span> → <span class="green">1 s</span></p>
+</section>
+
+<section>
+    <h4>Рекомендации, а не догмы</h4>
+</section>
+
+<section>
+    <h4>HTTP2 <a href="https://www.youtube.com/watch?v=yURLTwZ3ehk">уже скоро</a></h4>
+    <p class="left cons">Уменьшайте количество запросов</p>
+    <p class="left pros">Оптимизируйте контент</p>
+    <p class="left pros">Используйте GZIP</p>
+    <p class="left pros">Настройте кэширование</p>
+    <p class="left pros">Используйте CDN</p>
+</section>
+
+<section>
+    <h4>Пользователи важнее, чем оценка PageSpeed</h4>
+</section>
+
+<section>
+    <section>Ресурсы</section>
+
+    <section>
+        <h4>Браузеры для разработки</h4>
+        <ul>
+            <li><a href="https://www.google.com/chrome/browser/canary.html">Google Chrome Canary</a></li>
+            <li><a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a></li>
+            <li><a href="https://blogs.windows.com/blog/tag/windows-insider-program/">Windows 10 Insider Preview Build</a></li>
+            <li><a href="http://www.opera.com/ru/developer">Opera Developer</a></li>
+            <li><a href="https://developer.apple.com/safari/technology-preview/">Safari Technology Preview</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Инструменты разработчика</h4>
+        <ul>
+            <li><a href="https://developer.chrome.com/devtools">Chrome DevTools</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox Developer Tools</a></li>
+            <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/platform/documentation/f12-devtools-guide/">Microsoft Edge F12</a></li>
+            <li><a href="https://developer.apple.com/safari/tools/">Safari Web Development Tools</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Аудит</h4>
+        <ul>
+            <li><a href="http://www.webpagetest.org/">WebPageTest</a> (<a href="https://github.com/marcelduran/webpagetest-api">api</a>)</li>
+            <li><a href="https://developers.google.com/speed/pagespeed/insights">PageSpeed Insights</a> (<a href="https://github.com/addyosmani/psi">psi</a>)</li>
+            <li><a href="https://developer.chrome.com/devtools#audits">Chrome DevTools: Audits</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Минификаторы</h4>
+        <ul>
+            <li><a href="https://github.com/mishoo/UglifyJS">UglifyJS</a></li>
+            <li><a href="https://github.com/jakubpawlowicz/clean-css">clean-css</a></li>
+            <li><a href="https://github.com/kangax/html-minifier">HTMLMinifier</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Оптимизаторы изображений</h4>
+        <ul>
+            <li><a href="https://github.com/svg/svgo">SVGO</a></li>
+            <li><a href="http://www.imagemagick.org/script/index.php">ImageMagick</a></li>
+            <li><a href="https://github.com/imagemin/imagemin">imagemin</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Извлечение стилей</h4>
+        <ul>
+            <li><a href="https://github.com/giakki/uncss">UnCSS</a></li>
+            <li><a href="https://github.com/pocketjoso/penthouse">penthouse</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Компрессия</h4>
+        <ul>
+            <li><a href="https://github.com/expressjs/compression">compression</a></li>
+        </ul>
+    </section>
+</section>
+
+<section data-background-image="img/performance_books.jpg">
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'none',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>

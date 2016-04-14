@@ -14,6 +14,7 @@
 12. [Паттерны](https://urfu-2015.github.io/webdev-slides/12-patterns/)
 13. [Тестирование. Эпизод II](https://urfu-2015.github.io/webdev-slides/13-client-tests/)
 15. Web APIs I: [Storage](https://urfu-2015.github.io/webdev-slides/15-1-storage-apis/), [Geolocation and Audio](https://urfu-2015.github.io/webdev-slides/15-2-geolocation-and-audio-apis/), [Fun](https://urfu-2015.github.io/webdev-slides/15-3-fun-apis/)
+16. [Производительность](https://urfu-2015.github.io/webdev-slides/16-dev-tools-and-performance/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)
