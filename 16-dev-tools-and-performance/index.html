@@ -255,6 +255,13 @@
             <li>Response: откликнуться за <span class="green">100 мс</span></li>
         </ul>
     </section>
+
+    <section>
+        <p class="left">Ускорение сайта уменьшает расходы на бэкенд.</p>
+        <p class="left">Производительность <a hreg="http://radar.oreilly.com/2009/06/bing-and-google-agree-slow-pag.html">влияет</a> на поведение пользователей</p>
+        <p class="left">Поисковые движки <a href="https://webmasters.googleblog.com/2010/04/using-site-speed-in-web-search-ranking.html">учитывают</a> скорость сайта при ранжировании.</p>
+        <p class="left">Мобильных пользователей <a href="http://www.smartinsights.com/mobile-marketing/mobile-marketing-analytics/mobile-marketing-statistics/">уже больше</a>, чем десктопных</p>
+    </section>
 </section>
 
 <section>
@@ -403,7 +410,7 @@ Bytes/Characters/Tokens/Nodes
     </section>
 
     <section>
-        <h4>65 из 77 запросов – икноки</h4>
+        <h4>65 из 77 запросов – иконки</h4>
     </section>
 
     <section>
@@ -488,6 +495,10 @@ Done in 21 ms!
     </section>
 
     <section>
+        <h4>2/3 размера страницы – jpeg-изображения</h4>
+    </section>
+
+    <section>
         <ol>
             <li>Уменьшаем размер изображений</li>
             <li>Вырезаем метаданные</li>
@@ -513,6 +524,10 @@ Done in 21 ms!
 
     <section>
         <img src="img/after-png-optimize.png" alt="">
+    </section>
+
+    <section>
+        <h4>Приближаем момент первой отрисовки</h4>
     </section>
 
     <section>
@@ -591,6 +606,10 @@ window.onload = function () {
     </section>
 
     <section>
+        <h4>Ускоряем загрузку ресурсов</h4>
+    </section>
+
+    <section>
         <ol>
             <li>Включаем компрессию</li>
             <li>Включаем кэширование</li>
@@ -628,7 +647,6 @@ app.use(express.static('static', {
     <p class="left pros">Оптимизируйте контент</p>
     <p class="left pros">Используйте GZIP</p>
     <p class="left pros">Настройте кэширование</p>
-    <p class="left pros">Откладывайте загрузку, если можно</p>
     <p class="left pros">Используйте CDN</p>
 </section>
 
@@ -660,6 +678,10 @@ function fib(n) {
     return fib(n - 2) + fib(n - 1);
 }
         </code></pre>
+    </section>
+
+    <section>
+        <h4>Избавляемся от блокирующих операций</h4>
     </section>
 
     <section>
@@ -711,6 +733,95 @@ myWorker.onmessage = function (event) {
 
     <section>
         <img src="img/web-worker.png" alt="">
+    </section>
+</section>
+
+<section>
+    <p class="left">Размер страницы: <span class="red">4 MB</span> → <span class="green">300 KB</span></p>
+    <p class="left">Время загрузки: <span class="red">22 s</span> → <span class="green">1 s</span></p>
+</section>
+
+<section>
+    <h4>Рекомендации, а не догмы</h4>
+</section>
+
+<section>
+    <h4>HTTP2 <a href="https://www.youtube.com/watch?v=yURLTwZ3ehk">уже скоро</a></h4>
+    <p class="left cons">Уменьшайте количество запросов</p>
+    <p class="left pros">Оптимизируйте контент</p>
+    <p class="left pros">Используйте GZIP</p>
+    <p class="left pros">Настройте кэширование</p>
+    <p class="left pros">Используйте CDN</p>
+</section>
+
+<section>
+    <h4>Пользователи важнее, чем оценка PageSpeed</h4>
+</section>
+
+<section>
+    <section>Ресурсы</section>
+
+    <section>
+        <h4>Браузеры для разработки</h4>
+        <ul>
+            <li><a href="https://www.google.com/chrome/browser/canary.html">Google Chrome Canary</a></li>
+            <li><a href="https://www.mozilla.org/en-US/firefox/developer/">Firefox Developer Edition</a></li>
+            <li><a href="https://blogs.windows.com/blog/tag/windows-insider-program/">Windows 10 Insider Preview Build</a></li>
+            <li><a href="http://www.opera.com/ru/developer">Opera Developer</a></li>
+            <li><a href="https://developer.apple.com/safari/technology-preview/">Safari Technology Preview</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Инструменты разработчика</h4>
+        <ul>
+            <li><a href="https://developer.chrome.com/devtools">Chrome DevTools</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/Tools">Firefox Developer Tools</a></li>
+            <li><a href="https://developer.microsoft.com/en-us/microsoft-edge/platform/documentation/f12-devtools-guide/">Microsoft Edge F12</a></li>
+            <li><a href="https://developer.apple.com/safari/tools/">Safari Web Development Tools</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Аудит</h4>
+        <ul>
+            <li><a href="http://www.webpagetest.org/">WebPageTest</a> (<a href="https://github.com/marcelduran/webpagetest-api">api</a>)</li>
+            <li><a href="https://developers.google.com/speed/pagespeed/insights">PageSpeed Insights</a> (<a href="https://github.com/addyosmani/psi">psi</a>)</li>
+            <li><a href="https://developer.chrome.com/devtools#audits">Chrome DevTools: Audits</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Минификаторы</h4>
+        <ul>
+            <li><a href="https://github.com/mishoo/UglifyJS">UglifyJS</a></li>
+            <li><a href="https://github.com/jakubpawlowicz/clean-css">clean-css</a></li>
+            <li><a href="https://github.com/kangax/html-minifier">HTMLMinifier</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Оптимизаторы изображений</h4>
+        <ul>
+            <li><a href="https://github.com/svg/svgo">SVGO</a></li>
+            <li><a href="http://www.imagemagick.org/script/index.php">ImageMagick</a></li>
+            <li><a href="https://github.com/imagemin/imagemin">imagemin</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Извлечение стилей</h4>
+        <ul>
+            <li><a href="https://github.com/giakki/uncss">UnCSS</a></li>
+            <li><a href="https://github.com/pocketjoso/penthouse">penthouse</a></li>
+        </ul>
+    </section>
+
+    <section>
+        <h4>Компрессия</h4>
+        <ul>
+            <li><a href="https://github.com/expressjs/compression">compression</a></li>
+        </ul>
     </section>
 </section>
 
