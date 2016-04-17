@@ -17,4 +17,5 @@
 16. [Производительность](https://urfu-2015.github.io/webdev-slides/16-dev-tools-and-performance/)
 
 # Слайды к хакатонам
-1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/1-hackatone/)
+1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-1/)
+1. [Второй хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-2/)
