@@ -18,8 +18,20 @@
     color: #a0a0f0 !important;
 }
 
+.yellow {
+    color: yellow !important;
+}
+
 .grey {
     color: #777 !important;
+}
+
+.blue {
+    color: #00b4ff !important;
+}
+
+.orange {
+    color: #e7ad52 !important;
 }
 
 img {
@@ -29,24 +41,26 @@ img {
     border: 0 !important;
 }
 
-img.invert {
-    -webkit-filter: invert(100%)
-}
-
 .textbook {
     font-family: 'textbook-light';
 }
 
+.left {
+    text-align: left;
+}
+
 .pros,
 .cons,
-.question {
-    position: relative;
+.question,
+.bullet {
+    text-align: left;
     padding-left: 50px !important;
 }
 
 .pros:before,
 .cons:before,
-.question:before {
+.question:before,
+.bullet:before {
     position: absolute;
     left: 0;
 }
@@ -66,6 +80,11 @@ img.invert {
     color: #546BD2 !important;
 }
 
+.bullet:before {
+    content: '●';
+    color: #cccccc;
+}
+
 .progress {
     height: 4px !important;
 }
@@ -75,7 +94,7 @@ img.invert {
     font-size: 35px !important;
 }
 
-.author small::first-letter {
+.authores small::first-letter {
     color: red;
 }
 
@@ -112,62 +131,18 @@ pre code {
     max-height: 100% !important;
 }
 
-.join {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-}
-
-.join code {
-    padding: 18px 25px !important;
+pre.flat code {
+    padding: 0 0 !important;
     border: 0 !important;
+    background: none !important;
 }
 
-.left {
-    text-align: left;
-}
-
-section.size-L,
-section .size-L,
-pre.size-L
+.reload
 {
-    font-size: 60px !important;
-    line-height: 90px !important;
-}
-
-section.size-M,
-section .size-M,
-pre.size-M,
-.yandex section
-{
-    font-size: 50px !important;
-    line-height: 75px !important;
-}
-
-section.size-S,
-section .size-S,
-pre.size-S
-{
-    font-size: 40px !important;
-    line-height: 60px !important;
-}
-
-section.size-XS,
-section .size-XS,
-pre.size-XS
-{
-    font-size: 30px !important;
-    line-height: 45px !important;
-}
-
-section.size-XXS,
-section .size-XXS,
-pre.size-XXS
-{
-    font-size: 20px !important;
-    line-height: 30px !important;
-}
-
-.reveal mark, .reveal mark *
-{
-    color: black !important;
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    top: 15px;
+    left: -100px;
 }

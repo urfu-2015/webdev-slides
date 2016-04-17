@@ -89,12 +89,110 @@
     <p class="left fragment">Загрузка файлов – <span class="grey">Busboy, Multer</span></p>
     <p class="left fragment">Остальные рекомендации в <a href="https://github.com/urfu-2015/webdev-slides">лекциях</a></p>
     <p>&nbsp;</p>
-    <p class="fragment">В отличии от домашек здесь можно и нужно пользоваться готовыми решениями!</p>
+    <p class="fragment red">В отличии от домашек здесь можно и нужно пользоваться готовыми решениями!</p>
 </section>
 
 <section>
     <h4 class="green">Регламент</h4>
     <p><span class="red">8</span> часов + 🍴</p>
+</section>
+
+<section>
+    <h4 class="blue">Hackaflow</h4>
+    <ol class="fragment left">
+        <li class="left">Подготовка к разработке</li>
+        <li class="left">Начало работы над задачей</li>
+        <li class="left">Работа над задачей</li>
+        <li class="left">Создание пулла c решением</li>
+        <li class="left">Ревью и обновление пулла</li>
+        <li class="left">Слияние пулла</li>
+    </ol>
+</section>
+
+<section>
+    <h4 class="blue">1. Подготовка к разработке</h4>
+    <pre class="flat">
+
+<span class="fragment"><img src="img/fork.png" width=100></span>
+<span class="fragment">git <span class="green">clone</span> <span class="grey">%origin_url%</span></span>
+
+<span class="fragment">git <span class="green">remote</span> add upstream <span class="grey">%upstream_url%</span></span>
+    </pre>
+</section>
+
+<section>
+    <img src="img/flow.png" width=800>
+</section>
+
+<section>
+    <h4 class="blue">2. Начало работы над задачей</h4>
+    <pre class="flat">
+
+<span class="fragment">git <span class="green">checkout</span> master</span>
+
+<span class="fragment">git <span class="green">pull</span> upstream master</span>
+
+<span class="fragment">git <span class="green">checkout</span> <span class="magenta">-b</span> <span class="grey">%feature_name%</span></span>
+    </pre>
+</section>
+
+<section>
+    <h4 class="blue">3. Работа над задачей</h4>
+
+    <pre class="flat">
+
+<span class="fragment">git <span class="green">add</span> <span class="grey">%files%</span></span>
+
+<span class="fragment">git <span class="green">commit</span> <span class="magenta">-m</span> <span class="grey">"%message%"</span></span>
+<div class="reload fragment"><img src="img/reload.gif" width=100 height=100></div>
+    </pre>
+</section>
+
+<section>
+    <h4 class="blue">4. Создание пулла c решением</h4>
+    <pre class="flat">
+
+<span>git <span class="green">checkout</span> <span class="grey">%feature_name%</span></span>
+
+<span class="fragment">git <span class="green">pull</span> upstream <span class="magenta">--rebase</span> master</span>
+<img class="fragment" src="img/rebase.png">
+<span class="fragment"><span class="red">*</span> git <span class="green">add</span> <span class="grey">%files%</span></span>
+
+<span class="fragment"><span class="red">*</span> git <span class="green">rebase</span> <span class="magenta">--continue</span></span>
+<div class="reload fragment" style="top: 340px"><img src="img/reload.gif" width="100" height="100"></div>
+<span class="fragment">git <span class="green">push</span> origin <span class="grey">%feature_name%</span></span>
+    </pre>
+
+</section>
+
+<section>
+    <h4 class="blue">5. Ревью и обновление пулла</h4>
+    <pre class="flat fragment">
+
+<span>git <span class="green">checkout</span> <span class="grey">%feature_name%</span></span>
+
+<span>git <span class="green">add</span> <span class="grey">%files%</span></span>
+
+<span>git <span class="green">commit</span> <span class="magenta">-m</span> <span class="grey">"%message%"</span></span>
+<div class="reload" style="top: 80px"><img src="img/reload.gif" width="100" height="100"></div>
+<span>git <span class="green">pull</span> upstream <span class="magenta">--rebase</span> master</span>
+
+<span>git <span class="green">push</span> <span class="red">-f</span> origin <span class="grey">%feature_name%</span></span>
+    </pre>
+</section>
+
+<section>
+    <h4 class="blue">6. Слияние пулла</h4>
+    <pre class="flat fragment">
+
+<span>git <span class="green">checkout</span> <span class="grey">%feature_name%</span></span>
+
+<span>git <span class="green">pull</span> upstream <span class="magenta">--rebase</span> master</span>
+
+<span>git <span class="green">push</span> <span class="red">-f</span> origin <span class="grey">%feature_name%</span></span>
+
+<span class="fragment"><img src="img/merge.png"></span>
+    </pre>
 </section>
 
 <section data-background="img/go.png" data-background-size="70%" data-background-color="black"></section>
