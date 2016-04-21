@@ -266,7 +266,7 @@ class Cache {
         <pre class="fragment" data-fragment-index="2"><code>&nbsp;</code></pre>
         <pre class="fragment" data-fragment-index="4"><code>    return Promise.resolve()</code></pre>
         <pre class="fragment" data-fragment-index="4"><code>        .then(fn)</code></pre>
-        <pre class="fragment" data-fragment-index="5"><code>        .then(results => {})</code></pre>
+        <pre class="fragment" data-fragment-index="5"><code>        .then(results => {</code></pre>
         <pre class="fragment" data-fragment-index="6"><code>            cache.set(key, result, maxAge * 1000);</code></pre>
         <pre class="fragment" data-fragment-index="7"><code>            return result;</code></pre>
         <pre class="fragment" data-fragment-index="5"><code>        });</code></pre>
