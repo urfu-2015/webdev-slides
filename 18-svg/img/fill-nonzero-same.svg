@@ -1,0 +1,59 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="250" height="310" version="1.1"
+viewBox="0 0 250 310" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  style="border: 0px dashed blue;"
+	  >
+	   <title>Two paths in the same direction, fill rule nonzero </title>
+	  <!--http://svg-art.ru  Alexander Teterin --> 
+	 <desc> fill rule nonzero </desc>
+   <defs>
+       <pattern id="newpattern"
+           x="0" y="0" width="20" height="20"
+           patternUnits="userSpaceOnUse" >
+		   
+          <g fill="#85D2FF" fill-opacity="0.4" stroke-width="0.5px" stroke="none">
+           <rect x="0" y="0" width="10" height="10" />
+           <rect x="10" y="10" width="10" height="10" />
+          </g>
+      </pattern>
+	  <marker id="MarkerArrow"  refX="2" refY="4"
+        markerUnits="userSpaceOnUse"  orient="auto"
+        markerWidth="12" markerHeight="8" >
+        <polyline id="markerPoly1" points="0,0 12,2 0,4 2,2 0,0"
+        fill="none" stroke-width="2" stroke="black"  />
+    </marker> 
+    </defs>
+     
+	 
+	  <rect x="0" y="0" width="250" height="310"
+          style="stroke: #000000; fill: url(#newpattern);" />    	
+         	 
+	     <path d="M25,225 25,25 225,25 225,225 25,225
+		          M75,175 75,75 175,75 175,175 75,175 " 
+           style="stroke:blue; stroke-width:2;  fill:dodgerblue; fill-rule:nonzero;fill-opacity:0.6;
+		   marker-start: url(#MarkerArrow); marker-mid: url(#MarkerArrow)"/>
+	<g 	fill="red" stroke-width="2" stroke="orange">
+       <desc> the point of intersection </desc> 	
+		<circle cx="125" cy="125" r="4" fill="black"  />
+		<circle cx="75" cy="125" r="3" fill="red"  />
+		<circle cx="25" cy="125" r="3" fill="red"  />
+	</g>
+		<line x1="125" y1="125"  x2="0" y2="125" 
+			stroke-width="2" stroke="green" /> 
+	  
+	 <text x="80" y="120"  font-family="Arial"  font-size="16" fill="red" >+1
+		<tspan x="30"> +1</tspan>
+	 </text>
+		 <text x="115" y="120"  font-family="Arial"  font-size="16" fill="red" >	= +2</text>
+			 <text x="45" y="260"  font-family="Arial"  font-size="16" font-weight="bold" > 
+				 Same direction
+				 <tspan x="45" dy="30">  fill-rule = "nonzero" </tspan>
+				 <tspan fill="crimson" x="205" dy="10">  Pic.1 </tspan>
+		    </text>	  	  
+				
+	
+	
+</svg>		   

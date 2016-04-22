@@ -1,0 +1,83 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="250" height="310" version="1.1"
+viewBox="0 0 250 310" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  style="border: 0px dashed blue;"
+	  >
+	   <title>Three paths, fill rule evenodd </title>
+	  <!--http://svg-art.ru  Alexander Teterin --> 
+	 <desc> fill rule evenodd </desc>
+   <defs>
+       <pattern id="newpattern"
+           x="0" y="0" width="20" height="20"
+           patternUnits="userSpaceOnUse" >
+		   
+          <g fill="#85D2FF" fill-opacity="0.4" stroke-width="0.5px" stroke="none">
+           <rect x="0" y="0" width="10" height="10" />
+           <rect x="10" y="10" width="10" height="10" />
+          </g>
+      </pattern>
+	  <marker id="MarkerArrow"  refX="2" refY="2"
+        markerUnits="userSpaceOnUse"  orient="auto"
+        markerWidth="12" markerHeight="8" >
+        <polyline id="markerPoly1" points="0,0 12,2 0,4 2,2 0,0"
+        fill="none" stroke-width="2" stroke="black"  />
+    </marker> 
+    </defs>
+     
+	 
+	  <rect x="0" y="0" width="250" height="310"
+          style="stroke: #000000; fill: url(#newpattern);" />    	
+         	 
+	     <path d="M25,225 25,25 225,25 225,225z  
+		          M25,185 185,185 225,65z
+				  M70,145 145,145 145,90 90,90z"
+				  
+           style="stroke:blue; stroke-width:2;  fill:dodgerblue; fill-rule:evenodd;fill-opacity:0.6;"/>
+		  
+	<g 	fill="red" stroke-width="2" stroke="orange">
+       <desc> the point of intersection green line</desc> 	
+		<circle cx="215" cy="125" r="3"   />
+		<circle cx="180" cy="125" r="3"   />
+		<circle cx="135" cy="125" r="3"   />
+		<circle cx="100" cy="125" r="3"   />
+		<circle cx="45" cy="125" r="3"   />
+	</g>
+		<line x1="240" y1="125"  x2="0" y2="125" 
+			stroke-width="2" stroke="green" stroke-dasharray="5 5" /> 
+	
+			 <text x="45" y="260"  font-family="Arial"  font-size="16" font-weight="bold" > 
+				  <tspan x="45" dy="10">  fill-rule = "evenodd" </tspan>
+				 <tspan fill="crimson" x="205" dy="30">  Pic.7 </tspan>
+		    </text>	  	  
+			   <text x="8" y="142"  font-family="Arial"  font-size="16" font-weight="bold" fill="black" > &#8667;
+			       <tspan x="35"> 1 </tspan>
+				   <tspan x="85"> 2 </tspan>
+				   <tspan x="130"> 3 </tspan>
+				   <tspan x="180"> 4 </tspan>
+				   <tspan x="210"> 5 </tspan>
+	          </text>
+		  <text x="224" y="118"  font-family="Arial"  font-size="16" font-weight="bold" fill="green" > &#8666;
+		   <tspan x="210"> 1 </tspan>
+		   <tspan x="180"> 2 </tspan>
+		   <tspan x="130"> 3 </tspan>
+		   <tspan x="85"> 4 </tspan>
+		   <tspan x="35"> 5 </tspan>
+	   </text>
+	   
+   <line x1="160" y1="15"  x2="160" y2="240" 
+    	stroke-width="2" stroke="red" stroke-dasharray="5 5" /> 
+	  <text x="153" y="252"  font-family="Arial"  font-size="16" font-weight="bold" fill="crimson" > &#8682;
+		   <tspan x="165" y="210"> 1 </tspan>
+		   <tspan x="165" y="170" > 2 </tspan>
+		    <tspan x="165" y="55"> 3 </tspan>
+	   </text>
+           <g 	fill="red" stroke-width="2" stroke="orange" >
+				<desc> the point of intersection red line </desc> 	
+				<circle cx="160" cy="55" r="3"   />
+				<circle cx="160" cy="165" r="3"   />
+				<circle cx="160" cy="212" r="3"   />
+			</g>
+</svg>		   

@@ -1,0 +1,2298 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>******</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/hljs.css">
+    <link rel="stylesheet" href="./css/user.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Task', 'Hours per Day'],
+                ['Пк', 59],
+                ['Планшеты', 17],
+                ['Смартфоны', 23],
+                ['TV', 0.3]
+            ]);
+
+            var options = {
+                is3D: true,
+//           pieSliceText: 'label',
+                backgroundColor: 'transparent',
+                legend: { textStyle: { color: 'white', fontSize: 25 } },
+                slices: { 3: { offset: 0.2 } }
+//         title: 'My Daily Activities'
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+</head>
+<body class="yandex nodejs">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="large">
+            <div class="world-map fragment">
+                <img src="img/map.svg">
+            </div>
+            <!--<h3>SVG<br/>-->
+            <!--</h3>-->
+            <!--<p class="author">-->
+            <!--<small>Кувалдин Артем,</small>-->
+            <!--<small>Грищенко Антон</small>-->
+            <!--</p>-->
+        </section>
+
+
+        <section>
+            <!--<h2>SVG</h2>-->
+            <svg viewBox="0 0 800 300">
+
+            <pattern
+                       id="p-fire"
+                       viewBox="30 100 186 200"
+                       patternUnits="userSpaceOnUse"
+                       width="216" height="200"
+                       x="-70" y="35">
+
+                <!-- Fire -->
+                <image xlink:href="http://tympanus.net/codrops-playground/assets/images/posts/23145/fire.gif" width="256" height="300"/>
+              </pattern>
+
+              <!-- Text -->
+              <a href="http://tympanus.net/codrops/2015/02/16/create-animated-text-fills/"><text text-anchor="middle"
+                    x="50%"
+                    y="50%"
+                    dy=".35em"
+                    class="svg-text-show">
+                    <!--fill="url(#p-fire)";-->
+
+                SVG
+              </text><a>
+            </svg>
+            <p>– это формат векторных изображений, основанный на XML.</p>
+        </section>
+
+        <section>
+            <h2>Преимущества SVG</h2>
+            <ul>
+                <li class="fragment plus">Масштабирование без потери качества</li>
+                <li class="fragment plus">Меньше размер чем растр</li>
+                <li class="fragment plus">Можно открыть в текстовом редакторе</li>
+                <li class="fragment plus">Может содержать логику (Javascript)</li>
+                <li class="fragment plus">Частями изображения можно манипулировать с помощью CSS и JS</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Недостатки</h2>
+            <ul>
+                <li class="fragment minus">Больший расход CPU.
+                </li>
+                <li class="fragment minus">Слишком детализированные svg могут иметь большой размер.</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Структура SVG</h2>
+<pre class="xml"><code>&lt;?xml version="1.0">
+&lt;svg version="1.0" xmlns="http://www.w3.org/2000/svg">
+…
+&lt;/svg>
+
+</code></pre>
+<pre class="xml fragment"><code>&lt;svg>
+<!--минимально возможный при вставке в html-->
+&lt;/svg>
+</code></pre>
+        </section>
+
+        <section>
+<pre class="xml"><code>&lt;?xml version=”1.0" encoding=”UTF-8" standalone=”no”?>
+&lt;svg width=”24px” height=”25px” viewBox=”0 0 24 25"
+version=”1.1" xmlns=”>http://www.w3.org/2000/svg"
+xmlns:xlink=”http://www.w3.org/1999/xlink"
+xmlns:sketch=”http://www.bohemiancoding.com/sketch/ns">
+ <! — Generator: Sketch 3.3 (11970) — http://www.bohemiancoding.com/sketch →
+ <title>add</title>
+ <desc>Created with Sketch.</desc>
+...
+&lt;/svg></code></pre>
+        </section>
+
+        <section>
+            <h3>Встраивание svg</h3>
+<pre><code><embed src="your.svg" width="199" height="200">
+</code></pre>
+<pre class="html"><code>&lt;object data="your.svg"
+type="image/svg+xml" width="199" height="200"></object>
+</code></pre>
+
+<pre><code>&lt;iframe src="your.svg"
+width="199px" height=“200px"></iframe>
+</code></pre>
+
+            <ul>
+                <li class="fragment plus">Содержимое доступно для внешнего JavaScript</li>
+                <li class="fragment plus">Интерактивная стилизация через CSS работает(hover)</li>
+            </ul>
+        </section>
+
+        <section>
+<pre class="html"><code><!--IMG-->
+<img src=“your.svg”>
+</code></pre>
+<pre class="css fragment"><code>/*Css backgrounds*/
+.elem {
+    background-image: url(your.svg);
+}
+</code></pre>
+        <ul>
+            <li class="fragment minus">Содержимое недоступно для JS</li>
+            <li class="fragment minus">Не работает интерактивная стилизация</li>
+        </ul>
+        </section>
+
+        <section>
+<pre><code><!--inline-->
+&lt;svg width="200px" height="200px">
+…
+&lt;/svg>
+</code></pre>
+            <ul>
+                <li class="fragment plus">Позволяет использовать не только внутреннюю стилизацию</li>
+                <li class="fragment minus">Не кэшируется браузером</li>
+                <li class="fragment minus">Неудобно его редактировать в графическом редакторе, оптимизировать</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Фигуры</h2>
+        </section>
+
+        <style>
+            .draw-rect svg {
+                border: 1px solid skyblue;
+            }
+            .draw-rect svg rect {
+                transition: 1s;
+                width: 0;
+                height: 0;
+            }
+            .draw-rect .f1.visible ~ svg rect{
+                width: 220px;
+                height: 200px;
+                fill: skyblue;
+            }
+            .draw-rect .f2.visible ~ svg rect{
+                stroke: #ff1919;
+                stroke-width: 10px;
+            }
+            .draw-rect .f3.visible ~ svg rect{
+                transform: translate(15px, 15px);
+            }
+        </style>
+        <section class="draw-rect">
+            <h2>rect</h2>
+<pre class="xml"><code data-noescape>&lt;svg width="300" height="240">
+    &lt;rect <mark class="fragment switch" data-fragment-index="1">width="220" height="130" fill="skyblue"</mark>
+    <mark class="fragment switch" data-fragment-index="2">stroke="#ff1919" stroke-width="10"</mark> <mark class="fragment switch" data-fragment-index="3">x="15" y="15"</mark>/>
+&lt;/svg>
+</code></pre>
+            <div class="fragment f1" data-fragment-index="1"></div>
+            <div class="fragment f2" data-fragment-index="2"></div>
+            <div class="fragment f3" data-fragment-index="3"></div>
+
+            <svg width="300" height="240">
+                <rect  class="rect"/>
+            </svg>
+
+        </section>
+
+        <section class="rect-radius">
+            <h2>rect</h2>
+<pre><code data-noescape>&lt;svg width="230" height="140">
+    &lt;rect x="5" y="5" width="220" height="130"
+    fill="yellowgreen"<mark>rx="30" ry="30"</mark>/>
+
+    &lt;rect x="225" y="5" width="220" height="130"
+    fill="#ee204d" <mark class="fragment" data-fragment-index="1">rx="60" ry="30"</mark>/>
+&lt;/svg>
+</code></pre>
+
+            <svg width="450" height="140">
+                <rect x="30" y="5" width="180" height="130" rx="30" ry="30"
+                      fill="yellowgreen" stroke="green" stroke-width="5" />
+
+                <rect class="fragment" data-fragment-index="1" x="255" y="5" width="180" height="130" rx="60" ry="30"
+                      fill="#ee204d" stroke="#ad102f" stroke-width="5" />
+            </svg>
+
+        </section>
+
+
+        <style>
+            .show-circle .fragment circle,
+            .show-circle .fragment ellipse{
+                transition: 1s ease-in;
+                transform: scale(0);
+                transform-origin: 50%;
+            }
+            .show-circle .fragment.visible circle,
+            .show-circle .fragment.visible ellipse{
+                transform: scale(1);
+            }
+        </style>
+        <section class="show-circle">
+            <h3>circle/ellipse</h3>
+<pre><code>&lt;circle r="65" cx="70" cy="70" fill="orangered"/>
+</code></pre>
+        <div class="fragment" data-fragment-index="1">
+        <svg width="140" height="140">
+             <circle r="65" cx="70" cy="70"
+                     fill="orangered" stroke="crimson" stroke-width="5" />
+        </svg>
+        </div>
+<pre class="xml fragment" data-fragment-index="2"><code>&lt;ellipse rx="110" ry="60" cx="115" cy="70" fill="gold" />
+</code></pre>
+            <div class="fragment"  data-fragment-index="3">
+                <svg width="230" height="140">
+                     <ellipse rx="110" ry="60" cx="115" cy="70"
+                              fill="gold" stroke="orange" stroke-width="5" />
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h3>line</h3>
+<pre><code>&lt;line x1="220" y1="10" x2="20" y2="130"/>
+</code></pre>
+            <div class="fragment">
+                <svg width="330" height="240">
+                    <line x1="320" y1="10" x2="20" y2="230" stroke="violet" stroke-width="5" />
+                </svg>
+            </div>
+        </section>
+
+        <style>
+            .show-polyline .fragment svg {
+                transition: 1s ease-in-out;
+                width: 0;
+            }
+            .show-polyline .fragment.visible svg {
+                width: 260px;
+            }
+        </style>
+        <section class="show-polyline">
+            <h3>polyline</h3>
+<pre><code>&lt;polyline points="5,135 30,5 55,135 80,5, 105,135 130,5, 155,135 180,5, 205,135 230,5, 255,135"
+  fill="none"/>
+</code></pre>
+            <div class="fragment">
+                <svg width="560" height="270" viewBox="0 0 260 170">
+                    <polyline points="5,135 30,5 55,135 80,5, 105,135 130,5, 155,135 180,5, 205,135 230,5, 255,135"
+                              fill="none" stroke="orangered" stroke-width="5" />
+                    <text fill="#fff" x="0" y="155" font-size="20">5,135</text>
+                    <text fill="#fff" x="10" y="25" font-size="20">30,5</text>
+                    <text fill="#fff" x="33" y="135" font-size="20">55,135</text>
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h3>polygon</h3>
+<pre><code>             <!--x,y  x2,y2 x3,y3 ....-->
+&lt;polygon points="70,5 90,41 136,48 103,80 111,126
+70,105 29,126 36,80 5,48 48,41"/>
+</code></pre>
+
+            <div class="fragment">
+                <svg width="340" height="330" viewBox="0 0 140 130">
+                    <polygon points="70,5 90,41 136,48 103,80 111,126 70,105 29,126 36,80 5,48 48,41"
+                             fill="turquoise" stroke="lightseagreen" stroke-width="5" />
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h2>Трансформации</h2>
+        </section>
+        <style>
+            .show-transform svg g {
+                transition: 1s;
+            }
+
+            .show-transform svg {
+                border: 1px dashed rgba(255,255,255,.3);
+            }
+            .show-transform .f1.visible ~ svg g {
+                transform: translate(50px, 50px);
+            }
+
+            .show-transform .f2.visible ~ svg g {
+                transform: translate(50px, 50px) scale(1.5, 2);
+            }
+
+            .show-transform .f3.visible ~ svg g {
+                transform: translate(50px, 50px) scale(2, 2.5) skew(30deg);
+            }
+        </style>
+        <section class="show-transform">
+            <a href="https://css-tricks.com/transforms-on-svg-elements/"><h3>Трансформации</h3></a>
+<pre class="xml"><code  data-noescape>&lt;rect x="50" y="20" width="100" height="100"
+transform="<mark class="fragment" data-fragment-index="1">translate(50, 50)</mark> <mark class="fragment" data-fragment-index="2">scale(1.5, 2)</mark> <mark class="fragment" data-fragment-index="3">skew(30)</mark>"/>
+</code></pre>
+
+            <!--перемещение-->
+            <div class="fragment f1"  data-fragment-index="1"></div>
+            <!--увелицение-->
+            <div class="fragment f2"  data-fragment-index="2"></div>
+            <!--skew-->
+            <div class="fragment f3"  data-fragment-index="3"></div>
+            <svg width="300" height="300" style="overflow: visible">
+
+                <!-- non-rotated arrow -->
+                <g id="arrow" style="stroke: #fff;">
+                    <line x1="0" y1="0" x2="120" y2="0"/>
+                    <line x1="0" y1="0" x2="0" y2="120"/>
+                    <polygon points="120 0, 115 5, 115 -5"/>
+                    <polygon points="0 120, 5 115, -5 115"/>
+                    <rect x="50" y="20" width="100" height="100" fill="gold" stroke="orange" stroke-width="5"/>
+                    <circle cx="0" cy="0" r="10" style="fill: red;" />
+                </g>
+                <!--&lt;!&ndash; вращение вокруг произвольной &ndash;&gt;-->
+                <!--<use xlink:href="#arrow" transform="rotate(90)" />-->
+
+            </svg>
+        </section>
+
+        <style>
+            .show-transform-rotate svg circle,
+            .show-transform-rotate svg line,
+            .show-transform-rotate svg polygon,
+            .show-transform-rotate svg g {
+                transition: 1s;
+            }
+
+            .show-transform-rotate svg {
+                border: 1px dashed rgba(255,255,255,.3);
+            }
+            .show-transform-rotate .f1.visible ~ svg g {
+                transform: rotate(45deg);
+            }
+
+            .show-transform-rotate .f2.visible ~ svg g {
+                transform: rotate(45deg);
+                transform-origin: 75px 60px;
+            }
+            .show-transform-rotate .f2.visible ~ svg line,
+            .show-transform-rotate .f2.visible ~ svg polygon,
+            .show-transform-rotate .f2.visible ~ svg circle {
+                transform: translate(100px, 70px);
+            }
+        </style>
+        <section class="show-transform-rotate">
+            <a href="https://css-tricks.com/transforms-on-svg-elements/"><h3>Rotate</h3></a>
+<pre class="xml"><code  data-noescape>&lt;rect x="50" y="20" width="100" height="100" fill="gold"
+stroke="orange"
+stroke-width="5" transform="<mark class="fragment" data-fragment-index="1">rotate(45<mark class="fragment" data-fragment-index="2"> 100 70</mark>)</mark>"/>
+</code></pre>
+
+            <!--перемещение-->
+            <div class="fragment f1"  data-fragment-index="1"></div>
+            <!--увелицение-->
+            <div class="fragment f2"  data-fragment-index="2"></div>
+            <!--skew-->
+            <svg width="300" height="300" style="overflow: visible">
+
+                <!-- non-rotated arrow -->
+                <g id="arrow" style="stroke: #fff;">
+                    <line x1="0" y1="0" x2="120" y2="0"/>
+                    <line x1="0" y1="0" x2="0" y2="120"/>
+                    <polygon points="120 0, 115 5, 115 -5"/>
+                    <polygon points="0 120, 5 115, -5 115"/>
+                    <rect x="50" y="20" width="100" height="100" fill="gold" stroke="orange" stroke-width="5"/>
+                    <circle cx="0" cy="0" r="10" style="fill: red;" />
+                </g>
+                <!--&lt;!&ndash; вращение вокруг произвольной &ndash;&gt;-->
+                <!--<use xlink:href="#arrow" transform="rotate(90)" />-->
+
+            </svg>
+        </section>
+
+        <style>
+            .show-rotate-hard svg rect:not(.r1),
+            .show-rotate-hard svg circle {
+                opacity: 0;
+            }
+
+            .show-rotate-hard svg {
+                border: 1px dashed rgba(255,255,255,.3);
+            }
+            .show-rotate-hard svg rect {
+                fill: #1e88e5
+            }
+            .show-rotate-hard .f1.visible ~ svg .r1 {
+                opacity: 0;
+            }
+            .show-rotate-hard .f1.current-fragment ~ svg .c1,
+            .show-rotate-hard .f2.current-fragment ~ svg .c1,
+            .show-rotate-hard .f3.current-fragment ~ svg .c2,
+            .show-rotate-hard .f4.current-fragment ~ svg .c2,
+            .show-rotate-hard .f1.current-fragment ~ svg .r2,
+            .show-rotate-hard .f2.current-fragment ~ svg .r3,
+            .show-rotate-hard .f3.current-fragment ~ svg .r4,
+            .show-rotate-hard .f4.current-fragment ~ svg .r5
+            {
+                opacity: 1;
+            }
+        </style>
+        <section class="show-rotate-hard">
+            <h3>Rotate</h3>
+<pre><code data-noescape>&lt;rect x="0" y="0" width="20" height="80"
+    transform="<mark class="fragment" data-fragment-index="1">rotate(90 20 80)</mark> <mark class="fragment" data-fragment-index="3">rotate(90 20 0)</mark>"/>
+</code></pre>
+            <div class="fragment f1"  data-fragment-index="1"></div>
+            <div class="fragment f2"  data-fragment-index="2"></div>
+            <div class="fragment f3"  data-fragment-index="3"></div>
+            <div class="fragment f4"  data-fragment-index="4"></div>
+            <svg width="300" height="300">
+              <rect class="r1" x="0" y="0" width="40" height="150" />
+              <rect class="r2" x="0" y="0" width="40" height="150" transform="rotate(45 40 150)"/>
+              <rect class="r3" x="0" y="0" width="40" height="150" transform="rotate(90 40 150)"/>
+            <circle class="c1" cx="40" cy="150" r="8" fill="red"/>
+              <rect class="r4" x="0" y="0" width="40" height="150" transform="rotate(90 40 150) rotate(45 40 0)"/>
+              <rect class="r5" x="0" y="0" width="40" height="150" transform="rotate(90 40 150) rotate(90 40 0)"/>
+            <circle class="c2" cx="190" cy="150" r="8" fill="red"/>
+            </svg>
+        </section>
+
+        <section>
+            <h3>SVG-path</h3>
+<pre><code>&lt;path d="M 10,110 L 10,10 L 40,50 L 70,10 L 100,50
+L 130,10 L 130,110 z" fill="gold" stroke="orange"
+stroke-width="5"/>
+</code></pre>
+
+            <div class="fragment"><svg width="300" height="260">
+                <path transform="scale(2)" d="M 10,110 L 10,10 L 40,50 L 70,10 L 100,50 L 130,10 L 130,110 z"
+                          fill="gold" stroke="orange" stroke-width="5"/>
+            </svg></div>
+        </section>
+
+        <section data-background-image="img/Wat_cat_whale.jpg" data-background-size="auto 100%">
+
+        </section>
+
+        <section>
+            <h3>Команды</h3>
+<pre><code data-noescape>&lt;path stroke="orange" stroke-width="3"
+d="M 20,20 L150,150
+<mark class="fragment" data-fragment-index="1">&lt;!--В нижнем — относительные-->
+    m -100,0 l150,100</mark>
+<mark class="fragment" data-fragment-index="2">&lt;!--Верхний регистр – абсолютные координаты-->
+    M 70,20 L200,150"</mark>/></code></pre>
+            <div class="ex">
+                <svg width="300" height="300">
+                    <path stroke="orange" stroke-width="3"
+                            d="M 20,20 L150,150"/>
+                    <path data-fragment-index="1" class="fragment" stroke="orange" stroke-width="3"
+                            d="M 20,20 L150,150
+                            m -100,0 l150,100"/>
+                    <path data-fragment-index="2" class="fragment" stroke="orange" stroke-width="3"
+                            d="M 70,20 L200,150"/>
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h3>Команды</h3>
+            <ul>
+                <li>M, m(moveto) – устанавливает новую текущую точку.</li>
+                <li>L, l(line) – рисование линии</li>
+            </ul>
+<pre class="xml"><code data-noescape="">&lt;path stroke="orange" stroke-width="3"
+d="M 20,20 L80,20 <mark class="fragment" data-fragment-index="1">20,100</mark> <mark class="fragment" data-fragment-index="2">M150,50 L50,150</mark> <mark class="fragment" data-fragment-index="3">150,120</mark>"/></code></pre>
+            <svg width="300" height="200">
+                <!--<path stroke="orange" stroke-width="3" d="M 20,20 L80,20 20,100 M150,50 L50,150 150,120"/>-->
+
+                <path stroke="orange" stroke-width="3" d="M 20,20 L80,20"/>
+                <path data-fragment-index="1" class="fragment" stroke="orange" stroke-width="3" d="M 20,20 L80,20 20,100"/>
+                <path data-fragment-index="2" class="fragment" stroke="orange" stroke-width="3" d=" M150,50 L50,150"/>
+
+                <path data-fragment-index="3" class="fragment" stroke="orange" stroke-width="3" d=" M150,50 L50,150  150,120"/>
+            </svg>
+        </section>
+
+        <section>
+            <a href="https://www.w3.org/TR/SVG/paths.html#PathDataCurveCommands"><h3>Команды</h3></a>
+            <ul>
+                <li>H, h и V, v – рисование горизонтальных и вертикальных линий.</li>
+                <li>Z, z – команда замыкание фигуры</li>
+            </ul>
+<pre class="xml"><code data-noescape="">&lt;path stroke="lightseagreen" stroke-width="5"
+    d="<mark class="fragment switch" data-fragment-index="1">M 200,20 h 160</mark> <mark class="fragment switch" data-fragment-index="2">v 160</mark> <mark class="fragment switch" data-fragment-index="3">h -80</mark> <mark class="fragment switch" data-fragment-index="4">v -80</mark> <mark class="fragment switch" data-fragment-index="5">h -80</mark> <mark class="fragment switch" data-fragment-index="6">z</mark>"/></code></pre>
+<pre><code data-noescape>&lt;path stroke="red" stroke-width="5"
+    d="<mark class="fragment switch" data-fragment-index="1">M 20,20 H 160</mark> <mark class="fragment switch" data-fragment-index="2">V 160</mark> <mark class="fragment switch" data-fragment-index="3">H -80</mark> <mark class="fragment switch" data-fragment-index="4">V -80</mark> <mark class="fragment switch" data-fragment-index="5">H -80</mark> <mark class="fragment switch" data-fragment-index="6">z</mark>"/>
+</code></pre>
+            <svg  width="500" height="200">
+                <!--<path stroke="lightseagreen" stroke-width="5" fill="turquoise" d="M 20,20 h 160 v 160 h -80 v -80 h -80 z"/>-->
+
+                <g fill-opacity=".3">
+                    <path class="fragment" data-fragment-index="1" stroke="lightseagreen" stroke-width="5" d="M 200,20 h 160 "/>
+                    <path class="fragment" data-fragment-index="1" stroke="red" stroke-width="5" d="M 20,20 H 160 "/>
+
+                    <path class="fragment" data-fragment-index="2" stroke="lightseagreen" stroke-width="5" d="M 200,20 h 160 v 160 "/>
+                    <path class="fragment" data-fragment-index="2" stroke="red" stroke-width="5" d="M 20,20 H 160 V 160 "/>
+
+                    <path class="fragment" data-fragment-index="3" stroke="lightseagreen" stroke-width="5" d="M 200,20 h 160 v 160 h -80 "/>
+                    <path class="fragment" data-fragment-index="3" stroke="red" stroke-width="5" d="M 20,20 H 160 V 160 H -80 "/>
+
+                    <path class="fragment" data-fragment-index="4" stroke="lightseagreen" stroke-width="5" d="M 200,20 h 160 v 160 h -80 v -80"/>
+                    <path class="fragment" data-fragment-index="4" stroke="red" stroke-width="5" d="M 20,20 H 160 V 160 H -80 V -80"/>
+
+                    <path class="fragment" data-fragment-index="5" stroke="lightseagreen" stroke-width="5" d="M 200,20 h 160 v 160 h -80 v -80 h -80"/>
+                    <path class="fragment" data-fragment-index="5" stroke="red" stroke-width="5" d="M 20,20 H 160 V 160 H -80 V -80 H -80"/>
+
+                    <path class="fragment" data-fragment-index="6" stroke="lightseagreen" stroke-width="5" fill="turquoise" d="M 200,20 h 160 v 160 h -80 v -80 h -80 z"/>
+                    <path class="fragment" data-fragment-index="6" stroke="red" stroke-width="5" fill="red" d="M 20,20 H 160 V 160 H -80 V -80 H -80 z"/>
+                </g>
+            </svg>
+        </section>
+
+        <section>
+            <a href="https://svg-art.ru/?page_id=900#comm_a"><h3>Кривые</h3></a>
+            <ul>
+                <li>C, c(cubic) и S, s(smooth) – кубическая кривая Бизье</li>
+                <li>Q, q(quadratic) и T, t – квадратичная кривая Бизье
+                </li>
+                <li>A, a – сегмент окружности</li>
+            </ul>
+            <div style="display: inline-block; background: #fff">
+                <img src="img/Quadratic_Bezier.svg" height="200">
+                <img src="img/cubic_Bezier_curve.svg" height="200">
+            </div>
+        </section>
+
+        <section>
+            <h3>Рабочая область</h3>
+<pre class="xml"><code>&lt;svg width="115" height="190">&lt;/svg></code></pre>
+
+            <svg width="115" height="190" viewBox="0 0 115 190" style="border: 1px solid #fff">
+                <desc>Green pear to show effects of matching viewport and viewBox.</desc>
+                <g>
+                  <path fill="#BBC42A" d="M4.976,126.451c-0.571,1.76-1.067,3.551-1.475,5.377c-6.62,29.681,7.465,54.363,43.244,56.718 c56.994,3.751,77.653-25.65,60.462-67.25C90.017,79.697,82.063,89.688,80.366,57.764c-0.764-14.367-11.098-27.167-26.203-24.576
+                  c-17.378,2.982-19.794,19.916-22.192,34.44C28.36,89.508,11.623,105.957,4.976,126.451z"/>
+                  <path fill="none" stroke="#59351C" stroke-width="7" stroke-linecap="round" d="M56.427,40.406
+                 c0,0-7.375-15.376,8.06-35.837"/>
+                  <path fill="#7AA20D" stroke="#7AA20D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="
+                 M54.247,35.412c0.787-3.843,3.55-7.335,8.368-9.848c10.053-5.244,18.075-4.042,28.061,0.2c0.004,0.002,12.83,5.449,20.517-4.672
+                  c-4.778,6.291-9.415,12.478-14.878,18.237c-8.878,9.359-25.348,22.181-37.176,9.661C55.019,44.629,53.349,39.793,54.247,35.412z"/>
+                </g>
+              </svg>
+        </section>
+
+        <style>
+            .show-viewbox-1 .with-viewbox,
+            .show-viewbox-1 .f1.visible ~ svg {
+                display: none;
+            }
+            .show-viewbox-1 .f1.visible ~ .with-viewbox {
+                display: inline;
+            }
+        </style>
+        <section class="show-viewbox-1">
+            <h3>viewBox</h3>
+<pre class="xml" data-fragment-index="2"><code data-noescape>&lt;!--                                 x y width height--&gt;
+&lt;svg width="200" height="200" <mark class="fragment" data-fragment-index="2">viewBox="0 0 233 295</mark>">
+    ...
+&lt;/svg></code></pre>
+            <div class="fragment f1" data-fragment-index="2"></div>
+            <svg width="200" height="200" style="border: 1px solid #fff">
+                <desc>Green pear to show effects of matching viewport and viewBox.</desc>
+                <g>
+                  <path fill="none" stroke="#7AA20D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="
+                  M65.989,185.785c0,0,85.638-80.731,90.675-114.314c5.038-33.583,50.941,100.189,30.228,133.493"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M186.87,211.373
+                  c1.927-0.131,3.965-0.533,6.206-1.261c9.353-3.041,23.276-7.675,30.963,3.463c16.565,24.002,6.333,61.392-20.202,73.091
+                  c-30.336,13.374-64.783-18.62-61.949-49.448c1.391-15.139,8.969-39.499,28.717-30.191  C176.568,209.837,181.243,211.757,186.87,211.373z"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M67.278,193.489  c1.908,0.3,3.985,0.361,6.332,0.148c9.795-0.889,24.399-2.316,29.421,10.25c10.823,27.08-7.454,61.266-35.924,66.782
+                  c-32.548,6.306-59.032-32.537-49.426-61.967c4.718-14.452,17.514-36.523,34.703-23.062   C57.574,189.705,61.706,192.614,67.278,193.489z"/>
+                  <path fill="#7AA20D" stroke="#7AA20D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="
+                  M153.81,68.308c-1.475-6.678,0.444-14.2,6.331-21.624c12.283-15.49,25.91-19.271,44.822-19.608c0.008,0,24.298-0.435,29.351-22.009
+                  c-3.141,13.41-6.131,26.553-10.739,39.603c-7.49,21.206-24.61,53.318-52.334,41.783C161.585,82.435,155.491,75.921,153.81,68.308z"
+                  />
+                </g>
+              </svg>
+            <svg class="with-viewbox" width="200" height="200" viewBox="0 0 233 295" style="border: 1px solid #fff">
+                <desc>Green pear to show effects of matching viewport and viewBox.</desc>
+                <g>
+                  <path fill="none" stroke="#7AA20D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="
+                  M65.989,185.785c0,0,85.638-80.731,90.675-114.314c5.038-33.583,50.941,100.189,30.228,133.493"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M186.87,211.373
+                  c1.927-0.131,3.965-0.533,6.206-1.261c9.353-3.041,23.276-7.675,30.963,3.463c16.565,24.002,6.333,61.392-20.202,73.091
+                  c-30.336,13.374-64.783-18.62-61.949-49.448c1.391-15.139,8.969-39.499,28.717-30.191  C176.568,209.837,181.243,211.757,186.87,211.373z"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M67.278,193.489  c1.908,0.3,3.985,0.361,6.332,0.148c9.795-0.889,24.399-2.316,29.421,10.25c10.823,27.08-7.454,61.266-35.924,66.782
+                  c-32.548,6.306-59.032-32.537-49.426-61.967c4.718-14.452,17.514-36.523,34.703-23.062   C57.574,189.705,61.706,192.614,67.278,193.489z"/>
+                  <path fill="#7AA20D" stroke="#7AA20D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="
+                  M153.81,68.308c-1.475-6.678,0.444-14.2,6.331-21.624c12.283-15.49,25.91-19.271,44.822-19.608c0.008,0,24.298-0.435,29.351-22.009
+                  c-3.141,13.41-6.131,26.553-10.739,39.603c-7.49,21.206-24.61,53.318-52.334,41.783C161.585,82.435,155.491,75.921,153.81,68.308z"
+                  />
+                </g>
+              </svg>
+            <p class="fragment" data-fragment-index="1">Размеры рабочей области 200х200</p>
+            <p class="fragment" data-fragment-index="1">Размеры картинки 233х295</p>
+        </section>
+
+        <section>
+            <h3>viewBox</h3>
+<pre class="xml"><code>&lt;svg width="200" height="200" viewBox="100 100 233 295">...
+&lt;/svg></code></pre>
+
+            <svg class="with-viewbox" width="200" height="200" viewBox="100 100 233 295" style="border: 1px solid #fff">
+                <desc>Green pear to show effects of matching viewport and viewBox.</desc>
+                <g>
+                  <path fill="none" stroke="#7AA20D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" d="
+                  M65.989,185.785c0,0,85.638-80.731,90.675-114.314c5.038-33.583,50.941,100.189,30.228,133.493"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M186.87,211.373
+                  c1.927-0.131,3.965-0.533,6.206-1.261c9.353-3.041,23.276-7.675,30.963,3.463c16.565,24.002,6.333,61.392-20.202,73.091
+                  c-30.336,13.374-64.783-18.62-61.949-49.448c1.391-15.139,8.969-39.499,28.717-30.191  C176.568,209.837,181.243,211.757,186.87,211.373z"/>
+                  <path fill="#ED6E46" stroke="#ED6E46" stroke-width="13"  d="M67.278,193.489  c1.908,0.3,3.985,0.361,6.332,0.148c9.795-0.889,24.399-2.316,29.421,10.25c10.823,27.08-7.454,61.266-35.924,66.782
+                  c-32.548,6.306-59.032-32.537-49.426-61.967c4.718-14.452,17.514-36.523,34.703-23.062   C57.574,189.705,61.706,192.614,67.278,193.489z"/>
+                  <path fill="#7AA20D" stroke="#7AA20D" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" d="
+                  M153.81,68.308c-1.475-6.678,0.444-14.2,6.331-21.624c12.283-15.49,25.91-19.271,44.822-19.608c0.008,0,24.298-0.435,29.351-22.009
+                  c-3.141,13.41-6.131,26.553-10.739,39.603c-7.49,21.206-24.61,53.318-52.334,41.783C161.585,82.435,155.491,75.921,153.81,68.308z"
+                  />
+                </g>
+              </svg>
+        </section>
+
+        <section>
+            <h3>Маркеры</h3>
+            <p>– служит для указания направления, начала, середины, конца линии (line, polyline, path, polygon, rect)</p>
+        </section>
+
+        <section>
+<pre class="xml fragment"><code>&lt;marker id="circleMarker"
+viewBox="0 0 50 50" refX="25" refY="25" orient="auto">
+    &lt;circle r="25" fill="red" cx="25" cy="25"/>
+&lt;/marker>
+</code></pre>
+
+<pre class="xml"><code>&lt;path d="M100,100 L100,300 L444,200 L100,500"
+marker-mid="url(#circleMarker)"
+</code></pre>
+            <svg class="fragment" width="400" height="400"  viewBox="0 50 550 550"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <marker id="myMarker12" viewBox="0 0 130 130" refX="65" refY="65" orient="auto">
+                        <circle r="65" fill="red" cx="65" cy="65"/>
+                    </marker>
+                </defs>
+
+                <path d="M100,100 L100,300 L444,200 L100,500" style="stroke-width:5;stroke:#fff;fill:none" marker-mid="url(#myMarker12)"/>
+            </svg>
+        </section>
+
+        <section>
+<pre class="xml fragment"><code>&lt;marker id="myMarkerMid" viewBox="0 0 50 50"
+    refX="25" refY="25"
+    orient="auto"
+    markerUnits="strokeWidth"
+    markerWidth="3" markerHeight="3">
+
+    &lt;rect x="5" y="5" width="50" height="30" fill="yellow"/>
+
+&lt;/marker>
+</code></pre>
+<pre class="xml" data-fragment-index="1"><code>&lt;path d="M100,100 L100,300 L444,200 L100,500"
+marker-start="url(#circleMarker)"
+marker-mid=“url(#myMarkerMid)"
+marker-end="url(#circleMarker)"/>
+</code></pre>
+
+        </section>
+
+        <section>
+            <svg width="400" height="400"  viewBox="0 50 550 550"
+                 xmlns="http://www.w3.org/2000/svg">
+
+                <defs>
+                    <marker id="myMarker" viewBox="0 0 130 130" refX="65" refY="65" orient="auto">
+                        <circle r="65" fill="red" cx="65" cy="65"/>
+                    </marker>
+
+                    <marker id="myMarkerMid" viewBox="0 0 50 30" refX="25" refY="25" orient="auto" markerUnits="strokeWidth" markerWidth="10" markerHeight="10">
+                        <rect x="5" y="5" width="50" height="30" fill="yellow"/>
+                    </marker>
+                </defs>
+
+                <path d="M100,100 L100,300 L444,200 L100,500"
+                      style="stroke-width:5;stroke:#fff;fill:none"
+                      marker-start="url(#myMarker)"
+                      marker-end="url(#myMarker)" marker-mid="url(#myMarkerMid)"/>
+            </svg>
+        </section>
+
+        <section>
+            <h3>Группировка и переиспользование</h3>
+            <img src="img/giphy-group.gif">
+        </section>
+
+        <section>
+            <h3>&lt;defs&gt;</h3>
+            <p>– для хранения содержимого, которое не будет отображаться при определении.</p>
+<pre class="xml fragment"><code>&lt;defs>
+    &lt;marker id="Triangle"
+            viewBox="0 0 10 10"
+            refX="5" refY="5"
+            markerWidth="6"
+            markerHeight="6"
+            orient="auto">
+    &lt;circle r="5" fill="white" cx="5" cy="5"/>
+    &lt;/marker>
+<!--gradients-->
+<!--filters-->
+&lt;/defs>
+</code></pre>
+        </section>
+
+        <section>
+            <h3>&lt;g&gt;</h3>
+            <p>– используется для логической группировки графических элементов.</p>
+<pre><code><svg width="1144.12px" height="400px" viewBox="0 0 572.06 200">
+<g id="bird">
+    <g id="head">...</g>
+    <g id="body">...</g>
+</g>
+</svg></code></pre>
+        </section>
+
+        <style>
+            .show-group .fragment.visible ~ svg #bird {
+                transition: transform .2s;
+                transform: rotate(180deg);
+                transform-origin: 50%;
+                stroke: red;
+            }
+        </style>
+        <section class="show-group">
+<pre class="xml fragment"><code><g id="bird" transform="rotate(180 150 150)" stroke="red">
+    <g id="head">...</g>
+    <g id="body">...</g>
+</g>
+</code></pre>
+            <svg width="300" height="300" viewBox="30 40 127 99">
+            	<style>
+            		/*svg{background-color:white;}*/
+            		#wing{fill:#81CCAA;}
+            		#body{fill:#B8E4C2;}
+            		#pupil{fill:#1F2600;}
+            		#beak{fill:#F69C0D;}
+            		.eye-ball{fill:#F6FDC4;}
+            	</style>
+            	<g id="bird">
+            		<g id="body">
+            			<path d="M48.42,78.11c0-17.45,14.14-31.58,31.59-31.58s31.59,14.14,31.59,31.58c0,17.44-14.14,31.59-31.59,31.59S48.42,95.56,48.42,78.11"/>
+            			<path d="M109.19,69.88c0,0-8.5-27.33-42.51-18.53c-34.02,8.81-20.65,91.11,45.25,84.73c40.39-3.65,48.59-24.6,48.59-24.6S124.68,106.02,109.19,69.88"/>
+            			<path id="wing" d="M105.78,75.09c4.56,0,8.84,1.13,12.62,3.11c0,0,0.01-0.01,0.01-0.01l36.23,12.38c0,0-13.78,30.81-41.96,38.09c-1.51,0.39-2.82,0.59-3.99,0.62c-0.96,0.1-1.92,0.16-2.9,0.16c-15.01,0-27.17-12.17-27.17-27.17C78.61,87.26,90.78,75.09,105.78,75.09"/>
+            		</g>
+            		<g id="head">
+            			<path id="beak" d="M50.43,68.52c0,0-8.81,2.58-10.93,4.86l9.12,9.87C48.61,83.24,48.76,74.28,50.43,68.52"/>
+            			<circle class="eye-ball" cx="72" cy="71.5" r="11"/>
+            			<circle id="pupil" cx="72" cy="71.5" r="7"/>
+            			<circle class="eye-ball" cx="77" cy="74" r="5"/>
+            		</g>
+            	</g>
+            </svg>
+        </section>
+
+        <section>
+            <h3>&lt;use&gt;</h3>
+            <p>– применяться для повторного использования как отдельных элементов, так и групп элементов.</p>
+<pre class="xml"><code>&lt;use x="100" y="100" xlink:href="#bird"/>
+&lt;use xlink:href="#bird" transform="translate(250, 250)
+    scale(0.5)"/>
+</code></pre>
+        </section>
+
+        <section>
+            <svg width="500" height="500">
+            <style>
+                /*svg{background-color:white;}*/
+                #wing{fill:#81CCAA;}
+                #body{fill:#B8E4C2;}
+                #pupil{fill:#1F2600;}
+                #beak{fill:#F69C0D;}
+                .eye-ball{fill:#F6FDC4;}
+            </style>
+            <g id="bird2">
+                <g id="body">
+                    <path d="M48.42,78.11c0-17.45,14.14-31.58,31.59-31.58s31.59,14.14,31.59,31.58c0,17.44-14.14,31.59-31.59,31.59S48.42,95.56,48.42,78.11"/>
+                    <path d="M109.19,69.88c0,0-8.5-27.33-42.51-18.53c-34.02,8.81-20.65,91.11,45.25,84.73c40.39-3.65,48.59-24.6,48.59-24.6S124.68,106.02,109.19,69.88"/>
+                    <path id="wing" d="M105.78,75.09c4.56,0,8.84,1.13,12.62,3.11c0,0,0.01-0.01,0.01-0.01l36.23,12.38c0,0-13.78,30.81-41.96,38.09c-1.51,0.39-2.82,0.59-3.99,0.62c-0.96,0.1-1.92,0.16-2.9,0.16c-15.01,0-27.17-12.17-27.17-27.17C78.61,87.26,90.78,75.09,105.78,75.09"/>
+                </g>
+                <g id="head">
+                    <path id="beak" d="M50.43,68.52c0,0-8.81,2.58-10.93,4.86l9.12,9.87C48.61,83.24,48.76,74.28,50.43,68.52"/>
+                    <circle class="eye-ball" cx="72" cy="71.5" r="11"/>
+                    <circle id="pupil" cx="72" cy="71.5" r="7"/>
+                    <circle class="eye-ball" cx="77" cy="74" r="5"/>
+                </g>
+            </g>
+                <use x="100" y="100" xlink:href="#bird2" />
+                <use xlink:href="#bird2" transform="translate(100, 100)" />
+                <use xlink:href="#bird2" transform="translate(250, 250) scale(0.5)" />
+            </svg>
+        </section>
+        
+        <section>
+            <h3>symbol</h3>
+            <p>– это группа фигур, представляющая собой единое целое. </p>
+<pre class="xml fragment"><code>&lt;symbol id="s-path">
+    &lt;path d="M 30 15 170 15" stroke-width="30">
+&lt;/symbol>
+<use y="20" stroke-linecap="butt"></use>
+<use y="85" stroke-linecap="round"></use>
+<use y="150" stroke-linecap="square"></use>
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Заливка</h3>
+            <p>– заливка фигур осуществляется с помощью атрибута fill.</p>
+<pre><code><!--currentColor и transparent, none-->
+&lt;rect fill="red"/>
+</code></pre>
+        </section>
+
+        <section>
+            <h3>Fill-rule</h3>
+            <p>– определяет как будут заливаться сложные фигуры, имеющие пересечения внутри себя.</p>
+            <div class="column _50">
+                <svg class="svg" width="200" height="200"><path stroke="orange" stroke-width="5" fill="gold" fill-rule="nonzero" d="M 100,20 L 50,180 180,80 20,80 150,180 z"></path></svg>
+            </div>
+            <div class="column _50">
+                <svg class="svg" width="200" height="200"><path stroke="orange" stroke-width="5" fill="gold" fill-rule="evenodd" d="M 100,20 L 50,180 180,80 20,80 150,180 z"></path></svg>
+            </div>
+        </section>
+        
+        <section>
+<pre class="xml"><code>&lt;g fill="gold" fill-rule="nonzero">
+    &lt;path d="..."></path>
+&lt;/g></code></pre>
+<pre class="xml"><code>&lt;g fill="gold" fill-rule="evenodd">
+    &lt;path d="..."></path>
+&lt;/g></code></pre>
+
+        </section>
+        <section>
+            <code>fill-rule="nonzero"</code>
+            <div style="background: #fff; display: inline-block;">
+            <img src="img/nonzero.jpg">
+            </div>
+        </section>
+        <section>
+            <code>fill-rule="evenodd"</code><br>
+            <div style="background: #fff; display: inline-block;">
+            <img src="img/evenodd.jpg">
+            </div>
+        </section>
+
+        <section>
+            <h3>Stroke</h3>
+<pre><code>&lt;rect stroke="gold" stroke-width="10"/>
+&lt;rect stroke="yellowgreen" stroke-width="10%"/>
+</code></pre>
+            <svg width="200" height="200">
+              <rect width="100" height="100" x="50" y="50"
+                    fill="none" stroke="gold"
+                    stroke-width="10"/>
+              <rect width="160" height="160" x="20" y="20"
+                    fill="none" stroke="yellowgreen"
+                    stroke-width="10%"/>
+            </svg>
+        </section>
+        <section>
+            <h3>stroke-linecap</h3>
+<pre class="xml"><code>&lt;symbol id="s-path">
+    &lt;path d="M 30 15 170 15" stroke-width="30">
+&lt;/symbol>
+&lt;use y="20" stroke-linecap="butt"/>
+&lt;use y="85" stroke-linecap="round"/>
+&lt;use y="150" stroke-linecap="square"/>
+</code></pre>
+
+            <svg class="svg" width="200" height="205">
+                <symbol id="s-path-guide">
+                    <circle r="3" cx="30" cy="15"></circle>
+                    <circle r="3" cx="170" cy="15"></circle>
+                    <path d="M 30 15 170 15" stroke-width="2"></path>
+                </symbol>
+                <symbol id="s-path">
+                    <path d="M 30 15 170 15" stroke-width="30"></path>
+                </symbol>
+                <use xlink:href="#s-path" stroke="orangered" y="20" stroke-linecap="butt"></use>
+                <use xlink:href="#s-path" stroke="olivedrab" y="85" stroke-linecap="round"></use>
+                <use xlink:href="#s-path" stroke="steelblue" y="150" stroke-linecap="square"></use>
+                <g class="guides">
+                    <use xlink:href="#s-path-guide" y="20" stroke="orange" fill="orange"></use>
+                    <use xlink:href="#s-path-guide" y="85" stroke="yellowgreen" fill="yellowgreen"></use>
+                    <use xlink:href="#s-path-guide" y="150" stroke="skyblue" fill="skyblue"></use>
+                </g></svg>
+
+        </section>
+
+        <section>
+            <h3>Stroke-linejoin</h3>
+
+<pre class="xml"><code>&lt;use xlink:href="#s-corner"  stroke-linejoin="miter"></use>
+&lt;use xlink:href="#s-corner"  stroke-linejoin="round"/>
+&lt;use xlink:href="#s-corner" stroke-linejoin="bevel"/>
+</code></pre>
+
+            <svg class="svg" width="215" height="300">
+                <symbol id="s-corner-guide">
+                    <circle r="3" cx="50" cy="100"></circle>
+                    <circle r="3" cx="164" cy="100"></circle>
+                    <path d="M 30 50 h 80 v 80" stroke-width="2" fill="none" transform="rotate(-45 100 50)"></path>
+                </symbol>
+                <symbol id="s-corner">
+                    <path d="M 30 50 h 80 v 80" stroke-width="30" fill="none" transform="rotate(-45 100 50)"></path>
+                </symbol>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner" stroke="orangered" y="0" stroke-linejoin="miter"></use>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner" stroke="olivedrab" y="80" stroke-linejoin="round"></use>
+                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner" stroke="steelblue" y="160" stroke-linejoin="bevel"></use>
+                <g class="guides">
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner-guide" y="0" stroke="orange" fill="orange"></use>
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner-guide" y="80" stroke="yellowgreen" fill="yellowgreen"></use>
+                    <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#s-corner-guide" y="160" stroke="skyblue" fill="skyblue"></use>
+                </g></svg>
+        </section>
+
+        <section>
+            <h3>Stroke-dasharray</h3>
+            <p>– управляет видом пунктирной обводки.</p>
+            <div class="column"><svg width="300" height="400" viewBox="15 0 120 60" preserveAspectRatio="xMinYMin meet">
+              <path d="M 20 20 h 260"
+                    stroke="purple" stroke-width="1"
+                    stroke-dasharray="1" />
+              <path d="M 20 40 h 260"
+                    stroke="mediumspringgreen" stroke-width="15"
+                    stroke-dasharray="1 3" />
+              <path d="M 20 60 h 260"
+                    stroke="orangered" stroke-width="1"
+                    stroke-dasharray="5%" />
+              <path d="M 20 80 h 260"
+                    stroke="green" stroke-width="1"
+                    stroke-dasharray="1 5" />
+              <path d="M 20 100 h 260"
+                    stroke="steelblue" stroke-width="1"
+                    stroke-dasharray="2 7 6" />
+              <path d="M 20 120 h 260"
+                    stroke="orange" stroke-width="5"
+                    stroke-dasharray="5" />
+              <path d="M 20 140 h 260"
+                    stroke="mediumseagreen" stroke-width="1"
+                    stroke-dasharray="12% 5%" />
+            </svg></div>
+            <div class="column">
+<pre class="xml" style="width: 600px; margin-top: 20px;"><code>stroke-dasharray="1"
+
+stroke-dasharray="1 3"
+
+stroke-dasharray="5%"
+stroke-dasharray="1 5"
+
+stroke-dasharray="2 7 6"
+stroke-dasharray="5"
+
+stroke-dasharray="12% 5%"
+</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h3>Stroke-dashoffset</h3>
+            <p>– позволяет задать смещение пунктирной обводки относительно первоначального положения.</p>
+            <svg class="fragmentc" width="270" height="270">
+              <g class="g-circles"  fill="none"
+                   stroke-width="15"
+                   stroke-dasharray="25% 110%"
+                   transform="rotate(72 135 135)">
+                   <circle r="115" cx="135" cy="135"
+                      stroke="crimson"/> <!-- Красная обводка без смещения -->
+                  <circle r="115" cx="135" cy="135"
+                       stroke="orangered"
+                       stroke-dashoffset="25%"/> <!-- Оранжевая обводка смещена на 25% -->
+                  <circle r="115" cx="135" cy="135"
+                       stroke="gold"
+                       stroke-dashoffset="50%"/> <!-- Желтая обводка смещена на 50% -->
+                  </g>
+            </svg>
+        </section>
+
+        <section>
+            <h3>Градиенты</h3>
+        </section>
+
+        <section>
+            <h3>Линейный градиент</h3>
+<pre class="xml"><code>&lt;linearGradient id="grad1"
+x1="0%" y1="0%"
+x2="100%" y2="0%">
+    &lt;stop offset="0%" stop-color="#BBC42A" />
+    &lt;stop offset="100%" stop-color="#ED6E46" />
+&lt;/linearGradient></code></pre>
+<pre class="xml fragment"><code>&lt;rect fill= "url(#grad1)" width="400" height="100"/>
+</code></pre>
+
+            <svg class="fragment" width="505" height="105">
+              <defs>
+                <linearGradient id="Gradient1" x1="0" y1="0" x2="100%" y2="0">
+                  <stop offset="0%" stop-color="#BBC42A" />
+                  <stop offset="100%" stop-color="#ED6E46" />
+                </linearGradient>
+              </defs>
+              <rect x="50" y="2" width="400" height="100" fill= "url(#Gradient1)" stroke="#333333" stroke-width="4px" />
+            </svg>
+        </section>
+
+        <section>
+            <h3>Радиальные</h3>
+            
+<pre class="xml"><code>&lt;radialGradient id="RadialGradient2"
+cx="0.5" cy="0.5" r="0.5">
+    &lt;stop offset="0%" stop-color="red"/>
+    &lt;stop offset="100%" stop-color="blue"/>
+&lt;/radialGradient>
+</code></pre>
+<pre class="xml fragment"><code>&lt;rect fill="url(#RadialGradient2)" width="10" height="10"/></code></pre>
+            <svg class="fragment" width="240" height="240"  viewBox="0 0 120 120" version="1.1" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                  <radialGradient id="RadialGradient2" cx="0.5" cy="0.5" r="0.5">
+                    <stop offset="0%" stop-color="red"/>
+                    <stop offset="100%" stop-color="blue"/>
+                  </radialGradient>
+              </defs>
+
+              <rect x="10" y="10" rx="15" ry="15" width="100" height="100" fill="url(#RadialGradient2)"/>
+
+            </svg>
+        </section>
+
+        <section>
+            <h3>Паттерны</h3>
+            <p>– это некоторый бесконечно повторяющийся узор.</p>
+<pre class="xml fragment size-XXS"><code>&lt;pattern id="basicPattern" x="0" y="0"
+width="40" height="40" patternUnits="userSpaceOnUse">
+    &lt;circle cx="20" cy="20" r="20" fill= "#BBC42A" />
+&lt;/pattern>
+<!--Далее, достаточно применить его через заливку к нужной фигуре:-->
+&lt;rect width="200" height="70" fill="url(#basicPattern)" />
+</code></pre>
+
+            <svg  class="fragment" width="600" height="600" viewBox="0 0 200 200">
+                <pattern id="basicPattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <circle cx="20" cy="20" r="20" fill= "#BBC42A" />
+                </pattern>
+
+            <rect width="200" height="70" fill="url(#basicPattern)" />
+            </svg>
+
+        </section>
+
+        <section data-state="maskAnim">
+            <h3>Маски</h3>
+            <p>– позволяют скрывать части изображений с помощью другого изображения.</p>
+            <svg id="mask-anim" width="300" height="300">
+                <clipPath id="clipping-star">
+                  <polygon id="Star-1" points="98.4999978 153.75 38.2520165 185.424245 49.7583542 118.337123 1.01670635 70.8257603 68.3760155 61.037872 98.5000012 1.1379786e-14 128.624005 61.0378871 195.98331 70.8258091 147.241642 118.337136 158.747982 185.424247"></polygon>
+                </clipPath>
+                <g class="g--clip-path-img" clip-path="url(#clipping-star)">
+                  <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://img-fotki.yandex.ru/get/5607/5091629.6b/0_612e6_b9039c0d_M.jpg" width="300" height="300"></image>
+                </g>
+            </svg>
+        </section>
+
+        <section>
+            <h3>clip-path</h3>
+            <p>– для обрезки использует только контуры фигур, игнорируя заливки и обводки</p>
+<pre class="xml size-XXS"><code>&lt;clipPath id="clipping-star">
+    &lt;polygon id="Star-1" points="..."></polygon>
+&lt;/clipPath>
+&lt;g clip-path="url(#clipping-star)">
+    &lt;image xlink:href="image.jpg" width="200" height="300"/>
+&lt;/g>
+</code></pre>
+        </section>
+
+        <section>
+            <h3>mask</h3>
+            <p>– в них учитываются и заливки, и обводки, и яркость содержимого.</p>
+<pre class="xml fragment size-XXS"><code>&lt;mask id="mask">
+    &lt;g stroke="gray" stroke-width="12" fill="white">
+        &lt;circle cx="33%" cy="30%" r="20%" />
+        &lt;circle cx="52%" cy="62%" r="32%" />
+    &lt;/g>
+&lt;/mask>
+<image mask="url(#mask)" xlink:href="flower.jpg" width="199" height="300" />
+</code></pre>
+        </section>
+
+        <section>
+            <svg  style="float: left" width="300" height="300"><mask id="mask">
+                <g stroke="gray" stroke-width="12" fill="white">
+                    <circle cx="33%" cy="30%" r="20%" />
+                    <circle cx="52%" cy="62%" r="32%" />
+                </g>
+            </mask>
+            <image mask="url(#mask)" xlink:href=http://webneel.com/wallpaper/sites/default/files/images/01-2014/2-flower-wallpaper.jpg width="499" height="300" /></svg>
+            <svg style="float: left" width="300" height="300">
+            <g stroke="gray" stroke-width="12" fill="white">
+                <circle cx="33%" cy="30%" r="20%" />
+                <circle cx="52%" cy="62%" r="32%" />
+            </g>
+            </svg>
+            <div style="clear: both" class="comment">Цвет заливки маски влияет на уровень её прозрачности. Белый цвет означает полную прозрачность, черный, соответственно полную непрозрачность</div>
+        </section>
+
+        <section>
+            <h2>Фильтры</h2>
+            <img src="img/filter-cat.gif">
+        </section>
+        <section>
+            <a href="http://html5.by/blog/svg-filters/"><h3>Фильтры</h3></a>
+            <p>– это механизм применения различных эффектов к svg-элементам.</p>
+<pre class="xml fragment"><code>&lt;defs>
+    &lt;filter id="myFilter1">
+        &lt;!-- размытие по Гауссу -->
+        &lt;feGaussianBlur stdDeviation="10"/>
+    &lt;/filter>
+&lt;/defs>
+</code></pre>
+<pre class="xml fragment"><code>&lt;image xlink:href="/img.jpg" filter="url('#filter-blur')"
+width="318" height="240"/>
+</code></pre>
+        </section>
+
+        <section data-state="blurAnim">
+            <svg width="618" height="540" id="girl-blur">
+                <filter id="filter-blur">
+                    <feGaussianBlur stdDeviation="0"/>
+                </filter>
+
+                <image width="618" height="540" xlink:href="/webdev-slides/18-svg/img/girl.jpg" filter="url('#filter-blur')"/>
+            </svg>
+        </section>
+        
+        <section>
+            <h3>Идем дальше.</h3>
+<pre class="xml size-XXS"><code>&lt;svg width="400" height="300" viewbox="0 0 400 300">
+<defs>
+    <filter id="myFilter3">
+        <feGaussianBlur in="SourceGraphic" result="a1" stddeviation="3" />
+        &lt;feColorMatrix in="a1" type="saturate" values="0"/>
+    </filter>
+</defs>
+    &lt;image xlink:href="image.jpg"  width="100%" height="100%" />
+&lt;/svg></code></pre>
+        </section>
+
+
+        <section>
+            <svg width="618" height="540" id="girl-saturate2">
+                <filter id="saturat3e">
+                    <feGaussianBlur in="SourceGraphic" result="a1" stddeviation="3" />
+                    <feColorMatrix in="a1" type="saturate" values="0"/>
+                </filter>
+                <image filter="url(#saturat3e)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section>
+            <h3>feComponentTransfer</h3>
+
+<pre class="xml"><code>&lt;fecomponenttransfer>
+    <!--red = red * 5 - 0.5.-->
+    &lt;feFuncR type="linear" slope="5" intercept="-0.5" />
+    &lt;feFuncG type="linear" slope="0.2" />
+    &lt;feFuncB type="linear" slope="0.2" />
+    &lt;feFuncA type="identity" />
+&lt;/fecomponenttransfer>
+</code></pre>
+        </section>
+
+        <section data-state="fecomponenttransfer">
+            <svg width="618" height="540" id="girl-fecomponenttransfer">
+                <filter id="fecomponenttransfer">
+                    <fecomponenttransfer>
+                        <feFuncR type="linear" slope="1" intercept="0" />
+                        <feFuncG type="linear" slope="1" />
+                        <feFuncB type="linear" slope="1" />
+                        <feFuncA type="identity" />
+                    </fecomponenttransfer>
+                </filter>
+                    <image filter="url(#fecomponenttransfer)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section>
+            <a href="https://docs.webplatform.org/wiki/svg/elements/feComponentTransfer"><code>type="table"</code></a>
+<pre><code>&lt;fecomponenttransfer>
+    &lt;fefuncr type="table" tablevalues="1 0" />
+    &lt;fefuncg type="table" tablevalues="1 0" />
+    &lt;fefuncb type="table" tablevalues="1 0" />
+&lt;/fecomponenttransfer>
+</code></pre>
+
+            <svg  width="618" height="400" viewBox="0 0 400 300">
+                <defs>
+                    <filter id="fecomponenttransfer-2">
+                            <fecomponenttransfer>
+                                <feFuncR type="table" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="4s"
+                                             values="-1 3 3 -1; 1 0 1 1; 2 0 1 2; -1 3 3 -1;"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncR>
+                                <feFuncG type="table" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="4s"
+                                             values="-1 3 3 -1; 1 0 0 0; 1 0 1 1; -1 3 3 -1"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncG>
+                                <feFuncB type="table" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="4s"
+                                             values="-1 1 3 -2; 1 1 1 1; 2 0 0 2; -1 1 3 -2"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncB>
+                            </fecomponenttransfer>
+                        </filter>
+                </defs>
+                    <image filter="url(#fecomponenttransfer-2)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section>
+            <code>type="discrete"</code>
+<pre><code>&lt;fecomponenttransfer>
+    &lt;fefuncr type="discrete" tablevalues="1 0 1 1" />
+    &lt;fefuncg type="discrete" tablevalues="1 0 1 1" />
+    &lt;fefuncb type="discrete" tablevalues="1 0 0 1" />
+&lt;/fecomponenttransfer>
+</code></pre>
+
+                    <svg width="618" height="400" id="girl-fecomponenttransfer-3">
+                        <filter id="fecomponenttransfer-3">
+                            <fecomponenttransfer>
+                                <feFuncR type="discrete" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="3s"
+                                             values="-1 3 3 -1; 1 0 1 1; 0 0 1 2"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncR>
+                                <feFuncG type="discrete" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="3s"
+                                             values="-1 3 3 -1; 0 0 0 0; 1 0 1 1"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncG>
+                                <feFuncB type="discrete" tablevalues="1 0 1 1">
+                                    <animate attributeName="tableValues"
+                                             calcMode="paced"
+                                             begin="0s" dur="3s"
+                                             values="-1 1 3 -2; 1 1 1 1; 1 0 0 1"
+                                             repeatCount="indefinite"
+                                             fill="freeze"/>
+                                </feFuncB>
+                            </fecomponenttransfer>
+                        </filter>
+                    <image filter="url(#fecomponenttransfer-3)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section data-state="gamma">
+            <code>type="gamma"</code>
+<pre class="xml size-XXS"><code>&lt;fecomponenttransfer>
+    &lt;fefuncr type="gamma" amplitude="2" exponent="1" offset="0.1" />
+    &lt;fefuncg type="gamma" amplitude="1" exponent="1.2" offset="0.1" />
+    &lt;fefuncB type="gamma" amplitude="1.4" exponent="1" offset="0.1" />
+&lt;/fecomponenttransfer>
+</code></pre>
+
+            <svg  width="618" height="400" id="girl-fecomponenttransfer-gamma">
+                <filter id="fecomponenttransfer-gamma">
+                    <fecomponenttransfer>
+                        <feFuncR type="gamma" amplitude="1" exponent="1" offset="0" />
+                        <feFuncG type="gamma" amplitude="1" exponent="1" offset="0" />
+                        <feFuncB type="gamma" amplitude="1" exponent="1" offset="0" />
+                    </fecomponenttransfer>
+                </filter>
+                    <image filter="url(#fecomponenttransfer-gamma)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+
+        <section>
+            <h3>feColorMatrix</h3>
+            <p>– позволяет умножить каждый пиксель исходного изображения в виде вектора, образованного каналами R, G, B, A.</p>
+<pre class="plaintext"><code>| R' |     | a00 a01 a02 a03 a04 |   | R |
+| G' |     | a10 a11 a12 a13 a14 |   | G |
+| B' |  =  | a20 a21 a22 a23 a24 | * | B |
+| A' |     | a30 a31 a32 a33 a34 |   | A |
+| 1  |     |  0   0   0   0   1  |   | 1 |
+</code></pre>
+        </section>
+
+        <section>
+<pre class="xml"><code>&lt;fecolormatrix type="matrix"
+  values="0.343 0.669 0.119 0 0
+          0.249 0.626 0.130 0 0
+          0.172 0.334 0.111 0 0
+          0        0    0   1 0" />
+</code></pre>
+
+            <img src="img/fecolormatrix.gif">
+        </section>
+
+        <section data-state="saturate">
+            <pre class="xml"><code>&lt;fecolormatrix type="saturate" values="0"/></code></pre>
+            <svg  width="618" height="600" id="girl-saturate">
+                <filter id="saturate">
+                    <feColorMatrix type="saturate" values="0" />
+                </filter>
+                    <image filter="url(#saturate)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section data-state="hue">
+            <pre class="xml"><code>&lt;fecolormatrix type="hueRotate" values="240"/></code></pre>
+            <svg  width="618" height="400" id="girl-hue">
+                <filter id="hue">
+                    <feColorMatrix type="hueRotate" values="0" />
+                </filter>
+
+                    <image filter="url(#hue)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+        </section>
+
+        <section>
+<pre class="xml"><code>&lt;feConvolveMatrix
+order="3"
+kernelMatrix=" 1  -1   1
+              -1  -1  -1
+               1  -1   1"></code></pre>
+            <img src="img/calv.gif">
+        </section>
+
+        <section>
+            <h3>Композитные операции</h3>
+            <p>– можно осуществлять арифметические и логические операции над слоями в svg.</p>
+            <pre><code>&lt;feComposite in="source1" in2="source2" operator="xor"/></code></pre>
+        </section>
+        
+        <section>
+                    <svg width="1000" height="800" id="girl-fecomponenttransfer">
+                        <defs>
+                            <filter id="compOver" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <!--  "A (in) over B (in2)" -->
+                                <feComposite operator="over" in="img1" in2="img2"/>
+                            </filter>
+
+                            <filter id="compOut" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <!--  "A (in) in B (in2)" -->
+                                <feComposite operator="in" in="img1" in2="img2"/>
+                            </filter>
+
+                            <filter id="compIn" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <!--  "A (in) in B (in2)" -->
+                                <feComposite operator="out" in="img1" in2="img2"/>
+                            </filter>
+
+                            <filter id="atop" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <feComposite operator="atop" in="img1" in2="img2" />
+                            </filter>
+
+                            <filter id="arithmetic" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <feComposite operator="arithmetic" in="img1" in2="img2" k1="0" k2=".5" k3=".7" k4="0" />
+                            </filter>
+
+                            <filter id="arithmetic2" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <feComposite operator="arithmetic" in="img1" in2="img2" k1="0" k2="1" k3="-1" k4="1" />
+                            </filter>
+
+                            <filter id="arithmetic3" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <feComposite operator="arithmetic" in="img1" in2="img2" k1="0.5" k2="0.5" k3="0.5" k4="0.5" />
+                            </filter>
+
+                            <filter id="arithmetic4" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                                <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                                <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                                    <animate attributeName="y"
+                                             calcMode="paced"
+                                             begin="0s" dur="5s"
+                                             repeatCount="indefinite"
+                                             values="140; 0; 140;"
+                                             fill="freeze"/>
+                                </feImage>
+                                <feComposite operator="arithmetic" in="img1" in2="img2" k1="0" k2="1" k3="1" k4="0" />
+                            </filter>
+                        </defs>
+                        <g class="blend-mix" transform="translate(10)">
+                            <text x="310" y="370" style="font-size: 30px;">
+                                        operator="arithmetic"
+                                    </text>
+
+                                    <g filter="url(#compOver)" transform="translate(0)"></g>
+
+                                    <text x="0" y="280" style="font-size: 25px;">
+                                        operator="over"
+                                    </text>
+
+                                    <g filter="url(#compIn)" transform="translate(250)"></g>
+
+                                    <text x="250" y="280" style="font-size: 29px;">
+                                        operator="in"
+                                    </text>
+
+                                    <g filter="url(#compOut)" transform="translate(500)"></g>
+
+                                    <text x="500" y="280" style="font-size: 27px;">
+                                        operator="out"
+                                    </text>
+
+                                    <g filter="url(#atop)" transform="translate(750)"></g>
+
+                                    <text x="750" y="280" style="font-size: 25px;">
+                                        operator="atop"
+                                    </text>
+
+                                    <g filter="url(#arithmetic)" transform="translate(0 330)"></g>
+
+                                    <text x="0" y="620" style="font-size: 17px;">
+                                        k2=".5" k3=".7" k4="0"
+                                    </text>
+
+                                    <g filter="url(#arithmetic2)" transform="translate(250 330)"></g>
+
+                                    <text x="250" y="620" style="font-size: 13px;">
+                                        k1="0" k2="1" k3="-1" k4="1"
+                                    </text>
+
+                                    <g filter="url(#arithmetic3)" transform="translate(500 330)"></g>
+
+                                    <text x="500" y="620" style="font-size: 11px;">
+                                        k1="0.5" k2="0.5" k3="0.5" k4="0.5"
+                                    </text>
+
+                                    <g filter="url(#arithmetic4)" transform="translate(750 330)"></g>
+
+                                    <text x="750" y="620" style="font-size: 14px;">
+                                        k1="0" k2="1" k3="1" k4="0"
+                                    </text>
+                        </g>
+                    </svg>
+
+                </section>
+
+        <section>
+            <h3>Режимы смешивания</h3>
+<pre class="xml"><code>&lt;feBlend in="source1" in2="source2" mode="lighten"/></code></pre>
+            <!--<img src="img/feblend.png">-->
+        </section>
+
+        <section>
+            <svg width="1000" height="700" id="girl-fecomponenttransfer">
+                <style>
+                    .blend-mix text {
+                        font-size: 30px;
+                        font-family: courier new;
+                        fill: #fff
+                    }
+                </style>
+                <defs>
+                    <filter id="normal" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                        <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                        <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                            <animate attributeName="y"
+                                     calcMode="paced"
+                                     begin="0s" dur="5s"
+                                     repeatCount="indefinite"
+                                     values="140; 0; 140;"
+                                     fill="freeze"/>
+                        </feImage>
+
+                        <feBlend mode="normal" in="img1" in2="img2"/>
+                    </filter>
+
+                    <filter id="screen" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                        <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                        <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                            <animate attributeName="y"
+                                     calcMode="paced"
+                                     begin="0s" dur="5s"
+                                     repeatCount="indefinite"
+                                     values="140; 0; 140;"
+                                     fill="freeze"/>
+                        </feImage>
+
+                        <feBlend mode="screen" in="img1" in2="img2"/>
+                    </filter>
+
+                    <filter id="multiply" x="0" y="0" width="280" height="500" filterUnits="userSpaceOnUse">
+                        <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                        <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                            <animate attributeName="y"
+                                     calcMode="paced"
+                                     begin="0s" dur="5s"
+                                     repeatCount="indefinite"
+                                     values="140; 0; 140;"
+                                     fill="freeze"/>
+                        </feImage>
+
+                        <feBlend mode="multiply" in="img1" in2="img2"/>
+                    </filter>
+
+                    <filter id="lighten" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                        <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                        <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                            <animate attributeName="y"
+                                     calcMode="paced"
+                                     begin="0s" dur="5s"
+                                     repeatCount="indefinite"
+                                     values="140; 0; 140;"
+                                     fill="freeze"/>
+                        </feImage>
+                        <feBlend mode="lighten" in="img1" in2="img2"/>
+                    </filter>
+
+                    <filter id="darken" x="0" y="0" width="250" height="500" filterUnits="userSpaceOnUse">
+                        <feImage x="0" y="40" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/girl.jpg" result="img1" />
+                        <feImage x="0" y="30" width="220" height="240" xlink:href="/webdev-slides/18-svg/img/pitt.png" result="img2">
+                            <animate attributeName="y"
+                                     calcMode="paced"
+                                     begin="0s" dur="5s"
+                                     repeatCount="indefinite"
+                                     values="140; 0; 140;"
+                                     fill="freeze"/>
+                        </feImage>
+                        <feBlend mode="darken" in="img1" in2="img2"/>
+                    </filter>
+
+                </defs>
+                <g class="blend-mix" transform="translate(10)">
+                            <g filter="url(#normal)" transform="translate(0)"></g>
+
+                            <text x="0" y="280">
+                                mode="normal"
+                            </text>
+
+                            <g filter="url(#screen)" transform="translate(250)"></g>
+
+                            <text x="250" y="280">
+                                mode="screen"
+                            </text>
+
+                            <g filter="url(#multiply)" transform="translate(500)"></g>
+
+                            <text x="500" y="280" style="font-size: 25px;">
+                                mode="multiply"
+                            </text>
+
+                            <g filter="url(#lighten)" transform="translate(750)"></g>
+
+                            <text x="750" y="280"  style="font-size: 27px;">
+                                mode="lighten"
+                            </text>
+
+                            <g filter="url(#darken)" transform="translate(0 300)"></g>
+
+                            <text x="0" y="575"  style="font-size: 27px;">
+                                mode="darken"
+                            </text>
+                </g>
+        </section>
+
+        <section>
+            <style>
+            </style>
+            <h3>Тексты</h3>
+            <pre><code>&lt;text font-size="150" x="0" fill="#1e88e5" y="150">
+    Текст
+&lt;/text></code></pre>
+            <svg width="600" height="300" id="text">
+                <text id="#cool_shape" font-size="150" x="0" fill="#1e88e5" y="150">Текст</text>
+            </svg>
+        </section>
+
+        <section data-state="textPath">
+            <h3>Текст по линии</h3>
+
+<pre class="xml"><code>&lt;defs>
+      &lt;path id="textpath" d="M10.057,20.024c0,0,10.99,51.603,102.248,51.603c91.259,0,136.172,53.992,136.172,53.992"/>
+&lt;/defs>
+
+&lt;text y="20" x="10" fill="red">
+    &lt;textPath xlink:href="#textpath">
+        Lorem ipsum dolor sit amet consectetur.
+    &lt;/textPath>
+&lt;/text>
+</code></pre>
+
+            <svg width="700" height="200" >
+                <defs>
+                      <path id="textpath" fill="none" stroke="white" d="M10.057,20.024c0,0,10.99,51.603,92.248,51.603c91.259,0,136.172,53.992,166.172,93.992c0,0,10.99,51.603,502.248,1.603"/>
+                </defs>
+
+                <text id="textPathAnim" y="20" x="10" fill="red">
+                  <textPath xlink:href="#textpath">
+                    Lorem ipsum dolor sit amet.
+                  </textPath>
+                </text>
+                <use xlink:href="#textpath"></use>
+            </svg>
+        </section>
+
+        <section>
+            <pre class="xml"><code data-trim>
+            &lt;text fill="url(#p-stars)" class="text">Text&lt;/text>
+            </code></pre>
+            <style>
+                /* Main styles */
+                @import url(http://fonts.googleapis.com/css?family=Open+Sans:800);
+
+                .text {
+                  fill: url(#p-stars);
+                  stroke: #551F7A;
+                  stroke-width: 3;
+                    font-size: 4em;
+                }
+
+                /* Colorize & animate pattern */
+                .g-stars polygon {
+                  stroke-width: 0;
+                  -webkit-animation: stroke 2s infinite;
+                  animation: stroke 2s infinite;
+                }
+
+                .g-stars polygon:nth-child(5n + 1) {
+                  fill: #551F7A;
+                  stroke: #551F7A;
+                  -webkit-animation-delay: -0.4s;
+                  animation-delay: -0.4s;
+                }
+
+                .g-stars polygon:nth-child(5n + 2) {
+                  fill: #BA2799;
+                  stroke: #BA2799;
+                  -webkit-animation-delay: -0.8s;
+                  animation-delay: -0.8s;
+                }
+
+                .g-stars polygon:nth-child(5n + 3) {
+                  fill: #D9587A;
+                  stroke: #D9587A;
+                  -webkit-animation-delay: -1.2s;
+                  animation-delay: -1.2s;
+                }
+
+                .g-stars polygon:nth-child(5n + 4) {
+                  fill: #FFDD00;
+                  stroke: #FFDD00;
+                  -webkit-animation-delay: -1.6s;
+                  animation-delay: -1.6s;
+                }
+
+                .g-stars polygon:nth-child(5n + 5) {
+                  fill: #FFF3A1;
+                  stroke: #FFF3A1;
+                  -webkit-animation-delay: -2s;
+                  animation-delay: -2s;
+                }
+
+                /* Change stroke-width within animation */
+                @-webkit-keyframes stroke {
+                  50% {
+                    stroke-width: 8;
+                  }
+                }
+                @keyframes stroke {
+                  50% {
+                    stroke-width: 8;
+                  }
+                }
+
+                /* Other styles */
+                /*html, body {*/
+                  /*height: 100%;*/
+                /*}*/
+
+                .wrapper {
+                  background: #280e39 -webkit-linear-gradient(0deg, #280e39 50%, #220c31 50%);
+                  background: #280e39 linear-gradient(90deg, #280e39 50%, #220c31 50%);
+                  background-size: .2em 100%;
+                  font: 14.5em/1 Open Sans, Impact;
+                  text-transform: uppercase;
+                  margin: 0 auto;
+                    width: 800px;
+                    height: 500px;
+                }
+
+                #animateText {
+                  /*position: absolute;*/
+                    width: 100%;
+                    height: 100%;
+                    border: 0;
+                    margin: 0 auto;
+                }
+            </style>
+            <div class="wrapper" style="margin-top: 10px;">
+                <svg id="animateText" height="300" width="600" viewBox="0 0 600 300">
+
+              <!-- Pattern -->
+              <pattern
+                       id="p-stars"
+                       width="70"
+                       height="70"
+                       viewBox="0 0 120 120"
+                       patternUnits="userSpaceOnUse"
+                       >
+
+                <g class="g-stars">
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      scale(.9,.9)"
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(30,30)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(90,30)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(0,60)
+                                      scale(.9,.9)"
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549 "
+                           transform="
+                                      translate(60,0)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(60,60)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(90,90)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(30,90)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(120,60)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(60,120)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(0,120)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(-30,90)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                  <!-- Hack to make shapes full  -->
+                  <polygon></polygon>
+                  <polygon></polygon>
+                  <polygon></polygon>
+
+                  <polygon
+                           points="15 22.5 6.18322122 27.1352549 7.86707613 17.3176275 0.734152256 10.3647451 10.5916106 8.93237254 15 0 19.4083894 8.93237254 29.2658477 10.3647451 22.1329239 17.3176275 23.8167788 27.1352549"
+                           transform="
+                                      translate(120,0)
+                                      scale(.9,.9)
+                                      "
+                           ></polygon>
+
+                </g>
+
+              </pattern>
+
+              <!-- Text -->
+              <text text-anchor="middle"
+                    x="50%"
+                    y="50%"
+                    dy=".35em"
+                    class="text"
+                    >
+                Text
+              </text>
+
+            </svg></div>
+        </section>
+
+         <section>
+             <h2>Css в SVG</h2>
+             <p>– CSS может использоваться для стилизации, наложения масок и фильтров, а так же анимации svg-изображений.</p>
+<pre class="css fragment"><code>rect {
+ fill: red;
+ filter: url(#blur)
+}
+</code></pre>
+         </section>
+
+        <section>
+            <h2>Анимации</h2>
+            <ul>
+                <li class="fragment minus">Анимации как в css (transition, animate)</li>
+                <li class="fragment minus">JS (<a href="http://snapsvg.io/">Snap.svg</a>)</li>
+            </ul>
+
+            <a href="http://snapsvg.io/assets/demos/illustrated-infographic-coffee/">Demo</a>
+        </section>
+
+        <section>
+            <h2>Спасибо!</h2>
+            <a href="http://www.janvas.com/site/home_en.php">Редактор svg-online</a><br>
+            <a href="https://github.com/willianjusten/awesome-svg">Awesome-svg</a><br>
+            <a href="http://css.yoksel.ru/">Статьи</a><br>
+            <a href="http://xiper.net/learn/svg/">Статьи (en)</a><br>
+        </section>
+        <section data-state="lastslide">
+            <h4>Домашнее задание</h4>
+            <svg style="display: block; margin: 0 auto" width="418" height="340" id="girl">
+                <filter id="filter123">
+                    <fecomponenttransfer>
+                        <feFuncR id="feFuncR" type="linear" slope="1" intercept="0" />
+                        <feFuncG type="linear" slope="1" />
+                        <feFuncB type="linear" slope="1" />
+                        <feFuncA type="identity" />
+                    </fecomponenttransfer>
+                </filter>
+                <image filter="url(#filter123)" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>
+            </svg>
+            <audio src="audio/dub.mp3" id="dub" loop></audio>
+            <a class="fragment"
+               href="https://github.com/urfu-2015/webdev-tasks-7">github.com/urfu-2015/webdev-tasks-7</a>
+        </section>
+
+
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+
+    function startFilterDemoMad() {
+        var isStoped = false;
+        document.querySelector('#dub').play();
+        var girl = Snap('#girl');
+        var image = girl.select('image');
+        var feFuncR = girl.select('feFuncR');
+        var feFuncG = girl.select('feFuncG');
+        var feFuncB = girl.select('feFuncB');
+        var time = 500;
+        var angle = 0;
+        function animate(){
+            if (isStoped) return;
+            feFuncR.animate({
+                slope: 10,
+                intercept: -0.5
+            }, time);
+            feFuncG.animate({
+                slope: .2
+            }, time);
+            feFuncB.animate({
+                slope:.2
+            }, time);
+            setTimeout(function(){
+                feFuncR.animate({
+                    slope:.2,
+                    intercept: -0.5
+                }, time);
+                feFuncG.animate({
+                    slope: 10
+                }, time);
+                feFuncB.animate({
+                    slope:.2
+                }, time);
+                image.animate({
+                    transform: `rotate(angle += 300 160 120) scale(1.5)`
+                }, time, mina.linear, animate);
+            }, time);
+            image.animate({
+                transform: `rotate(${angle += 300} 160 120) scale(1)`
+            }, time, mina.linear);
+        }
+        animate();
+
+        function stopFilterDemoMad(){
+            isStoped = true;
+            document.querySelector('#dub').pause();
+        }
+}
+
+
+function startFilterDemoHue() {
+    var isStoped = false;
+    var slope = 0;
+    var girl = Snap('#girl-hue');
+    var image = girl.select('image');
+    var fecolormatrix = girl.select('feColorMatrix');
+
+    function animate3(){
+        if (isStoped) return;
+        if (slope === 0) {
+            slope = 360;
+        } else {
+            slope = 0;
+        }
+        fecolormatrix.animate({
+            values: slope
+        }, 2500, mina.linear, animate3);
+    }
+    animate3();
+    function stopFilterDemoSaturate(){
+        isStoped = true;
+    }
+}
+
+//startFilterDemoSaturate(); // -- start
+//                stopFilterDemoSaturate(); // -- stop
+function startFilterDemoSaturate() {
+    var slope = 0;
+    var isStoped = false;
+    var girl = Snap('#girl-saturate');
+    var image = girl.select('image');
+    var fecolormatrix = girl.select('feColorMatrix');
+    function animate2(){
+        if (isStoped) return;
+        if (slope === 0) {
+            slope = 7;
+        } else {
+            slope = 0;
+        }
+        fecolormatrix.animate({
+            values: slope
+        }, 1000, mina.linear, animate2);
+    }
+    animate2();
+    function stopFilterDemoSaturate(){
+        isStoped = true;
+    }
+}
+
+
+function startFilterDemofecomponenttransferGamma() {
+    var amplitude = 1;
+    var amplitude2 = 5;
+    var isStoped = true;
+    isStoped = false;
+    var girl = Snap('#girl-fecomponenttransfer-gamma');
+    var image = girl.select('image');
+    var feFuncR = girl.select('feFuncR');
+    var fefuncG = girl.select('feFuncG');
+    function animate(){
+        if (isStoped) return;
+        if (amplitude === 1) {
+            amplitude = amplitude2;
+        } else {
+            amplitude = 1;
+        }
+        console.log(amplitude);
+        feFuncR.animate({
+            amplitude: amplitude,
+            exponent: amplitude
+        }, 1500, mina.linear, animate);
+        fefuncG.animate({
+            amplitude: amplitude - 0.5,
+            exponent: amplitude - 0.5
+        }, 1500, mina.linear);
+    }
+    animate();
+    function stopFilterDemofecomponenttransferGamma(){
+        isStoped = true;
+    }
+}
+
+function startFilterDemofecomponenttransfer() {
+    var slope = 0;
+    var isStoped = true;
+    isStoped = false;
+    var girl = Snap('#girl-fecomponenttransfer');
+    var image = girl.select('image');
+    var feFuncR = girl.select('feFuncR');
+    function animate(){
+        if (isStoped) return;
+        if (slope === 0) {
+            slope = 100;
+        } else {
+            slope = 0;
+        }
+        feFuncR.animate({
+            slope: slope
+        }, 1500, mina.linear, animate);
+    }
+    animate();
+    function stopFilterDemofecomponenttransfer(){
+        isStoped = true;
+    }
+}
+
+function startFilterDemoBlur() {
+    var currentBlur = 0;
+    var isStoped = true;
+    isStoped = false;
+    var girl = Snap('#girl-blur');
+    var image = girl.select('image');
+    var blur = girl.select('feGaussianBlur');
+    function animate(){
+        if (isStoped) return;
+        if (currentBlur === 0) {
+            currentBlur = 10;
+        } else {
+            currentBlur = 0;
+        }
+        blur.animate({
+            stdDeviation: currentBlur
+        }, 1500, mina.linear, animate);
+    }
+    animate();
+    function stopFilterDemoBlur(){
+        isStoped = true;
+    }
+}
+
+function startMaskAnim() {
+    var currentBlur = 0;
+    var isStoped = false;
+    var girl = Snap('#mask-anim');
+    var clip = girl.select('#Star-1');
+    function animate(){
+        if (isStoped) return;
+        if (currentBlur === 0) {
+            currentBlur = 100;
+        } else {
+            currentBlur = 0;
+        }
+        clip.animate({
+            transform: 'translate('+currentBlur+',0)',
+        }, 1500, mina.linear, animate);
+    }
+    animate();
+}
+
+function startTextPath() {
+    var currentBlur = 0;
+    var isStoped = false;
+    var text = Snap('#textPathAnim');
+//    var clip = girl.select('#Star-1');
+    function animate(){
+        if (isStoped) return;
+        if (currentBlur === 0) {
+            currentBlur = 200;
+        } else {
+            currentBlur = 0;
+        }
+        text.animate({
+            x: currentBlur
+        }, 1500, mina.easeinout, animate);
+    }
+    animate();
+}
+
+    Reveal.addEventListener( 'lastslide', function() {
+        startFilterDemoMad()
+    }, false );
+
+    Reveal.addEventListener( 'hue', function() {
+        startFilterDemoHue()
+    }, false );
+
+    Reveal.addEventListener( 'saturate', function() {
+        startFilterDemoSaturate()
+    }, false );
+
+    Reveal.addEventListener( 'gamma', function() {
+        startFilterDemofecomponenttransferGamma()
+    }, false );
+
+    Reveal.addEventListener( 'fecomponenttransfer', function() {
+        startFilterDemofecomponenttransfer()
+    }, false );
+
+    Reveal.addEventListener( 'blurAnim', function() {
+        startFilterDemoBlur()
+    }, false );
+
+    Reveal.addEventListener( 'maskAnim', function() {
+        startMaskAnim()
+    }, false )
+
+    Reveal.addEventListener( 'textPath', function() {
+        startTextPath()
+    }, false );
+</script>
+</body>
+</html>
