@@ -1,0 +1,61 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="350" height="350" version="1.1"
+viewBox="0 0 350 350" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  style="border: 0px dashed blue;"
+	  >
+	  <!--http://svg-art.ru  Alexander Teterin --> 
+	  <title> The Quadratic Bezier curve commands</title>
+   <defs>
+       <pattern id="newpattern"
+           x="0" y="0" width="20" height="20"
+           patternUnits="userSpaceOnUse" >
+		   
+          <g fill="#85D2FF" fill-opacity="0.4" stroke-width="0.5px" stroke="none">
+           <rect x="0" y="0" width="10" height="10" />
+           <rect x="10" y="10" width="10" height="10" />
+          </g>
+      </pattern>
+    </defs>
+     
+	 
+	  <rect x="0" y="0" width="350" height="350"
+          style="stroke: #000000; fill: url(#newpattern);" />    	
+	 
+	     <path d="M50,200 Q175,75 300,200" 
+           style="stroke:blue; stroke-width:4; fill:none;"/>
+			 <g style=" stroke-width:2; stroke:grey;">	  
+				<desc> the control point of the Quadratic curve. </desc>
+				<line x1="50" y1="200" x2="175" y2="75"  />
+				<line x1="300" y1="200" x2="175" y2="75"  />
+			</g>
+				<g style="fill:black; stroke-width:2; stroke:red;">	  
+					<desc> line to control point of the Quadratic curve. </desc>
+					<circle cx="50" cy="200" r="4"  />
+					<circle cx="300" cy="200" r="4"  />	
+					<circle cx="175" cy="75" r="4" style="fill:black; stroke-width:2; stroke:orange;" />	
+				</g>
+		
+		
+	 <g fill="blue" font-family="Arial" font-weight="bold">
+	   <text x="30" y="220">  mx,my </text>
+	   <text x="290" y="220">  x,y </text>
+     </g>
+		 <g fill="red" font-family="Arial" font-weight="bold">
+		   <text x="185" y="75">  x1,y1 </text>
+		 </g>
+		
+	<text x="30" y="300" fill="black" font-family="Arial" font-weight="bold" 
+         font-size="16"  > &lt;path d="M                        
+        <tspan  fill="blue" > mx,my</tspan> 
+		 Q
+		<tspan fill="red"> x1,y1  </tspan>
+		<tspan fill="blue">  x,y</tspan>
+		"&gt; 
+		</text>
+   <text x="30" y="320" fill="black" font-family="Arial" font-weight="bold" font-size="16">
+		 &lt;path d="M50,200 Q175,75 300,200" /&gt; 
+   </text>
+</svg>		   

@@ -1,0 +1,62 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="550" height="350" version="1.1"
+viewBox="0 0 550 350" preserveAspectRatio="none"
+      xmlns="http://www.w3.org/2000/svg" 
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  style="border: 0px dashed blue;"
+	  >
+	  <!--http://svg-art.ru  Alexander Teterin --> 
+	  <title> The cubic Bezier curve commands</title>
+   <defs>
+       <pattern id="newpattern"
+           x="0" y="0" width="20" height="20"
+           patternUnits="userSpaceOnUse" >
+		   
+          <g fill="#85D2FF" fill-opacity="0.4" stroke-width="0.5px" stroke="none">
+           <rect x="0" y="0" width="10" height="10" />
+           <rect x="10" y="10" width="10" height="10" />
+          </g>
+      </pattern>
+    </defs>
+     
+	 
+	  <rect x="0" y="0" width="550" height="350"
+    style="stroke: #000000; fill: url(#newpattern);" />    	
+	 
+	     <path d="M 200, 300 C 100, 100, 500, 100, 400, 300" 
+           style="stroke:blue; stroke-width:4; fill:none;"/>
+		   <g style ="stroke:red; stroke-width:2;">
+			   <line x1="200" y1="300"  x2="100" y2="100"/>
+			   <line x1="400" y1="300"  x2="500" y2="100"/>
+		  </g>
+            <g style="fill:black; stroke-width:2; stroke:red;">	  
+     	    <desc>current point, final point. </desc>
+		    <circle cx="200" cy="300" r="4"  />
+           <circle cx="400" cy="300" r="4"  />	
+		  </g>
+		   
+		    <g style="fill:black; stroke-width:2; stroke:orange;">	  
+     	    <desc> the control point at the beginning of the curve and the control point at the end of the curve, end point. </desc>
+		    <circle cx="100" cy="100" r="4"  />
+           <circle cx="500" cy="100" r="4"  />	
+		   
+		   </g>
+	<text x="150" y="30" fill="black" font-family="Arial" font-weight="bold" 
+         font-size="16"  > &lt;path d="M                        
+        <tspan  fill="blue" > mx,my</tspan> 
+		 C
+		<tspan fill="red"> x1,y1 x2,y2 </tspan>
+		<tspan fill="blue">  x,y" </tspan>
+		&gt; 
+   </text>
+   <g fill="blue" font-family="Arial" font-weight="bold">
+	   <text x="160" y="320">  mx,my </text>
+	   <text x="400" y="320">  x,y </text>
+   </g>
+      <g fill="red" font-family="Arial" font-weight="bold">
+	   <text x="80" y="85">  x1,y1 </text>
+	   <text x="485" y="85">  x2,y2 </text>
+      </g>
+	
+	</svg> 
