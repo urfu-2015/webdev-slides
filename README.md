@@ -16,6 +16,7 @@
 15. Web APIs I: [Storage](https://urfu-2015.github.io/webdev-slides/15-1-storage-apis/), [Geolocation and Audio](https://urfu-2015.github.io/webdev-slides/15-2-geolocation-and-audio-apis/), [Fun](https://urfu-2015.github.io/webdev-slides/15-3-fun-apis/)
 16. [Клиентская производительность](https://urfu-2015.github.io/webdev-slides/16-dev-tools-and-performance/)
 17. [Производительный NodeJS](https://urfu-2015.github.io/webdev-slides/17-pro-nodejs/)
+18. [SVG](https://urfu-2015.github.io/webdev-slides/18-svg/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-1/)
