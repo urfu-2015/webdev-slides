@@ -1,0 +1,249 @@
+.hljs-comment {
+    color: #999 !important;
+}
+
+.hljs-string {
+    color: #a1b56c !important;
+}
+
+.red {
+    color: #ab4642 !important;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.magenta {
+    color: #a0a0f0 !important;
+}
+
+.yellow {
+    color: yellow !important;
+}
+
+.grey {
+    color: #777 !important;
+}
+
+.blue {
+    color: #00b4ff !important;
+}
+
+img {
+    background: none !important;
+    max-width: 100%;
+    max-height: 100%;
+    border: 0 !important;
+}
+
+img.invert {
+    -webkit-filter: invert(100%)
+}
+
+.textbook {
+    font-family: 'textbook-light';
+}
+
+.pros,
+.cons,
+.question {
+    padding-left: 50px !important;
+}
+
+.pros:before,
+.cons:before,
+.question:before {
+    position: absolute;
+    left: 0;
+}
+
+.pros:before {
+    content: '✓';
+    color: #a1b56c !important;
+}
+
+.cons:before {
+    content: '✗';
+    color: #992200 !important;
+}
+
+.question:before {
+    content: '?';
+    color: #546BD2 !important;
+}
+
+.progress {
+    height: 4px !important;
+}
+
+.slide-number {
+    font-family: 'sourcecodepro-light' !important;
+    font-size: 35px !important;
+}
+
+.author small::first-letter {
+    color: red;
+}
+
+.reveal section .fragment.init_visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.reveal section .fragment.highlight {
+    transition-duration: .3s;
+}
+
+.highlight.fragment.visible,
+.highlight.static {
+    background-color: rgb(68, 97, 142);
+}
+
+pre,
+pre code {
+    font-size: 26px !important;
+    font-family: 'sourcecodepro-light' !important;
+}
+
+pre {
+    margin: 10px 15px !important;
+    width: 100% !important;
+}
+
+pre code {
+    padding: 0 25px !important;
+    line-height: 35px !important;
+    border: 3px solid rgba(63, 63, 63, 0.3) !important;
+    background: rgba(63, 63, 63, 0.2) !important;
+    max-height: 100% !important;
+}
+
+pre.flat code {
+    padding: 0 15px !important;
+    border: 0 !important;
+    background: none !important;
+}
+
+.join {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+}
+
+.join code {
+    padding: 18px 25px !important;
+    border: 0 !important;
+}
+
+.left {
+    text-align: left;
+}
+
+.download-text-example textarea {
+    border: 4px solid #ffdb4d;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    display: block;
+    width: 500px;
+    height: 250px;
+    outline: 0;
+    padding: 20px;
+    font-size: 40px;
+    color: #fff;
+    background: #333338;
+    resize: none;
+}
+
+.download-text-example button,
+.upload-images-example ::-webkit-file-upload-button {
+    outline: 0;
+    cursor: pointer;
+    background: #ffdb4d;
+    border: 0;
+    height: 50px;
+    font-size: 20px;
+    padding: 10px 25px;
+    margin-top: 20px;
+    display: block;
+    transition: background 0.1s ease-out;
+    border-radius: 3px;
+}
+
+.download-text-example button {
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.download-text-example button:hover,
+.upload-images-example ::-webkit-file-upload-button:hover {
+    background: #ffd633;
+}
+
+.download-text-example a {
+    position: absolute;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    margin-top: 15px;
+    display: block;
+    transition: opacity .4s ease-out;
+}
+
+.download-text-example a[href] {
+    opacity: 1;
+    visibility: visible;
+}
+
+.upload-images-example input {
+    font-size: 15px;
+}
+
+.upload-images-example #uploaded-images {
+    padding: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-top: 20px;
+    width: 600px;
+    height: 200px;
+    background: rgba(255, 255, 255, .1);
+}
+
+#uploaded-images img {
+    width: 100px;
+    border-radius: 50%;
+    margin: 0;
+    margin-right: 10px;
+    float: left;
+}
+
+.dnd-example #drop-zone {
+    transition: background .1s ease-out;
+    float: left;
+    height: 250px;
+    width: 250px;
+    background: rgba(255, 255, 255, .1);
+    position: relative;
+}
+
+.dnd-example #drop-zone div {
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dnd-example #names {
+    padding: 10px;
+    text-align: left;
+    font-size: 20px;
+    height: 230px;
+    width: 600px;
+    background: rgba(255, 255, 255, .1);
+    margin-left: 10px;
+    float: left;
+}
+
+.dnd-example #drop-zone.hovered {
+    background: rgba(255, 255, 255, .3);
+}

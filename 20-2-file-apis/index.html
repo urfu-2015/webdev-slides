@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Browser APIs</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex" style="">
+<div class="reveal">
+    <div class="slides">
+        <section>
+            File APIs
+            <p class="author"><small>Максим Воронцов</small></p>
+        </section>
+
+        <section>
+            <h4 class="green">Для чего?</h4>
+            <ol>
+                <li class="fragment">Доступ к файлам из файловой системы</li>
+                <li class="fragment">Получение контента файла без отправки на сервер</li>
+                <li class="fragment">Работа с файлами как с бинарными данными</li>
+            </ol>
+        </section>
+
+        <section>
+            <h4 class="green">File APIs</h4>
+            <ol>
+                <li class="fragment"><span class="magenta">Blob</span> - file-like объект, позволяет работать с бинарными данными</li>
+                <li class="fragment"><span class="magenta">File</span> - собственно файл, основан на Blob</li>
+                <li class="fragment"><span class="magenta">FileList</span> - набор объектов типа File</li>
+                <li class="fragment"><span class="magenta">FileReader</span> - позволяет осуществлять асинхронное чтение объектов типа Blob или File и получать доступ к их контенту</li>
+            </ol>
+        </section>
+
+        <section>
+            <h4 class="green">Где использовать?</h4>
+            <ul>
+                <li class="fragment">Online-редакторы</li>
+                <li class="fragment">Превью загруженных файлов</li>
+                <li class="fragment">Создание файлов различных форматов прямо в браузере</li>
+                <li class="fragment">Загрузка изображений на canvas и работа с ними</li>
+            </ul>
+        </section>
+
+        <section data-background-image="images/file-caniuse.png" data-background-size="contain"></section>
+
+        <section>
+            <h4><span class="green">File APIs</span></h4>
+            <pre class="flat"><code>if (window.Blob && window.File &&
+    window.FileList && window.FileReader) {
+  // File APIs полностью поддерживаются
+} else {
+  // File APIs поддерживаются не полностью
+}
+</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Blob:</span> Binary Large Object</h4>
+            <pre class="fragment">Blob(blobParts, options)</pre>
+            <pre class="flat fragment"><code>
+var blob = new Blob(['abc', 'def'], options);</code></pre>
+            <pre class="flat fragment"><code>var blob = new Blob([otherBlob1, otherBlob2], options);</code></pre>
+            <pre class="flat fragment"><code>var blob = new Blob(['abc', otherBlob], options);</code></pre>
+            <pre class="flat fragment"><code>
+var options = {
+    type: 'plain/text',
+    endings: 'native' // default: 'transparent'
+};</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Blob:</span> Binary Large Object</h4>
+            <pre class="flat fragment"><code>blob.size; // Размер в байтах</code></pre>
+            <pre class="flat fragment"><code>blob.type; // MIME-type</code></pre>
+            <pre class="flat fragment"><code>
+blob.slice(start, end, contentType);</code></pre>
+            <pre class="flat fragment"><code>blob.close();</code></pre>
+        </section>
+
+        <section>
+            <h4><a href="https://www.w3.org/TR/FileAPI/#url">Blob URLs</a></h4>
+        </section>
+
+        <section data-background-image="images/bloburls-caniuse.png" data-background-size="contain"></section>
+
+        <section>
+            <h4 class="green">Blob URLs</h4>
+            <pre class="flat fragment" data-fragment-index="0"><code>var blob = new Blob(['abc'], { type: 'plain/text' });</code></pre>
+            <pre class="flat fragment" data-fragment-index="1"><code>if (window.URL) { </code></pre>
+            <pre class="flat fragment" data-fragment-index="2"><code>    var url = window.URL.createObjectURL(blob);
+    // blob:d3958f5c-0777-0845-9dcf-2cb28783acaf</code></pre>
+            <pre class="flat fragment" data-fragment-index="3"><code>    window.URL.revokeObjectURL(url);</code></pre>
+            <pre class="flat fragment" data-fragment-index="1"><code>} else {
+    // Blob URLs не поддерживаются
+}</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Пример: </span> Скачивание файла</h4>
+            <pre class="flat fragment"><code class="html">&lt;textarea id="text"&gt;&lt;/textarea&gt;
+&lt;button id="button"&gt;Получить ссылку&lt;/button&gt;
+&lt;a id="link" download="text.txt"&gt;Скачать&lt;/a&gt;</code></pre>
+        </section>
+
+        <section data-background-image="images/download-caniuse.png" data-background-size="contain"></section>
+
+        <section>
+            <h4><span class="green">Пример: </span> Скачивание файла</h4>
+            <pre class="flat"><code class="fragment" data-fragment-index="1">
+var textarea = document.getElementById('text');
+var button = document.getElementById('button');
+var link = document.getElementById('link');</code>
+<code class="fragment" data-fragment-index="2">button.addEventListener('click', function () {</code><code
+class="fragment" data-fragment-index="3">    var text = textarea.value;</code><code
+class="fragment" data-fragment-index="4">    var blob = new Blob([text], { type: 'plain/text' });</code><code
+class="fragment" data-fragment-index="5">    var url = window.URL.createObjectURL(blob);</code><code
+class="fragment" data-fragment-index="6">
+    link.href = url;</code><code
+class="fragment" data-fragment-index="2">});</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Пример: </span> Скачивание файла</h4>
+            <div class="download-text-example">
+                <textarea id="text-for-download"></textarea>
+                <button id="get-link">Получить ссылку</button>
+                <a id="download-link" download="text.txt"><small>Скачать</small></a>
+                <script>
+                    var textarea = document.getElementById('text-for-download');
+                    var button = document.getElementById('get-link');
+                    var link = document.getElementById('download-link');
+
+                    button.addEventListener('click', function () {
+                        var text = textarea.value;
+                        var blob = new Blob([text], { type: 'plain/text' });
+
+                        link.href = window.URL.createObjectURL(blob);
+                    });
+                </script>
+            </div>
+        </section>
+
+        <section>
+            <h4 class="green">Создание файлов различных форматов</h4>
+            <div class="fragment">
+            <a href="https://stuk.github.io/jszip/"><small>jsZip</small></a>
+            <pre class="flat fragment"><code>var zip = new JSZip();</code></pre>
+            <pre class="flat fragment"><code>
+zip.file("Hello.txt", "Hello World\n");</code></pre>
+            <pre class="flat fragment"><code>
+var imagesFoler = zip.folder("images");
+imagesFolder.file("smile.gif", imgData, {base64: true});</code></pre>
+                <pre class="flat fragment"><code>
+zip
+    .generateAsync({type:"blob"})
+    .then(function(blob) {
+        // ...
+    });</code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h4 class="green">Создание файлов различных форматов</h4>
+            <a class="fragment" href="https://parall.ax/products/jspdf"><small>jsPDF</small></a>
+            <pre class="flat fragment"><code>var doc = new jsPDF();</code></pre>
+            <pre class="flat fragment"><code>
+doc.text(20, 20, 'Hello world!');</code></pre>
+            <pre class="flat fragment"><code>doc.text(20, 30, 'This is client-side Javascript');</code></pre>
+            <pre class="flat fragment"><code>doc.addPage();</code></pre>
+            <pre class="flat fragment"><code>doc.text(20, 20, 'Do you like that?');</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Загрузка файлов: </span>&lt;input&gt;</h4>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple&gt;</code></pre>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple accept="application/pdf"&gt;</code></pre>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple accept="image/png,image/jpeg"&gt;</code></pre>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple accept="image/*"&gt;</code></pre>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple accept="video/*"&gt;</code></pre>
+            <pre class="flat fragment"><code class="html">&lt;input type="file" multiple accept="audio/*"&gt;</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Загрузка файлов: </span>&lt;input&gt;</h4>
+            <pre class="flat fragment" data-fragment-index="3"><code>var input = document.getElementById('input');</code></pre>
+            <pre class="flat fragment" data-fragment-index="4"><code>input.addEventListener('change', function () {</code></pre>
+    <pre class="flat fragment" data-fragment-index="5"><code>    var files = input.files; // FileList</code></pre>
+    <pre class="flat fragment" data-fragment-index="6"><code>
+    files.length;</code></pre>
+    <pre class="flat fragment" data-fragment-index="7"><code>    files[0];</code></pre>
+    <pre class="flat fragment" data-fragment-index="8"><code>    files.item(0);</code></pre>
+            <pre class="flat fragment" data-fragment-index="4"><code>});</code></pre>
+        </section>
+
+        <section>
+            <h4 class="green">File</h4>
+            <pre class="flat"><code>{
+    lastModified: 1461053555000,
+    lastModifiedDate: 'Date 2016-04-18T09:23:08.000Z',
+    name: 'img.png',
+    size: 8057,
+    type: 'image/png'
+}</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Загрузка файлов: </span> Drag and Drop</h4>
+            <pre class="fragment" data-fragment-index="1"><code class="html">&lt;div id="drop-zone"&gt;&lt;/div&gt;
+&lt;div id="names"&gt;&lt;/div&gt;</code></pre>
+            <pre class="flat fragment" data-fragment-index="2"><code>
+var dropZone = document.getElementById('drop-zone');
+var names = document.getElementById('names');</code></pre>
+            <pre class="flat fragment" data-fragment-index="3"><code>
+dropZone.addEventListener('dragover', function (event) {</code></pre>
+            <pre class="flat fragment" data-fragment-index="4"><code>    event.preventDefault();</code></pre>
+            <pre class="flat fragment" data-fragment-index="5"><code>    event.dataTransfer.dropEffect = 'copy';</code></pre>
+            <pre class="flat fragment" data-fragment-index="3"><code>});</code></pre>
+        </section>
+        <section>
+            <h4><span class="green">Загрузка файлов: </span> Drag and Drop</h4>
+            <pre class="flat fragment" data-fragment-index="6"><code>
+dropZone.addEventListener('drop', function (event) {</code></pre>
+            <pre class="flat fragment" data-fragment-index="7"><code>    event.preventDefault();</code></pre>
+            <pre class="flat fragment" data-fragment-index="8"><code>
+    var files = event.dataTransfer.files;</code></pre>
+            <pre class="flat fragment" data-fragment-index="9"><code>    var output = [];</code></pre>
+            <pre class="flat fragment" data-fragment-index="10"><code>
+    for (var i = 0; i < files.length; i++) {
+        output.push('&lt;li&gt;' + files[i].name + '&lt;/li&gt;');
+    }
+            </code></pre>
+            <pre class="flat fragment" data-fragment-index="11"><code>    names.innerHTML = '&lt;ol&gt;' + output.join('') + '&lt;/ol&gt;';</code></pre>
+            <pre class="flat fragment" data-fragment-index="6"><code>});</code></pre>
+            <a class="fragment small" href="https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API"><small>Подробнее про Drag and Drop</small></a>
+        </section>
+
+        <section>
+            <h4><span class="green">Загрузка файлов: </span> Drag and Drop</h4>
+            <div class="dnd-example">
+                <div id="drop-zone">
+                    <div>Перетащите файлы</div>
+                </div>
+                <div id="names"></div>
+            </div>
+            <script>
+                var dropZone = document.getElementById('drop-zone');
+                var names = document.getElementById('names');
+
+                dropZone.addEventListener('dragover', function (event) {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'copy';
+                    dropZone.classList.add('hovered');
+                });
+
+                dropZone.addEventListener('dragleave', function () {
+                    dropZone.classList.remove('hovered');
+                });
+
+                dropZone.addEventListener('drop', function (event) {
+                    event.preventDefault();
+
+                    var files = event.dataTransfer.files;
+                    var output = [];
+
+                    for (var i = 0; i < files.length; i++) {
+                        output.push('<li>' + files[i].name + '</li>');
+                    }
+
+                    names.innerHTML = '<ol>' + output.join('') + '</ol>';
+
+                    dropZone.classList.remove('hovered');
+                });
+            </script>
+        </section>
+
+        <section>
+            <h4 class="green">Чтение файла</h4>
+            <pre class="flat fragment"><code>var reader = new FileReader();</code></pre>
+            <pre class="flat fragment"><code>
+reader.readAsArrayBuffer(file)</code></pre>
+            <pre class="flat fragment"><code>reader.readAsBinaryString(file)</code></pre>
+            <pre class="flat fragment"><code>reader.readAsDataURL(file)</code></pre>
+            <pre class="flat fragment"><code>reader.readAsText(file)</code></pre>
+            <pre class="flat fragment"><code>reader.abort()</code></pre>
+        </section>
+
+        <section>
+            <h4 class="green">Чтение файла</h4>
+            <pre class="flat fragment"><code>reader.onerror
+reader.onloadstart
+reader.onloadend  // даже в случаее неудачной загрузки
+reader.onload     // только в случае успеха
+reader.onprogress</code></pre>
+            <pre class="flat fragment"><code>
+reader.error
+reader.readyState // EMPTY - 0, LOADING - 1, DONE - 2
+reader.result</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Пример:</span> Загрузка файлов</h4>
+            <pre class="flat fragment"><code class="html">&lt;input id="input" type="file" accept="image/*"&gt;
+&lt;div id="images"&gt;&lt;/div&gt;</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Пример:</span> Загрузка файлов</h4>
+            <pre class="flat fragment" data-fragment-index="1"><code>var input = document.getElementById('input');
+var images = document.getElementById('images');
+
+</code></pre>
+            <pre class="flat fragment" data-fragment-index="3"><code>input.addEventListener('change', function () {</code></pre>
+            <pre class="flat fragment" data-fragment-index="4"><code>    var image = input.files[0];</code></pre>
+            <pre class="flat fragment" data-fragment-index="5"><code>    var reader = new FileReader();
+
+</code></pre>
+            <pre class="flat fragment" data-fragment-index="6"><code>    reader.readAsDataURL(image);</code></pre>
+            <pre class="flat fragment" data-fragment-index="7"><code>    reader.addEventListener('load', function () {</code></pre>
+            <pre class="flat fragment" data-fragment-index="8"><code>        var img = document.createElement('img');
+        img.src = reader.result;</code></pre>
+            <pre class="flat fragment" data-fragment-index="9"><code>
+        images.appendChild(img);</code></pre>
+            <pre class="flat fragment" data-fragment-index="7"><code>    });</code></pre>
+            <pre class="flat fragment" data-fragment-index="3"><code>});</code></pre>
+        </section>
+
+        <section>
+            <h4><span class="green">Пример:</span> Загрузка файлов</h4>
+            <div class="upload-images-example">
+                <input type="file" accept="image/*" id="upload-image-input">
+                <div id="uploaded-images"></div>
+                <script>
+                    var input = document.getElementById('upload-image-input');
+                    var images = document.getElementById('uploaded-images');
+
+                    input.addEventListener('click', function () {
+                        input.value = null;
+                    });
+
+                    input.addEventListener('change', function () {
+                        var image = input.files[0];
+                        var reader = new FileReader();
+
+                        reader.addEventListener('load', function () {
+                            var img = document.createElement('img');
+                            img.src = reader.result;
+
+                            images.appendChild(img);
+                        });
+
+                        reader.readAsDataURL(image);
+                    });
+                </script>
+            </div>
+        </section>
+
+        <section>
+            <h4>Ссылки</h4>
+            <a target="_blank" href="https://www.w3.org/TR/FileAPI/">File APIs</a><span class="grey"> на w3.org</span><br>
+            <a target="_blank" href="https://developer.mozilla.org/ru/docs/Using_files_from_web_applications">File APIs </a><span class="grey"> на MDN</span><br>
+            <a target="_blank" href="http://www.html5rocks.com/ru/tutorials/file/dndfiles/">Reading files in JavaScript using the File APIs</a><br>
+            <a target="_blank" href="https://youtu.be/xT6eBk_Wr7c">Создание редактора изображений в браузере</a>
+        </section>
+    </div>
+    <script src="../lib/js/head.min.js"></script>
+    <script src="../js/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            controls: false,
+            progress: true,
+            slideNumber: true,
+            history: true,
+            center: true,
+            hideAddressBar: true,
+            transition: 'slide',
+            dependencies: [
+                {
+                    src: '../plugin/highlight/highlight.js',
+                    condition: function () {
+                        return Boolean(document.querySelector('pre code'));
+                    },
+                    callback: function () {
+                        hljs.configure({
+                            languages: ['javascript']
+                        });
+                        hljs.initHighlightingOnLoad();
+                    }
+                }
+            ]
+        });
+    </script>
+</body>
+</html>
