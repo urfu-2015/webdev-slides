@@ -1,0 +1,437 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+
+</head>
+<body class="yandex">
+<div class="reveal">
+    <div class="slides">
+
+        <section>
+            <h2>Service Workers</h2>
+
+            <p class="author">
+                <small>Семичев Олег</small>
+            </p>
+        </section>
+
+        <section>
+            <h3>Native vs Web</h3>
+            <div class="fragment">
+                <b class="fragment green">
+                    C; &nbsp;&nbsp;
+                </b>
+                <span>
+                    Internet
+                </span>
+                <b class="fragment red">
+                    &nbsp;&nbsp; :C
+                </b>
+            </div>
+        </section>
+
+        <section>
+            <small>
+                Service workers essentially act as proxy servers that sit between web applications, and the browser and network (when available).
+            </small>
+
+            <br/><br/>
+
+            <small class="fragment">
+                They are intended to enable the creation of effective offline experiences, intercepting network requests. They will also allow access to push notifications and background sync APIs.
+            </small>
+        </section>
+
+        <section>
+            <h3>Вот зэй кэн</h3>
+            <small class="fragment">Кэшировать ресурсы (читай, позволяют сайту "работать" "оффлайн")</small>
+            <br/>
+            <small class="fragment">Перехватывать запросы из браузера</small>
+            <br/>
+            <small class="fragment">Давать доступ к push-уведомлениям</small>
+            <br/>
+            <small class="fragment">Производить фоновые синхронизации <b class="fragment red">*</b></small>
+            <br/>
+            <small class="fragment">
+                Жить своей скрытой активной<br> жизнью и делать то,
+                что они хотят <span class="grey">(в рамках закона)</span> <b class="fragment red">*</b>
+            </small>
+        </section>
+
+        <section>
+            <h3>DISCLAIMER, AGAIN</h3>
+            <small class="fragment">
+                Вообще, <span class="magenta">Service Workers</span> – сырая технология. Работать может не везде, не всегда и необязательно так,
+                как хотелось бы и как заявлено. <br>
+                Поэтому – бикэрфул и вотчаут.
+            </small>
+        </section>
+
+        <section>
+            <h3>Что вам нужно знать?</h3>
+            <small class="fragment">Вы не сможете трогать DOM</small>
+            <br/>
+            <small class="fragment">Вы должны использовать https  <span class="grey">(ну, или localhost)</span></small>
+            <br/>
+            <small class="fragment">Вы обязательно наступите в промисы</small>
+            <br/>
+            <small class="fragment">Вы обязательно расстроитесь, увидев <a href="http://caniuse.com/#feat=serviceworkers" target="_blank">поддержку</a></small>
+            <br/>
+            <small class="fragment">
+                ...ну и когда Олег покажет
+                <a href="https://jakearchibald.github.io/isserviceworkerready/" target="_blank">детальную информацию</a><br>
+                о поддержке тоже не особо обрадуетесь
+            </small>
+        </section>
+
+
+
+        <section>
+            <h3>Feature detection</h3>
+            <pre><code>
+if (navigator.serviceWorker) {}
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Немного матчасти</h3>
+            <div class="fragment">
+                <small>Каждый <span class="magenta">Service Worker</span> должен сделать в своей жизни три вещи:</small>
+                <ol>
+                    <li class="fragment">Download</li>
+                    <li class="fragment">Install</li>
+                    <li class="fragment">Activate</li>
+                </ol>
+            </div>
+        </section>
+
+        <section>
+            <h3>Состояния</h3>
+            <small>
+            <ol style="list-style-type: none">
+                <pre><code>
+navigator.serviceWorker.register('service-worker.js')
+                </code></pre>
+                <li class="fragment grey">[Download]: с этого момента воркер уже может слушать события</li>
+                <li class="fragment"><span class="green">Installing</span>: воркер делает все грязные дела, например, кэширует ресурсы</li>
+                <li class="fragment"><span class="green">Installed</span></li>
+                <li class="fragment grey">[Install]: этап завершен</li>
+                <li class="fragment"><span class="blue">Activating</span>: назначение этого этапа – очистка ресурсов предыдущих версий воркера</li>
+                <li class="fragment"><span class="blue">Activated</span></li>
+                <li class="fragment grey">[Activate]: теперь страница в распоряжении воркера</li>
+                <li class="fragment"><span class="magenta">Reduntant</span>: воркер замещен воркером новой версии</li>
+            </ol>
+            </small>
+        </section>
+
+        <section>
+            <h3>Registration</h3>
+            <pre><code>
+navigator.serviceWorker
+    .register('service-worker.js', { scope: './' })
+    .then (function() { console.log('oh, yeah!) })
+    .catch(function() { console.log('oh, nooo!) });
+            </code></pre>
+
+            <small class="fragment"><br/>Путь указывается относительно origin</small>
+            <br/>
+            <small class="fragment"><br/><span class="magenta">scope</span> по умолчанию './'</small>
+        </section>
+
+        <section>
+            <h3>service-worker.js</h3>
+            <small>Представляет собой обычный js-файл, который имеет собственный контекст –
+            <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope" target="_blank">ServiceWorkerGlobalScope</a>,
+            в котором лежат все необходимые нам для работы свойства и методы. Поэтому, чтобы сделать "грязные делишки" на этапе установки
+            воркера, напишем:
+            </small>
+            <pre class="fragment"><code>
+this.addEventListener('install', function(event) {
+    // here we'll cache stuff
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Caching</h3>
+            <pre><code>
+this.addEventListener('install', function(event) {
+    event.waitUntil(
+        // we'll cache here for sure
+    );
+});
+            </code></pre>
+
+            <small class="fragment">
+                У <span class="magenta">event</span> так же существует метод
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerGlobalScope/skipWaiting" target="_blank">.skipWaiting()</a>,
+                который просто немедленно делает воркер активным
+            </small>
+        </section>
+
+        <section>
+            <pre><code>
+this.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches
+            .open('v1')
+            .then(function(cache) {
+                return cache.addAll([
+                    '/index.html',
+                    '/style.css',
+                    ...
+                ]);
+            });
+    );
+})
+            </code></pre>
+            <small class="fragment">
+                Тут можно почитать о
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage" target="_blank">caches (CacheStorage)</a> и
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Cache" target="_blank">cache</a>
+            </small>
+        </section>
+
+        <section>
+            <h3>Request Hijacking</h3>
+
+            <small>
+                Чтобы перехватить запрос используется событие
+                <a href="https://developer.mozilla.org/ru/docs/Web/API/FetchEvent" target="_blank">fetch</a>
+            </small>
+
+            <pre class="fragment"><code>
+this.addEventListener('fetch', function(event) {
+    event.respondWith(
+        // magic goes here
+    );
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Fire</h3>
+            <pre><code>
+this.addEventListener('fetch', function(event) {
+    event.respondWith(
+        caches.match(event.request);
+    );
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Fira</h3>
+            <pre><code>
+...
+event.respondWith(
+    caches
+        .match(event.request)
+        .catch(function() {
+            return fetch(event.request);
+        });
+);
+...
+            </code></pre>
+
+            <small class="fragment">
+                Тут можно почитать о
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API" target="_blank">Fetch API</a> и
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/Fetch" target="_blank">fetch</a>
+            </small>
+        </section>
+
+        <section>
+            <h3>Firaga</h3>
+            <pre><code>
+...
+return fetch(event.request)
+    .then(function(res) {
+        return caches
+            .open('v1')
+            .then(function(cache) {
+                cache.put(event.request, res.clone());
+                return res;
+            });
+    });
+...
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Firaja</h3>
+
+            <div style="font-size: 14px !important; line-height: 1.3 !important;">
+                <pre><code>
+...
+return fetch(event.request)
+    .then(function(res) {
+        return caches
+            .open('v1')
+            .then(function(cache) {
+                cache.put(event.request, res.clone());
+                return res;
+            })
+    })
+    .catch(function() {
+        caches.match('placeholder.jpg');
+    });
+...
+                </code></pre>
+            </div>
+        </section>
+
+        <section>
+            <h2>Summary</h2>
+            <small class="grey">don't write code in such way, I beg you</small>
+        </section>
+
+        <section>
+            <pre><code>
+this.addEventListener('fetch', function(event) {
+  event.respondWith(
+    caches
+      .match(event.request)
+      .catch(function() {
+        return fetch(event.request)
+          .then(function(res) {
+            return caches
+              .open('v1')
+              .then(function(cache) {
+                cache.put(event.request, res.clone());
+                return res;
+              })
+          })
+          .catch(function() {
+            caches.match('placeholder.jpg');
+          });
+      })
+  );
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>Update Service Worker</h3>
+
+            <pre class="fragment"><code>
+this.addEventListener('install', function(event) {
+    event.waitUntil(
+        caches
+            .open('v2') // <========
+            .then(function(cache) {
+                return cache.addAll([ ... ]);
+            });
+    );
+});
+            </code></pre>
+
+            <small class="fragment">Не забывайте поменять версию кэша на актуальную<br> в функцию при обработке <span class="magenta">fetch</span>!</small>
+        </section>
+
+        <section>
+            <h3>If you love...</h3>
+            <pre><code>
+this.addEventListener('activate', function(event) {
+    var safeList = ['v2'];
+
+    event.waitUntil(
+        // delete old caches
+    );
+});
+            </code></pre>
+        </section>
+
+        <section>
+            <h3>...let go</h3>
+            <pre><code>
+caches
+    .keys()
+    .then(function(cacheKeys) {
+        return Promise.all(
+            cacheKeys
+                .filter(function (key) {
+                    return safeList.indexOf(key) < 0;
+                })
+                .map(function (key) {
+                    return caches.delete(key);
+                });
+        )
+    });
+            </code></pre>
+
+            <small class="fragment">
+                Тут можно почитать о
+                <a href="https://developer.mozilla.org/en-US/docs/Web/API/CacheStorage/keys" target="_blank">caches.keys()</a>
+            </small>
+        </section>
+
+        <section>
+            <h3>Как вообще с этим работать?</h3>
+
+            <a class="fragment" href="https://www.chromium.org/blink/serviceworker/service-worker-faq" target="_blank">
+                в Chrome
+            </a>
+            <br/>
+
+            <a class="fragment" href="https://hacks.mozilla.org/2016/03/debugging-service-workers-and-push-with-firefox-devtools/" target="_blank">
+                в Firefox
+            </a>
+            <br/>
+        </section>
+
+        <section>
+            <h3>Useful Links</h3>
+            <a href="https://www.w3.org/TR/service-workers/" target="_blank">Specification</a>
+            <br/>
+            <a href="https://jakearchibald.github.io/isserviceworkerready/" target="_blank">Is Service Workers Ready?</a>
+            <br/>
+            <a href="https://mdn.mozillademos.org/files/12638/sw101.png" target="_blank">Cheatsheet</a>
+            <br/>
+            <a href="https://serviceworke.rs/" target="_blank">Cookbook</a>
+            <br/>
+            <a href="https://jakearchibald.com/2014/offline-cookbook/" target="_blank">Godlike Article About Offline</a>
+            <br/>
+            <a href="https://www.youtube.com/watch?v=9vN1O6p7nHA" target="_blank">Что такое service-worker? Пётр Лаптев</a>
+        </section>
+
+        <section>
+            <h2>That's all Folks!</h2>
+        </section>
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({ languages: ['javascript'] });
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
