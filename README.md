@@ -17,7 +17,7 @@
 16. [Клиентская производительность](https://urfu-2015.github.io/webdev-slides/16-dev-tools-and-performance/)
 17. [Производительный NodeJS](https://urfu-2015.github.io/webdev-slides/17-pro-nodejs/)
 18. [SVG](https://urfu-2015.github.io/webdev-slides/18-svg/)
-19. Web APIs II: [History, Selection, Clipboard, Editing](https://urfu-2015.github.io/webdev-slides/20-1-history-and-selection-apis/)
+19. Web APIs II: [History, Selection, Clipboard, Editing](https://urfu-2015.github.io/webdev-slides/20-1-history-and-selection-apis/), [Service Workers](https://urfu-2015.github.io/webdev-slides/19-3-service-workers/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-1/)
