@@ -1,0 +1,417 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Web APIs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <h4>Web APIs II</h4>
+    <p class="authores">
+        <br><small>Гоголев Сергей</small>
+        <br><small>Воронцов Максим</small>
+        <br><small>Семичев Олег</small>
+    </p>
+</section>
+
+<section>
+    <div>
+        <h4 class="orange">History API</h4>
+        <h4 class="orange">Selection API</h4>
+        <h4 class="orange">Clipboard API</h4>
+        <h4 class="orange">Editing API</h4>
+    </div>
+    <div class="fragment">
+        <h4 class="orange">File API</h4>
+    </div>
+    <div class="fragment">
+        <h4 class="orange">Service workers</h4>
+    </div>
+</section>
+
+<section data-background="img/history.jpg"></section>
+
+<section>
+    <img src="img/history-example.png">
+</section>
+
+<section>
+    <h4><span class="green">History:</span> навигация</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">window.history;</span>
+
+<span class="fragment">history.length; // Число записей</span>
+
+<span class="fragment">history.back();
+
+history.forward();</span>
+
+<span class="fragment">history.go(-2);
+
+history.go(2);</span>
+    </code></pre>
+    <a href="" onclick="history.back();" class="fragment">
+        <span style="position:relative; top: 5px;">⇠</span> вернуться назад
+    </a>
+</section>
+
+<section>
+    <h4><span class="green">S</span>ingle <span class="green">P</span>age <span class="green">A</span>pplication</h4>
+    <p class="left bullet fragment">Асинхронно получить данные</p>
+    <p class="left bullet fragment">Отрендерить часть страницы <span class="fragment">(<a href="http://localhost:8080/" target="_blank">demo</a>)</span></p>
+    <p class="left bullet fragment green">Обновить URL без перезагрузки <span class="fragment">(<a href="http://localhost:8081/" target="_blank">demo</a>)</span></p>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> pushState</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">history.pushState(state, name, pathname);</span>
+
+<span class="fragment">history.pushState(null, null, '/films/warcraft');</span>
+
+<span class="fragment">history.pushState(null, 'Warcraft', '/films/warcraft');</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> state</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">
+var state = { keywords: 'Horde, Alliance, War' };
+
+history.pushState(state, null, '/films/warcraft');</span>
+
+<span class="fragment">console.log(history.state);
+// Object {keywords: 'Horde, Alliance, War'}</span>
+    </code></pre>
+    <p class="fragment">Состояние должно быть</p>
+    <p class="bullet fragment">Сериализуемо</p>
+    <p class="bullet fragment">Ограничено размером <span class="grey">(firefox – 640k)</span></p>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> popstate</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">var state = { keywords: 'Horde, Alliance, War' };
+
+history.pushState(state, null, '/films/warcraft');</span>
+<span class="fragment">
+addEventListener('popstate', function (event) {
+    console.log(document.location.pathname, event.state);
+});
+</span>
+<span class="fragment">history.back();</span>
+</code></pre><pre class="flat fragment"><code data-noescape class="text grey">'/' null
+</code></pre><pre class="flat fragment"><code data-noescape>
+history.forward();
+</code></pre><pre class="flat fragment"><code data-noescape class="text grey">'/films/warcraft' {Object {keywords: "Horde, Alliance, War"}}
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> replaceState</h4>
+    <pre class="flat fragment"><code data-noescape>
+        var newState = { activeTab: 'trailers' };
+
+        var pathname = document.location.pathname;
+
+        history.replaceState(newState, null, pathname);
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> поведение скролла</h4>
+    <pre class="flat fragment"><code data-noescape>
+history.scrollRestoration = 'manual'; // Default: auto
+    </code></pre>
+    <a href="http://localhost:8082/" target="_blank" class="fragment">demo</a>
+    <!-- <iframe class="fragment" width=600 height=400 data-src="https://www.youtube.com/embed/DFBXl8NNQyk?controls=2&modestbranding=1&showinfo=0&utm-source=crdev-wf"></iframe> -->
+</section>
+
+<section>
+    <h4><span class="green">History:</span> поддержка</h4>
+    <img src="img/history-ciu.png">
+</section>
+
+<section>
+    <h4><span class="green">History:</span> определение поддержки</h4>
+    <pre class="flat fragment"><code data-noescape>
+       window.history && 'pushState' in window.history
+    </code></pre>
+    <h4 class="fragment">Но лучше <a href="https://modernizr.com/">Modernizr</a>
+    <pre class="flat fragment"><code data-noescape>
+                         modernizr.history
+    </code></pre>
+    </h4>
+</section>
+
+<section>
+    <h4><span class="green">History:</span> спецификация</h4>
+    <a href="https://html.spec.whatwg.org/multipage/browsers.html#history">WHATWG HTML Living Standard</a>
+</section>
+
+<section>
+    <h4><a href="https://visionmedia.github.io/page.js/">Page.js</a></h4>
+    <pre class="flat fragment"><code data-noescape>page('/', list);
+page('/films/:id', load, show);
+page('*', notFound)
+    </code></pre>
+    <pre class="flat fragment"><code data-noescape>function load(ctx, next) {
+    <span class="fragment">console.log(ctx.pathname);
+    console.log(ctx.state);</span>
+
+    <span class="fragment">console.log(ctx.params.id);</span>
+
+    <span class="fragment">ctx.whatever = 'something';</span>
+
+    <span class="fragment">next();</span>
+}
+    </code></pre>
+</section>
+
+<section>
+    <h4><a href="https://visionmedia.github.io/page.js/">Page.js</a></h4>
+    <p class="pros fragment">Реагирует на <span class="blue">popstate</span><br>
+        <span class="grey" style="font-size: 36px">значит на навигацию по истории</span></p>
+    <p class="pros fragment"><span class="blue">pushState</span> на <span class="blue">click</span> по ссылкам<br>
+        <span class="grey" style="font-size: 36px">same-origin, без атрибутов target и download</span>
+    </p>
+    <p class="pros fragment">Ручное управление<br>
+        <pre class="flat fragment"><code data-noescape>  page.show('/films/warcraft'); // pushState
+
+  page.redirect('/films/warcraft'); // replaceState
+        </code></pre>
+    </p>
+</section>
+
+<section>
+    <h4 class="orange">Selection, Clipboard, Editing APIs</h4>
+    <div class="fragment">
+        <p id="message">Для орков нет другой жизни кроме войны</p>
+        <button id="copy" class="button">Скопировать</button>
+        <button id="select" class="button fragment">Выделить всё</button>
+        <p id="editor" class="editor" contenteditable></p>
+
+        <script>
+            const message = document.getElementById('message');
+            const select = document.getElementById('select');
+            const copy = document.getElementById('copy');
+            const editor = document.getElementById('editor');
+
+            select.addEventListener('click', () => {
+                window.getSelection().selectAllChildren(message);
+            });
+
+            copy.addEventListener('click', () => {
+                document.execCommand('copy');
+            });
+
+            editor.addEventListener('paste', (event) => {
+                event.preventDefault();
+
+                const text = event.clipboardData.getData('text/plain');
+
+                document.execCommand('insertHTML', false, text);
+            });
+        </script>
+    </div>
+
+    <img class="fragment" src="img/selection-example.png">
+</section>
+
+<section>
+    <h4><span class="green">Selection:</span> выделение текста</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">var selection = window.getSelection()</span>
+
+<span class="fragment">selection.toString()</span>
+
+<span class="fragment">selection.selectAllChildren(domNode)</span>
+
+<span class="fragment">selection.removeAllRanges()</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Clipboard:</span> буфер обмена</h4>
+
+    <pre class="flat fragment"><code data-noescape>
+document.execCommand('copy');
+
+<span class="fragment">window.addEventListener('copy', function () {});</span>
+
+<span class="fragment">window.addEventListener('paste', function (event) {
+    event.clipboardData.getData('text/html');
+    <span class="fragment">event.clipboardData.getData('text/plain');</span>
+});</span>
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Clipboard:</span> поддержка</h4>
+
+    <a href="http://caniuse.com/#search=clipboard"><img src="img/clipboard-ciu.png"></a>
+    <a class="fragment" href="http://caniuse.com/#search=clipboard"><img src="img/clipboard-restr.png"></a>
+</section>
+
+<section>
+    <h4><a href="https://clipboardjs.com/">Clipboard.js</a></h4>
+    <pre class="fragment"><code class="html" data-noescape>
+&lt;input id="message"&gt;
+
+&lt;button <span class="blue">data-clipboard-target</span>="#message"&gt;&lt;/button&gt;
+    </code></pre>
+    <pre class="fragment"><code>
+var clipboard = new Clipboard('button');
+
+clipboard.on('success', function(event) {
+    var text = event.text;
+
+    event.clearSelection();
+});
+    </code></pre>
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> WYSIWYG</h4>
+    <div class="fragment">
+        <button id="bold" class="button wysiwyg-button" style="font-weight: bold">B</button>
+        <button id="italic" class="button wysiwyg-button" style="font-style: italic">I</button>
+        <input id="url" class="wysiwyg-url" value="yandex.ru">
+        <button id="link" class="button">Create link</button>
+        <div class="wysiwyg" contenteditable id="wysiwyg" style="height: 300px; ">
+            Веками магия и неприступные стены защищали людей от любых напастей. Но древнее зло, побежденное и забытое тысячелетия назад, пробудилось.
+            В самом сердце королевства открылся темный портал, и раса невиданных существ наводнила земли Азерота. Так начались события, призванные навсегда изменить судьбу этого мира.
+        </div>
+
+        <script>
+            const bold = document.getElementById('bold');
+            const italic = document.getElementById('italic');
+            const link = document.getElementById('link');
+            const wysiwyg = document.getElementById('wysiwyg');
+
+            bold.addEventListener('click', () => {
+                wysiwyg.setAttribute("contentEditable", true);
+                document.execCommand('bold');
+            });
+
+            italic.addEventListener('click', () => {
+                wysiwyg.setAttribute("contentEditable", true);
+                document.execCommand('italic');
+            });
+
+            link.addEventListener('click', () => {
+                const url = document.getElementById('url').value;
+
+                wysiwyg.setAttribute("contentEditable", true);
+                document.execCommand('createLink', false, 'https://' + url);
+            });
+
+            wysiwyg.addEventListener('blur', (e) => {
+                e.target.setAttribute("contentEditable", false);
+            });
+        </script>
+    </div>
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> contenteditable</h4>
+
+    <pre class="flat fragment"><code data-noescape class="html">
+&lt;div <span class="blue">contenteditable</span>&gt;&lt;/div&gt;
+    </code></pre>
+
+    <div class="wysiwyg fragment" contenteditable>
+Веками магия и неприступные стены защищали людей от любых напастей. Но древнее зло, побежденное и забытое тысячелетия назад, пробудилось.
+В самом сердце королевства открылся темный портал, и раса невиданных существ наводнила земли Азерота. Так начались события, призванные навсегда изменить судьбу этого мира.
+    </div>
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> поддержка contenteditable</h4>
+    <img src="img/editable-ciu.png">
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> spellcheck</h4>
+
+    <pre class="flat fragment"><code data-noescape class="html">
+&lt;div contenteditable <span class="blue">spellcheck</span>&gt;&lt;/div&gt;
+    </code></pre>
+
+    <div class="wysiwyg fragment" contenteditable spellcheck>
+Карова даёт малако!
+    </div>
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> поддержка spellcheck</h4>
+    <img src="img/spellcheck-ciu.png">
+</section>
+
+<section>
+    <h4><span class="green">Editing:</span> execCommand</h4>
+    <pre class="flat"><code data-noescape>
+<span class="fragment">document.execCommand('bold')</span>
+
+<span class="fragment">document.execCommand('createLink', false, 'https://ya.ru/')</span>
+
+<span class="fragment">document.execCommand('insertHTML', false, '&lt;p&gt;Awesome!&lt;/p&gt;');</span>
+
+<span class="fragment">document.queryCommandSupported('createLink');</span>
+    </code></pre>
+
+    <p><a class="fragment" href="https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand">Список команд</a></p>
+    <p><a class="fragment" href="http://codepen.io/netsi1964/pen/QbLLGW">Demo</a></p>
+    <p><a class="fragment" href="https://w3c.github.io/editing/execCommand.html">Спецификация</a></p>
+</section>
+
+<section style="font-size: 1.4em">
+    <h4>History API</h4>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/History_API">Manipulating the browser history</a></p>
+    <p><a href="http://diveinto.html5doctor.com/history.html">Manipulating history for fun &amp; profit</a></p>
+    <h4>Selection API</h4>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Selection">Selection</a> <span class="grey">(MDN)</span></p>
+    <h4>Editing APIs</h4>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand">Document.execCommand()</a> <span class="grey">(MDN)</span></p>
+    <p><a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content_Editable">Content Editable</a> <span class="grey">(MDN)</span></p>
+    <p><a href="http://htmlbook.ru/html/attr/spellcheck">Атрибут spellcheck</a></p>
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript', 'html']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
