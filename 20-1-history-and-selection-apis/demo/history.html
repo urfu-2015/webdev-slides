@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>History</title>
+    <style>
+        @font-face {
+            font-family: textbook-light;
+            src: url('/textbook-light.woff');
+        }
+
+        body {
+            margin: 0;
+            font-family: textbook-light;
+        }
+
+        header {
+            padding: 15px 40px;
+            background: #FFCC00;
+            font-size: 40px;
+            color: white;
+        }
+
+        main {
+            display: flex;
+            flex-direction: row;
+        }
+
+        article {
+            flex: 1 1 auto;
+            padding: 0 40px 20px;
+        }
+
+        aside {
+            flex: 0 1 auto;
+            padding: 20px;
+        }
+
+        nav a {
+            display: block;
+            padding: 10px 40px;
+            margin-bottom: 20px;
+            font-size: 25px;
+            color: black;
+            text-decoration: none;
+            background: #F3F1ED;
+        }
+
+        nav a:hover {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <header>Awesome films!</header>
+    <main>
+        <article>
+            <h1></h1>
+            <section></section>
+        </article>
+        <aside>
+            <nav>
+                <a href="/films/warcraft" data-id="warcraft">Warcraft</a>
+                <a href="/films/captain" data-id="captain">Captain&nbsp;America</a>
+            </nav>
+            <pre></pre>
+        </aside>
+    </main>
+    <script>
+        var title = document.getElementsByTagName('h1')[0];
+        var section = document.getElementsByTagName('section')[0];
+        var nav = document.getElementsByTagName('nav')[0];
+        var pre = document.getElementsByTagName('pre')[0];
+
+        function onDOMContentLoaded(event) {
+            var href = window.location.pathname;
+            var id = href.split('/')[2];
+
+            id && fetch('/api/' + id)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    updateArticle(data);
+                    history.replaceState(data, data.title, href);
+                    log('replaceState: ' + href);
+                });
+        }
+
+
+        function onClick(event) {
+            var id = event.target.dataset.id;
+            var href = event.target.getAttribute('href');
+
+            id && fetch('/api/' + id)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    updateArticle(data);
+                    history.pushState(data, data.title, href);
+                    log('pushState: ' + href);
+                });
+
+            return event.preventDefault();
+        }
+
+        function onPopstate(event) {
+            log('popstate: ' + event.state.title);
+            updateArticle(event.state);
+        }
+
+        function log(message) {
+            pre.appendChild(document.createTextNode(message + '\r\n'));
+        }
+
+        function updateArticle(data) {
+            window.document.title = data.title;
+            title.textContent = data.title;
+            section.innerHTML = data.text;
+        }
+
+        nav.addEventListener('click', onClick, true);
+        addEventListener('popstate', onPopstate);
+        addEventListener('load', onDOMContentLoaded)
+    </script>
+</body>
+</html>
