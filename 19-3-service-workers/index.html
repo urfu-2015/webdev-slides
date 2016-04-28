@@ -286,7 +286,7 @@ return fetch(event.request)
             })
     })
     .catch(function() {
-        caches.match('placeholder.jpg');
+        return caches.match('placeholder.jpg');
     });
 ...
                 </code></pre>
@@ -315,7 +315,7 @@ this.addEventListener('fetch', function(event) {
               })
           })
           .catch(function() {
-            caches.match('placeholder.jpg');
+                return caches.match('placeholder.jpg');
           });
       })
   );
