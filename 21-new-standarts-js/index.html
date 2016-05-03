@@ -1,0 +1,1306 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Новые стандарты JavaScript</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex nodejs"><div class="reveal"><div class="slides">
+
+<section class="large">
+    <h3>Новые стандарты<br/ >JavaScript</h3>
+    <p class="author">
+        <small>Жигалов Сергей</small>
+    </p>
+</section>
+
+<section>
+    <section data-background="images/who.jpg">
+        <h3 class="fragment">Кто?</h3>
+    </section>
+
+    <section>
+
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Technical Committee 39
+        </blockquote>
+    </section>
+</section>
+
+<section>
+    <section data-background="images/how.jpg">
+        <h3 class="fragment">Как?</h3>
+    </section>
+
+    <section>
+        <table>
+            <tr>
+                <td>ES1</td>
+                <td>Jun 1997</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ES2</td>
+                <td>Aug 1998</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ES3</td>
+                <td>Dec 1999</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ES4</td>
+                <td>???</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ES5</td>
+                <td>Dec 2009</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ES6 (ECMAScript 2015)</td>
+                <td>Jun 2015</td>
+            </tr>
+
+            <tr class="fragment">
+                <td>ECMAScript 2016 (ES7)</td>
+                <td>скоро</td>
+            </tr>
+        </table>
+    </section>
+</section>
+
+<section>
+    <section data-background="images/maturity_stages.png">
+        <h3 class="fragment">maturity stages</h3>
+    </section>
+
+    <section>
+        <h3>Stage 0: strawman</h3>
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Рассмотрено на собрании TC39 и внесено в список предложений
+        </blockquote>
+
+        <a href="https://github.com/tc39/ecma262/blob/master/stage0.md">page with proposals</a>
+    </section>
+
+
+    <section>
+        <h3>Stage 1: proposal</h3>
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Выбирается ответственный (champion) из числа TC39. Фича описывается в свободной
+            форме, реализация сопровождается примерами, обсуждается семантика и алгоритмы
+        </blockquote>
+    </section>
+
+    <section>
+        <h3>Stage 2: draft</h3>
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Строгое описание синтиксиса и семантики, допустимы TODO. Две эксперементальные реализации,
+            одна из которых может быть транспайлером.
+        </blockquote>
+    </section>
+
+    <section>
+        <h3>Stage 3: candidate</h3>
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Фича и описание готовы. Назначается ревьюверы. Должно быть не менее двух реализаций,
+            совместимых с текущей версией спецификации. Сбор обратной связи.
+        </blockquote>
+    </section>
+
+    <section>
+        <h3>Stage 4: finished</h3>
+
+        <blockquote cite="http://www.2ality.com/2015/11/tc39-process.html">
+            Все приемочные тесты проходят, практический опыт применения фичи.
+            Описание подписано и готово для включения в спецификацию.
+            Добавляется в ближайшую версию ECMAScript.
+        </blockquote>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Arrow functions</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+() => { return true; }
+        </code></pre>
+
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+() => true
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+[1, 2, 3].map(() => true);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// [true, true, true]
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+item => item % 2
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+[1, 2, 3].map(item => item % 2);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// [1, 0, 1]
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+(sum, item) => sum + item
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+[1, 2, 3].reduce(
+    (sum, item) => sum + item
+);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// 6
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions. <span class="green">this</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+function Person() {
+    this.age = 0;
+
+    setInterval(function() {
+        this.age++;
+    }, 1000);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var p = new Person();
+console.log(p.age); // ?
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions. <span class="green">this</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+function Person() {
+    this.age = 0;
+
+    setInterval(() => {
+        this.age++;
+    }, 1000);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var p = new Person();
+console.log(p.age); // ?
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions. <span class="green">arguments</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+[1, 2, 3].map(() => arguments[0]);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+// ReferenceError:
+//    arguments is not defined
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Arrow functions</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var simple = a => a > 15 ? 15 : a;
+        </code></pre>
+
+        <img src="images/what.jpg" alt="What" class="fragment" />
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Spread operator</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+var arr = [3, 1, 5];
+Math.min(...arr)
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Spread operator</h3>
+        <pre><code class="hljs javascript size-M" data-trim>
+var sub = [3, 4, 5];
+var all = [1, 2, ...sub, 6];
+
+console.log(all);
+// [1, 2, 3, 4, 5, 6]
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Spread operator</h3>
+        <pre><code class="hljs javascript size-M" data-trim>
+var one, other;
+[one, ...other] = [1, 2, 3, 4]
+
+console.log(one);   // 1
+console.log(other); // [2, 3, 4]
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Default arguments</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+function timePerSlide(slides, duration = 90) {
+    return duration / slides;
+}
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+timePerSlide(30);     // 3
+timePerSlide(20, 40); // 2
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>let</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+let year;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+let firstName, lastName;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+let city = 'Ekaterinburg';
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>let. <span class="green">Область видимости</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+if (true) {
+    var secret = 'Top secret!';
+}
+
+console.log(secret);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// Top secret!
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>let. <span class="green">Область видимости</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+if (true) {
+    let secret = 'Top secret!';
+}
+
+console.log(secret);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// ReferenceError:
+//     secret is not defined
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>let</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+let remember;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+let remember;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// SyntaxError:
+//   Identifier 'remember' has
+//   already been declared
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>let. <span class="green">temporal dead zone</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+function doWeather() {
+    console.log(temperature);
+    let temperature = 10;
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+// ReferenceError:
+//   temperature is not defined
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>const</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+const zero = 0;
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+const winterDuration = 3,
+      uralWeather = 'bad';
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>const</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+const students = [];
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+students.push('Аня');
+students.push('Федя');
+students.push('Катя');
+        </code></pre>
+
+        <img src="images/surprise.jpg" alt="surprise" class="fragment" />
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>bloсk-level function declaration</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+'use strict';
+function answer() {
+    return 'Yes';
+}
+
+if (true) {
+    function answer() {
+        return 'No';
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>bloсk-level function declaration</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+answer();
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+// Yes
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Number</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Number.EPSILON
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Number.isInteger(Infinity) // false
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Number.isNaN("NaN") // false
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Math</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Math.acosh(3)
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Math.hypot(3, 4) // 5
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Math.imul(Math.pow(2, 32) + 2, 2) // 4
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>String</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+'паром'.includes('ром') // true
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+'oh'.repeat(3)          // ohohoh
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Array</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Array.of(1, 2, 3); // [1, 2, 3]
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+[0, 0, 0].fill(7, 1); // [0, 7, 7]
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+[1, 2, 3].find(x => x === 3); // 3
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+[1, 2, 3].findIndex(x => x === 2); // 1
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+[1, 2, 3, 4, 5].copyWithin(3, 0);
+// [1, 2, 3, 1, 2]
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Array</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+['a', 'b', 'c'].entries();
+// iterator [0, 'a'], [1,'b'], [2,'c']
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+['a', 'b', 'c'].keys(); // iterator 0, 1, 2
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+['a', 'b', 'c'].values(); // iterator 'a', 'b', 'c'
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+[1, 2, 3].includes(2);   // true
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Object</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var car = {model: 'BMW M3'};
+Object.assign(car, { color: 'blue' });
+// {model: "BMW M3", color: "blue"}
+        </code></pre>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+car
+// {model: "BMW M3", color: "blue"}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+Object.keys(car);
+// ["model", "color"]
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre  class="fragment"><code class="hljs javascript size-M" data-trim>
+var one, two;
+[one, two] = [1, 2];
+
+console.log(one); // 1
+console.log(two); // 2
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-M" data-trim>
+var one, two;
+[one=1, two=2] = [11];
+
+console.log(one); // 11
+console.log(two); // 2
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-M" data-trim>
+var one = 1;
+var two = 2;
+[one, two] = [two, one];
+
+console.log(one); // 2
+console.log(two); // 1
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-M" data-trim>
+var one, three;
+[one, , three] = [1, 2, 3];
+
+console.log(one);   // 1
+console.log(three); // 3
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+var one, two;
+var {one, two} = {one: 1, two: 2};
+
+console.log(one); // 1
+console.log(two); // 2
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-M" data-trim>
+var one;
+var {number: one} = {number: 1};
+
+console.log(one); // 1
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Destructuring</h3>
+
+        <pre><code class="hljs javascript size-M" data-trim>
+var one, two;
+var {one=1, two=2} = {one: 12};
+
+console.log(one); // 12
+console.log(two); // 2
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Classes</h3>
+    </section>
+
+    <section>
+        <h3>Classes</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+class Lecture {
+    constructor(course, title) {
+        this.course = course;
+        this.title = title;
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">Methods</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+class Lecture {
+    constructor(course, title) {
+        this.course = course;
+        this.title = title;
+    }
+
+    getId() {
+        return this.course + '_' + this.title;
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">Methods</span></h3>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+var lecture = new Lecture('WebDev', 'ES.next');
+
+lecture.getId(); // 'WebDev_ES.next'
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">Fields</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+class Lecture {
+    constructor(title) {
+        this.title = title;
+    }
+
+    set duration(value) {
+        this._duration = value;
+    }
+
+    get duration() {
+        return this._duration;
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">Fields</span></h3>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+var lecture = new Lecture('ES.next');
+
+lecture.title; // ES.next
+
+lecture.duration = 120;
+lecture.duration; // 120
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">Static</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+class Lecture {
+    static from() {
+        return 'Yandex';
+    }
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+Lecture.from(); // Yandex
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">extends</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+class WebApiLecture extends Lecture {
+    constructor(course, title) {
+        super(course, 'API_' + title);
+    }
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-XS">    get isMultiTeacher () {
+        return true;
+    }</code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-XS">    getId() {
+        return super.getId() + '_WithAnimations';
+    }
+}</code></pre>
+    </section>
+
+    <section>
+        <h3>Classes. <span class="green">extends</span></h3>
+
+        <pre class="fragment"><code class="hljs javascript size-XS" data-trim>
+var lecture = new WebApiLecture('WebDev', 'Part1');
+
+lecture.isMultiTeacher; // true
+lecture.getId(); // WebDev_API_Part1_WithAnimations
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Enhanced Object Literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+var name = 'Сергей';
+var lecturer = { name: name };
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-M" data-trim>
+var lecturer = { name };
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Enhanced Object Literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var lecturer = {
+    name: 'Сергей',
+    toString() {
+        return this.name + ': ' +
+            super.toString();
+    }
+};
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+'' + lecturer;
+// Сергей: [object Object]
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Enhanced Object Literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var foolObj = {
+    [Math.random()]: 'Unpredictable!'
+};
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+JSON.stringify(foolObj);
+// {"0.0054615481669":"Unpredictable!"}
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Map</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var car = new Map();
+car.set('name', 'BMW i8');
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var engine = {capacity: '1499'};
+car.set(engine, {consumption: 2.1});
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Map</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+function drive () {};
+car.set(drive, () => new Error('...'));
+        </code></pre>
+<br>
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+car.get('name'); // BMW i8
+car.size;        // 3
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Map</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+for (var key of car.keys()) {
+    console.log(key);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+for (var value of car.values()) {
+    console.log(value);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+for (var [key, value] of car.entries()) {
+    console.log(key + ' => ' + value);
+}
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Set</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var mentors = new Set();
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+mentors.add('Олег Олегыч');
+mentors.add('Олег Львович');
+mentors.add('Олег Львович');
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+mentors.size; // 2
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Set</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+for (var mentor of mentors) {
+    console.log(mentor);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+// Олег Олегыч
+// Олег Львович
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Template literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var str = `Multi-line
+template string`
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+console.log(str);
+// Multi-line
+// template string
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Template literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var name = 'Сергей'
+var greet = `Привет, ${name}!`
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+console.log(greet);
+// Привет, Сергей!
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Template literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var math = `√25 = ${Math.sqrt(25)}`
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+console.log(math);
+// √25 = 5
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Template literals</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var name = 'Сергей'
+function tag(strings, value) {
+    strings[0]; //  'Привет, ';
+    strings[1]; //  '!';
+    value;      //  'Сергей';
+
+    return 'Нормально делай, нормально будет';
+}
+var greet = tag`Привет, ${name}!`
+        </code></pre>
+    </section>
+<!--
+    console.time('time')
+    var world = 'Мир';
+    for (var i = 0; i < 100000; i++) {
+       var a = `Привет ${world}`;
+    }
+    console.timeEnd('time')
+
+
+
+    console.time('time')
+    var world = 'Мир';
+    for (var i = 0; i < 100000; i++) {
+       var a = 'Привет ' + world;
+    }
+    console.timeEnd('time')
+
+-->
+
+    <section>
+        <h3>Template literals</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+console.log(greet);
+// Нормально делай, нормально будет
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Generators</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+function *incremental() {
+    var i = 0;
+
+    while(true) {
+        yield i++;
+    }
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Generators</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+var it = incremental();
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+it.next(); // {value: 0, done: false}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+it.next(); // {value: 1, done: false}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+it.next(); // {value: 2, done: false}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Generators</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+function *steps() {
+    yield 'Отрицание';
+    yield 'Гнев';
+    yield 'Торги';
+    yield 'Депрессия';
+    yield 'Принятие';
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Generators</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+for (var step of steps()) {
+    console.log(step);
+}
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+// Отрицание
+// Гнев
+// Торги
+// Депрессия
+// Принятие
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Typed arrays</h3>
+    </section>
+
+    <section>
+        <table class="size-S">
+            <tr>
+                <td>Int8Array</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Uint8Array</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Uint8ClampedArray</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>Int16Array</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Uint16Array</td>
+                <td>2</td>
+            </tr>
+            <tr>
+                <td>Int32Array</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Uint32Array</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Float32Array</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Float64Array</td>
+                <td>8</td>
+            </tr>
+
+        </table>
+    </section>
+
+    <section>
+        <h3>Typed arrays</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+var arr = new Int8Array([1, 100, 200]);
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+console.log(arr); // [1, 100, -56]
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>new.target</h3>
+
+        <pre class='fragment'><code class="hljs javascript size-S" data-trim>
+function Factory() {
+    console.log(new.target);
+}
+        </code></pre>
+
+        <pre class='fragment'><code class="hljs javascript size-S" data-trim>
+Factory();     // undefined
+        </code></pre>
+
+        <pre class='fragment'><code class="hljs javascript size-S" data-trim>
+new Factory(); // Factory {}
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Async functions</h3>
+
+        <pre class='fragment'><code class="hljs javascript size-XS" data-trim>
+function timeout(time) {
+    return new Promise(function (resolve) {
+        setTimeout(resolve, time);
+    });
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Async functions</h3>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+async function legendarily() {
+    console.log('Леген...');
+    await timeout(1000);
+
+    console.log('подожди-подожди');
+    await timeout(1000);
+
+    console.log('...дарно!');
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Async functions</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+legendarily()
+    .then(() => console.log('done'));
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Async functions</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+(async () => {
+    await legendarily();
+    console.log('done');
+})()
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <section>
+        <h3>Modules</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+// lib/math.js
+export function sum(x, y) {
+    return x + y;
+}
+export var pi = 3.141593;
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Modules</h3>
+
+        <pre><code class="hljs javascript size-XS" data-trim>
+import * as math from 'lib/math';
+
+console.log('2π = ' + math.sum(math.pi, math.pi));
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Modules</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+import {sum, pi} from 'lib/math';
+
+console.log('2π = ' + sum(pi, pi));
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Modules</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+// lib/mathplusplus.js
+export * from 'lib/math';
+export var e = 2.71828182846;
+export default function(x) {
+    return Math.exp(x);
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>Modules</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+import exp, {pi, e} from 'lib/mathplusplus';
+
+console.log('e^π = ' + exp(pi));
+        </code></pre>
+    </section>
+</section>
+
+<section>
+    <h3><a href="http://kangax.github.io/compat-table/es6/">Поддержка</a></h3>
+</section>
+
+<section>
+    <section data-background="images/babel.png">
+    </section>
+
+    <section>
+        <h3>Babel</h3>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+npm install --save-dev babel-cli
+        </code></pre>
+
+        <pre class="fragment"><code class="hljs javascript size-S" data-trim>
+babel src --out-dir build --source-maps
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>.babelrc</h3>
+
+        <pre><code class="hljs javascript size-S" data-trim>
+{
+    "presets": ["es2015"],
+    "plugins": [
+        "syntax-async-functions",
+        "transform-regenerator",
+        ...
+    ]
+}
+        </code></pre>
+    </section>
+
+    <section>
+        <h3>demo</h3>
+    </section>
+</section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
