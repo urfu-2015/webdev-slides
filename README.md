@@ -19,7 +19,7 @@
 18. [SVG](https://urfu-2015.github.io/webdev-slides/18-svg/)
 19. Безопастность
 20. Web APIs II: [History, Selection, Clipboard, Editing](https://urfu-2015.github.io/webdev-slides/20-1-history-and-selection-apis/), [File APIs](https://urfu-2015.github.io/webdev-slides/20-2-file-apis/), [Service Workers](https://urfu-2015.github.io/webdev-slides/20-3-service-workers/)
-21. [Новые стандарты JS](https://urfu-2015.github.io/webdev-slides/21-new-standarts-js/)
+21. [Новые стандарты JS](https://urfu-2015.github.io/webdev-slides/21-new-standarts-js)
 
 
 # Слайды к хакатонам
