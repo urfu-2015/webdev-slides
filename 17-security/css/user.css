@@ -1,0 +1,283 @@
+.reveal h4 {
+    font-weight: 100;
+}
+
+.reveal blockquote {
+    width: 95%;
+}
+
+.reveal blockquote:before {
+    content: "«"
+}
+.reveal blockquote:after {
+    content: "»"
+}
+
+.reveal pre code
+{
+    max-height: 650px;
+}
+
+.reveal pre
+{
+    box-shadow: none;
+    font-family: 'sourcecodepro-light', textbook-light, Arial;
+}
+
+.reveal pre.code
+{
+    display: block;
+    padding: 5px;
+    overflow: auto;
+    word-wrap: normal;
+    color: #dcdcdc;
+    background: rgba(63, 63, 63, 0.6);
+}
+
+.green
+{
+    color: green;
+}
+
+.toggle-near-container img
+{
+    display: inline-block;
+}
+
+section.size-L,
+section .size-L,
+pre.size-L
+{
+    font-size: 60px;
+    line-height: 90px;
+}
+
+section.size-M,
+section .size-M,
+pre.size-M,
+.yandex section
+{
+    font-size: 50px;
+    line-height: 75px;
+}
+
+section.size-S,
+section .size-S,
+pre.size-S
+{
+    font-size: 40px;
+    line-height: 60px;
+}
+
+section.size-XS,
+section .size-XS,
+pre.size-XS
+{
+    font-size: 30px;
+    line-height: 45px;
+}
+
+section.size-XXS,
+section .size-XXS,
+pre.size-XXS
+{
+    font-size: 26px;
+    line-height: 36px;
+}
+
+section.size-XXXS,
+section .size-XXXS,
+pre.size-XXXS
+{
+    font-size: 15px;
+    line-height: 20px;
+}
+
+.reveal pre
+{
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+}
+
+.reveal p.fact
+{
+    background-color: #2a2a2a;
+    text-align: left;
+    padding: 10px;
+}
+
+.magenta
+{
+    color: #a0a0f0 !important;
+}
+
+mark, mark *
+{
+    color: black !important;
+}
+
+.reveal code
+{
+    font-family: monospace, textbook, Arial;
+}
+
+.author small::first-letter
+{
+    color: red;
+}
+
+.shadow
+{
+   color: #808080 !important;
+}
+
+.reveal pre code {
+    font-family: 'sourcecodepro-light', textbook-light, Arial;
+    background: rgba(63, 63, 63, 0.6);
+    padding: 10px;
+}
+
+.green {
+    color: #a1b56c !important;
+}
+
+.grey {
+    color: #777;
+}
+
+.red {
+    color: #ab4642 !important;
+}
+
+.title-highlight {
+    display: inline-block;
+
+    padding: 0 20px !important;
+
+    background: rgba(63, 63, 63, 0.6);
+    border-radius: 5px;
+}
+
+.textbook {
+    font-family: 'textbook-light';
+}
+
+.reveal .slide-number {
+    font-size: 1em;
+}
+
+pre.join-bottom code{
+    padding-bottom: 0 !important;
+}
+
+pre.join-bottom ~ pre:not(:last-child) code {
+    padding-top: 0 !important;;
+    padding-bottom: 0 !important;;
+}
+
+.animation1 ~ img {
+    position: absolute;
+
+    margin-left: -189px !important;
+    z-index: 1;
+
+    transition: all 0.5s;
+}
+
+.fader {
+    position: absolute;
+    z-index: 2;
+    width: 294px;
+    height: 293px;
+    transform: scale(.3) translate(960px, -330px);
+}
+
+.animation1.visible ~ img {
+    margin-left: 0 !important;
+    opacity: .5;
+    transform: scale(.3) translate(960px, -330px);
+}
+
+.animation1.visible ~ .fader:hover ~ img {
+    opacity: 1;
+    transform: scale(1) translate(320px, -110px);
+}
+
+.animation1 ~ pre {
+    opacity: 0;
+    transition: opacity 0.5s 0.5s;
+}
+
+.animation1.visible ~ pre {
+    opacity: 1;
+}
+
+
+.spoiler {
+    background: rgba(238, 238, 238, 1);
+    transition: background 0.5s;
+}
+
+
+.spoiler:hover {
+    background: rgba(238, 238, 238, 0);
+}
+
+pre code {
+    padding: 0 25px !important;
+    border: 3px solid rgba(63, 63, 63, 0.4) !important;
+    background: rgba(63, 63, 63, 0.25) !important;
+    max-height: 100% !important;
+}
+
+pre {
+    margin: 10px 15px !important
+}
+
+.left {
+    text-align: left;
+}
+
+.reveal .slides section .fragment.prev {
+    display: none;
+}
+
+.reveal .slides section .fragment.prev.current-fragment {
+    display: block;
+}
+
+.reveal section .fragment.init_visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.highlight.fragment.visible,
+.highlight.static {
+    color: #000;
+}
+
+.highlight.yellow.fragment.visible,
+.highlight.yellow.static {
+    background-color: rgb(68, 97, 142);
+}
+
+.fragment.will-show {
+    display: none;
+}
+
+.fragment.will-show.visible {
+    display: inline;
+}
+
+.fragment.will-show.visible + .will-fade {
+    display: none;
+}
+
+.reveal section img {
+    background: none;
+}
+
+.reveal .slides > section {
+    padding: 0;
+}
