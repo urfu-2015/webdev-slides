@@ -20,7 +20,7 @@
 19. [Безопастность](https://urfu-2015.github.io/webdev-slides/19-security/)
 20. Web APIs II: [History, Selection, Clipboard, Editing](https://urfu-2015.github.io/webdev-slides/20-1-history-and-selection-apis/), [File APIs](https://urfu-2015.github.io/webdev-slides/20-2-file-apis/), [Service Workers](https://urfu-2015.github.io/webdev-slides/20-3-service-workers/)
 21. [Новые стандарты JS](https://urfu-2015.github.io/webdev-slides/21-new-standarts-js)
-
+22. [Accessibility](https://urfu-2015.github.io/webdev-slides/22-a11y/)
 
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-1/)
