@@ -25,3 +25,4 @@
 # Слайды к хакатонам
 1. [Первый хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-1/)
 2. [Второй хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-2/)
+2. [Третий хакатон](https://urfu-2015.github.io/webdev-slides/hackatone-3/)
