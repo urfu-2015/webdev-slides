@@ -1,0 +1,947 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>a11y</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/hljs.css">
+    <link rel="stylesheet" href="./css/user.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.2/Chart.bundle.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/snap.svg/0.4.1/snap.svg-min.js"></script>
+    <script src="../lib/js/countUp.js"></script>
+</head>
+<body class="yandex nodejs">
+<div class="reveal">
+    <div class="slides">
+
+        <section class="large">
+            <h3 class="fragment main-header">a<span class="main-header__short">11</span><span class="main-header__full">ccessibilit</span>y<br/>
+            </h3>
+            <p class="author">
+                <small>Кувалдин Артем,</small>
+                <small>Симонова Екатерина</small>
+            </p>
+        </section>
+
+        <section>
+            <h3>Что такое «доступность»?</h3>
+            <p>– это свойство приложения, заключающееся в том, что он может быть использован самым широким кругом лиц.</p>
+        </section>
+
+        <section>
+            <h3>Целевая аудитория</h3>
+            <p>– это люди с нарушением:</p>
+            <ul>
+                <li class="minus fragment">зрения</li>
+                <li class="minus fragment">слуха</li>
+                <li class="minus fragment">опорно-двигательной системы</li>
+                <li class="minus fragment">речи</li>
+                <li class="minus fragment">ментальной сферы</li>
+                <li class="minus fragment">и не только...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Примеры плохого зрения</h3>
+            <h4>Макулодистрофия</h4>
+            <img src="img/bad-eye-1.png" height="400">
+        </section>
+
+        <section>
+            <h4>Глаукома</h4>
+            <img src="img/bad-eye-2.png" height="400">
+        </section>
+
+        <section>
+            <h4>Диабетическая ретинопатия</h4>
+            <img src="img/bad-eye-3.png" height="400">
+        </section>
+
+        <section>
+            <h4>Катаракта</h4>
+            <img src="img/bad-eye-4.png" height="400">
+        </section>
+
+        <section>
+            <h4>Цветовая слепота</h4>
+            <img src="img/daltonizm.jpg" height="400">
+        </section>
+
+        <section data-state="countup">
+            <h4>Число людей с нарушением зрения<sup>*</sup></h4>
+            <span id="countPart" style="display: inline-block; width: 230px;"></span> / <span style="display: inline-block; width: 260px;" id="countAll"></span>
+            <p class="comment"><sup>*</sup>по данным <a href="http://www.who.int/mediacentre/factsheets/fs282/ru/">ВОЗ</a> за 2014</p>
+        </section>
+
+        <section>
+            <h3>Интерфесы взаимодействия</h3>
+            <ul>
+                <li class="fragment plus">Увеличение экрана</li>
+                <li class="fragment plus">Программы экранного доступа</li>
+                <li class="fragment plus">Дисплей Брайля<br><img src="img/дисплей-брайля.jpg"></li>
+            </ul>
+        </section>
+
+        <section>
+            <a href="https://habrahabr.ru/company/yandex/blog/270775/"><h3>Интерфесы взаимодействия</h3></a>
+            <canvas id="piechart-inerface" width="500" height="300"></canvas>
+        </section>
+
+        <section>
+            <h3>Программы экранного доступа</h3>
+            <p>— это программа, прочитывающая вслух то, что находится на экране.</p>
+            <ul>
+                <li class="fragment payment">JAWS (Windows)</li>
+                <li class="fragment plus">NVDA (Windows)</li>
+                <li class="fragment plus">VoiceOver (Mac Os)</li>
+                <li class="fragment plus">Orca (Linux)</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Программы экранного доступа</h3>
+            <canvas id="piechart-sr" width="500" height="300"></canvas>
+        </section>
+
+        <section>
+            <h3>Demo: voiceOver</h3>
+        </section>
+
+        <section>
+            <h3>Браузеры</h3>
+            <canvas id="piechart-browsers" width="500" height="250"></canvas>
+            <a class="fragment" href="http://www.webvisum.com/">Webvisum</a>
+        </section>
+
+        <section>
+            <h3>Операционные системы</h3>
+            <canvas id="piechart-os" width="500" height="300"></canvas>
+        </section>
+
+        <section>
+            <h4>Операционные системы на планшете/телефоне</h4>
+            <canvas id="piechart-mibile-os" width="500" height="300"></canvas>
+        </section>
+
+        <section>
+            <h4>Программы экранного доступа на планшете/телефоне</h4>
+            <canvas id="piechart-mibile-os-programm" width="500" height="250"></canvas>
+        </section>
+
+        <section>
+            <h3>Основные проблемы</h3>
+            <ul>
+                <li class="fragment minus">CAPTCHA</li>
+                <li class="fragment minus">Flash</li>
+                <li class="fragment minus">двусмысленными ссылками</li>
+                <li class="fragment minus">сложными формами</li>
+                <li class="fragment minus">изменяющимся содержимым страницы</li>
+                <li class="fragment minus">отсутствие клавиатурного управления</li>
+                <li class="fragment minus">«кривые руки» разработчиков</li>
+            </ul>
+        </section>
+
+        <section>
+            <a href="https://www.w3.org/TR/wai-aria/"><h2>WAI-ARIA</h2></a>
+            <p class="comment" style="font-size: .7em !important;">Web Accessibility Initiative — Accessible Rich Internet Applications</p>
+            <ul>
+                <li class="fragment plus"><a href="https://www.w3.org/TR/wai-aria/">ARIA</a> – основной документ</li>
+                <li class="fragment plus"><a href="https://www.w3.org/TR/wai-aria-primer/">Primer</a> – описание проблем</li>
+                <li class="fragment plus"><a href="https://www.w3.org/TR/wai-aria-practices/">Authoring Practices</a> – пример внедрения доступности</li>
+            </ul>
+        </section>
+
+        <section>
+            <a href="https://www.w3.org/Translations/WCAG20-ru/"><h3>Принципы разработки</h3></a>
+            <ul>
+                <li class="fragment plus">Воспринимаемость <div class="comment small">текстовая версия, отделение важного</div></li>
+                <li class="fragment plus">Управляемость  <div class="comment small">клавиатурой, ограничение времни, опасные элементы, увеличение шрифта, помощь в навигации</div></li>
+                <li class="fragment plus">Понятность  <div class="comment small">текст для чтения, предсказуемость, ошибки</div></li>
+                <li class="fragment plus">Надежность</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>Клавиатурная навигация</h2>
+        </section>
+
+        <section>
+            <h3>Навигация стралками FF</h3>
+            <ul>
+                <li class="fragment plus">«Preferences → Advanced → Always use the cursor keys to navigate within pages»</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>атрибут accesskey</h3>
+            <p>– выполняет переход поссылке</p>
+<pre><code><a href="yandex.ru" title="yandex(Y)" accesskey="y">...</a></code></pre>
+    <ul>
+        <li class="fragment plus">IE:      Alt+y</li>
+        <li class="fragment plus">Chrome:  Alt+y</li>
+        <li class="fragment plus">Opera:   Alt+y</li>
+        <li class="fragment plus">Safari:  Ctrl+Option+y</li>
+        <li class="fragment plus">Firefox: Shift+Alt+y</li>
+    </ul>
+        </section>
+
+        <section>
+            <h3>Виртуальный курсор</h3>
+            <p>– это способ изучить страницу не взаимодействуя с ней</p>
+            <div class="fragment">Demo</div>
+        </section>
+
+        <section>
+            <h3>Быстрая навигация</h3>
+            <ul>
+                <li class="fragment plus">по кнопкам</li>
+                <li class="fragment plus">по заголовкам(h1-h6)</li>
+                <li class="fragment plus">по ссылкам</li>
+                <li class="fragment plus">по полям ввода</li>
+            </ul>
+            <div class="fragment">Demo</div>
+        </section>
+
+        <section>
+            <img src="img/Warning.png" height="200">
+            <p>Все функции страницы должны быть доступны для навигации клавишей <code>Tab</code>, а методы «быстрой» навигации должны существовать в качестве дополнения, но никак не в качестве единственной возможности.</p>
+        </section>
+
+        <section>
+            <img src="img/Warning.png" height="200">
+            <p>Активация ссылки(Enter) перемещает на другую страниц</p>
+            <p class="fragment">Активация кнопки(Spacebar) совершает действие без перехода.</p>
+            <p class="fragment">Перед активацией необходимо проверить не используется ли модификатор</p>
+        </section>
+
+        <section>
+<pre><code>$('.button').on('keydown', function(e) {
+    if (e.shiftKey || e.ctrlKey || e.altKey || e.metaKey) {
+        return;
+    }
+
+    switch (e.which) {
+        case 13: /* Enter */
+            doSomething();
+            break;
+        case 32: /* Spacebar */
+            /* Прокрутка страницы на один экран. */
+            e.preventDefault();
+/* Здесь нельзя делать doSomething().*/
+    }
+});</code></pre>
+        </section>
+
+        <section>
+            <h3>атрибут tabindex</h3>
+            <pre><code><!--значение используется для включения в обход элемента,
+который по умолчанию не получает фокус--></code></pre>
+            <pre class="html"><code>&lt;div class=button tabindex="0">...&lt;/div></code></pre>
+<pre class="html fragment"><code>
+<!--если приходится размещать элементы в DOM не в том
+порядке, в котором они идут визуально-->
+&lt;a tabindex="1">...&lt;/a></code></pre>
+            <pre class="html fragment"><code>
+<!--элемент не получает фокус при нажатии Tab;-->
+&lt;a tabindex="-1">...&lt;/a></code></pre>
+        </section>
+
+        <section>
+<pre><code><button tabindex="0">Я кнопка 1</button>
+<button tabindex="1">Я кнопка 2</button>
+<button tabindex="3">Я кнопка 3</button>
+<button tabindex="2">Я кнопка 4</button>
+<button tabindex="0">Я кнопка 5</button></code></pre>
+            <video controls="controls" data-autoplay>
+                <source src="img/2014-02-24_15-30-01.webm">
+            </video>
+        </section>
+        
+        <section>
+<pre class="css"><code>.block:focus
+{
+    outline: 1px dashed black;
+}
+…
+</code></pre>
+<pre class="html"><code><div class="block" tabindex="-1">
+  <label for="login">Логин:</label>
+  <input id="login" disabled>
+</div>
+</code></pre>
+        </section>
+
+        <section>
+            <video controls="controls" data-autoplay >
+                <source src="img/click.webm">
+            </video>
+        </section>
+
+        <section>
+            <img src="img/Warning.png" height="200">
+            <p>Элемент, находящийся в фокусе, должен иметь графические выделение!</p>
+            <div class="button-hightlight" style="text-decoration: underline; background: #fff; color: #000; width: 300px; margin: 0 auto" role="button">Я ссылка</div>
+            <a href="https://www.gov.uk/">Demo: gov.uk</a>
+            <!--<img src="img/outline.png" width="300">-->
+        </section>
+
+        <section>
+            <h3>Невидимое</h3>
+            <p><code>display:none</code> и <code>visibility:hidden</code> – недоступны для фокуса</p>
+        </section>
+
+        <section>
+            <h3>Невидимые ссылки</h3>
+<pre><code>.hidden-link {
+    position: absolute;
+    left: -32767px;
+}
+.hidden-link:focus {
+    left: 10px;
+}
+</code></pre>
+<pre><code><a href="#blq-content" class="hidden-link">
+Skip to content
+</a>
+...
+<nav>...</nav>
+<div id="blq-content">...</div></code></pre>
+            <a href="http://www.bbc.co.uk/accessibility/">Demo: BBC</a>
+        </section>
+
+        <section>
+            <h3>Активация мышью</h3>
+            <ul>
+                <li class="fragment minus">Активировать по mousedown — ошибка!</li>
+                <li class="fragment minus">Клик с модификатором — это не то же самое, что и обычный клик</li>
+                <li class="fragment minus">dblclick — тяжёлое действие</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Всплывающие окна</h3>
+            <p>– создаёт развилку для навигации.</p>
+            <ul>
+                <li class="fragment minus">Меню</li>
+                <li class="fragment minus">Модальные окна</li>
+                <li class="fragment minus">Всплывающие подсказки</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Механика меню</h3>
+            <ul>
+                <li class="fragment minus">открывается при активации кнопки</li>
+                <li class="fragment minus">выбор стрелками</li>
+                <li class="fragment minus">активируется нажатием Spacebar или Enter</li>
+                <li class="fragment minus">после активации закрывается</li>
+            </ul>
+            <img src="img/menu.png">
+        </section>
+        <section>
+            <h3>Механика модальных окон</h3>
+            <p>Зацикливает внутри себя фокус.</p>
+            <img src="img/modal.png">
+        </section>
+        <section>
+            <h3>Механика всплывающих подсказок</h3>
+            <p>Внутри подсказки нет пригодных для фокуса элементов.</p>
+            <img src="img/tooltip.png">
+        </section>
+
+        <section>
+            <h3>Перекрытие страницы</h3>
+            <ul>
+                <li class="fragment minus">
+                    Использовать position:absolute в СSS-стилях.
+                </li>
+                <li class="fragment minus">
+                    Вынести содержимое окна в конец <code>&lt;body&gt;</code> и расположить его на странице при помощи скриптов.
+                </li>
+
+            </ul>
+        </section>
+
+        <section>
+            <h3>Роли</h3>
+            <p>– определяет то, чем логически является элемент.</p>
+<pre><code><div role="button">…</div></code></pre>
+            <ul>
+                <li class="fragment plus">абстрактные</li>
+                <li class="fragment plus">образующие элементы управления</li>
+                <li class="fragment plus">определяющие структуру документа</li>
+            </ul>
+        </section>
+
+        <section>
+            <h4>Абстрактные</h4>
+            <ul>
+                <li class="fragment plus">select</li>
+                <li class="fragment plus">input</li>
+                <li class="fragment plus">command – интерактивный элемент</li>
+                <li class="fragment plus">widget – выполняющий действие, но не получающий ввод</li>
+                <li class="fragment plus">...</li>
+            </ul>
+        </section>
+        <section>
+            <h4>Элементы управления</h4>
+            <ul>
+                <li class="fragment plus">button</li>
+                <li class="fragment plus">link</li>
+                <li class="fragment plus">slider</li>
+                <li class="fragment plus">...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>Роли живых областей</h3>
+            <ul>
+                <li class="fragment plus">alert – область для одноразовых уведомлений</li>
+                <li class="fragment plus">log – сообщения о добавлении новой информации</li>
+                <li class="fragment plus">marquee – уведомления о частом, периодическом изменении текста</li>
+                <li class="fragment plus">status</li>
+                <li class="fragment plus">timer</li>
+            </ul>
+        </section>
+
+
+        <section>
+            <h3>alert</h3>
+            <video controls data-autoplay>
+                <source src="img/alert.webm">
+            </video>
+        </section>
+
+        <section>
+            <h3>presentation</h3>
+            <p>Элемент не играет никакой роли, а используется для красоты.</p>
+            <pre><code><img src="/path/to/1x1.gif" role="presentation"></code></pre>
+        </section>
+
+        <section>
+            <h3>Области</h3>
+            <ul>
+                <li class="fragment plus">banner</li>
+                <li class="fragment plus">complimentary</li>
+                <li class="fragment plus">main</li>
+                <li class="fragment plus">contentinfo</li>
+                <li class="fragment plus">navigation</li>
+                <li class="fragment plus">...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>group</h3>
+<pre class="html"><code><div role="group" aria-label="Адрес доставки"></div></code></pre>
+            <video class="fragment" controls data-autoplay>
+                <source src="img/group.webm">
+            </video>
+        </section>
+
+        <section>
+            <h3>HTML5</h3>
+            <p>Можно обойтись семантичными элементами</p>
+<pre class="html"><code  style="max-height: 400px;"><!--role="banner"-->
+<header id="header">
+    <h1>Название блога</h1>
+</header>
+<!--role="navigation"-->
+<nav id="nav">
+    <ul>
+        <li><a href="/">Главная</a></li>
+        <li><a href="/news">Новости</a></li>
+        <li><a href="/contacts">Контакты</a></li>
+    </ul>
+</nav>
+<!--role="main"-->
+<main id="content">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+    <p>Maecenas iaculis, elit at tempor imperdiet, purus orci sollicitudin ipsum, nec elementum justo diam non metus.</p>
+</main>
+<!--role="complementary"-->
+<aside id="sidebar">
+    <nav>
+        <h3>Подменю</h3>
+        <ul>
+            <li><a href="#">Раз</a></li>
+            <li><a href="#">Два</a></li>
+            <li><a href="#">Три</a></li>
+        </ul>
+    </nav>
+</aside>
+<!--role="contentinfo"-->
+<footer id="footer">
+    <p>© 2011 Копирайт.</p>
+</footer></code></pre>
+        </section>
+        
+        <section>
+            <h3>aria-*</h3>
+<pre class="html size-XXS"><code><!-- «Войти, кнопка» -->
+ <div role="button" aria-label="Войти" aria-describedby="describe"></div>
+ <p id="describe">Описание кнопки</p>
+
+ <!-- «Войти, кнопка» -->
+ <div role="button" aria-labelledby="sign-in-button">
+     <span id="sign-in-button">Войти</span>
+ </div></code></pre>
+
+<a href="http://www.oaa-accessibility.org/examplep/tooltip1/">Demo: tooltip</a><br>
+<a href="https://www.w3.org/TR/wai-aria/rdf_model.png">Связность</a>
+        </section>
+
+        <section>
+            <h3>Свойства элементов управления</h3>
+            <ul>
+                <li class="fragment plus">aria-required {Boolean}</li>
+                <li class="fragment plus">aria-readonly {Boolean}</li>
+                <li class="fragment plus">aria-valuenow {Number}</li>
+                <li class="fragment plus">aria-valuemin {Number}</li>
+                <li class="fragment plus">aria-valuemax {Number}</li>
+                <li class="fragment plus">...</li>
+            </ul>
+
+        </section>
+
+        <section>
+            <video controls data-autoplay>
+                <source src="img/value-now.webm">
+            </video>
+        </section>
+
+        <section>
+            <h3>Состояния элементов управления</h3>
+            <ul>
+                <li class="fragment plus">aria-checked {Boolean}</li>
+                <li class="fragment plus">aria-disabled {Boolean}</li>
+                <li class="fragment plus">aria-expanded {Boolean}</li>
+                <li class="fragment plus">aria-invalid {Boolean}</li>
+                <li class="fragment plus">...</li>
+            </ul>
+        </section>
+
+        <section>
+            <h3>aria-invalid</h3>
+            <pre><code><input aria-invalid="true"></code></pre>
+            <video controls data-autoplay>
+                <source src="img/aria-invalid.webm">
+            </video>
+        </section>
+
+        <section>
+            <h3>«Живые» области</h3>
+            <p>– области, содержимое которых обновляется после внешнего события.</p>
+            <ul>
+                <li class="fragment plus">aria-atomic {Boolean}</li>
+                <li class="fragment plus">aria-live {off | polite | assertive}</li>
+                <li class="fragment plus">aria-relevant {additions | removals | text | all}</li>
+            </ul>
+            <a href="https://www.w3.org/WAI/WCAG20/Techniques/working-examples/ARIA19/aria-alert-validation.html">Demo: w3c</a>
+        </section>
+
+        <section>
+            <h3>aria-hidden</h3>
+<pre class="html size-XXS"><code><!--aria-controls Взаимодействие с элементом меняет состояние других элементов.-->
+&lt;span role="button" aria-controls="popup" aria-expanded="false"
+      aria-label="кнопка">&lt;/span>
+<div id="popup" class="popup" aria-hidden="true">текст</div></code></pre>
+            <a href="http://jsbin.com/sovubabali/1/edit?html,js,output">Demo</a>
+        </section>
+
+
+
+        <!--<section>-->
+            <!--<a href="https://www.w3.org/WAI/WCAG20/quickref/?showtechniques=111#qr-text-equiv-all"><h3>-->
+                <!--Воспринимаемость</h3></a>-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">текстовую версия любого нетекстового контента(alt, aria-label, title)</li>-->
+                <!--<li class="fragment plus">скрыть оформления</li>-->
+                <!--<li class="fragment plus">предоставьте альтернативную версию медиаконтента</li>-->
+                <!--<li class="fragment plus">контент можно представить в различных видах без потери данных или структуры(role, семантика)</li>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <!--<section>-->
+
+<!--<pre><code><h3>Set Alerts for your Account</h3>-->
+
+<!--<div role="radiogroup" aria-labelledby="alert1">-->
+    <!--<p id="alert1">...</p>-->
+    <!--<div>-->
+      <!--<span role="radio" aria-labelledby="a1r2" name="a1radio"></span>-->
+      <!--<span id="a1r2">No</span>-->
+    <!--</div>-->
+<!--</div></code></pre>-->
+        <!--</section>-->
+
+        <!--<section>-->
+            <!--<h3>Воспринимаемость</h3>-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">Использование цвета(required)</li>-->
+                <!--<li class="fragment plus">Аудиоуправление</li>-->
+                <!--<li class="fragment plus">Контраст(не менее 4.5:1)</li>-->
+                <!--<li class="fragment plus">Изменение размеров текста(до 200%)</li>-->
+                <!--<li class="fragment plus">Текст на изображениях только для оформления</li>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <!--<section>-->
+            <!--<h3>Управляемость</h3>-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">предоставьте возможность управления всей функциональностью с клавиатуры.</li>-->
+                <!--<li class="fragment plus">предоставьте пользователям достаточно времени для ознакомления и работы с контентом.</li>-->
+                <!--<li class="fragment plus">Не используйте заведомо опасные для здоровья элементы дизайна.(не более 3-х вспышек в секунду)</li>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <!--<section>-->
+            <!--<h3>Навигация</h3>-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">Пропуск блоков(якоря)</li>-->
+                <!--<li class="fragment plus">Заголовок страницы</li>-->
+                <!--<li class="fragment plus">Порядок перемещения фокуса(tabindex)</li>-->
+                <!--<li class="fragment plus">Цель ссылки (в контексте)</li>-->
+                <!--<li class="fragment plus">Видимый фокус</li>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <!--<section>-->
+            <!--<h3>Понятность</h3>-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">делайте весь текстовый контент удобочитаемым и понятным-->
+                    <!--<ul>-->
+                        <!--<li class="fragment plus">Язык страницы</li>-->
+                        <!--<li class="fragment plus">Аббревиатуры.</li>-->
+                    <!--</ul>-->
+                <!--</li>-->
+                <!--<li class="fragment plus">нет неожиданных именения контекста</li>-->
+                <!--<li class="fragment plus">помогайте пользователям избегать ошибок(aria-invalid)</li>-->
+                <!--<a href="https://www.w3.org/WAI/WCAG20/Techniques/working-examples/ARIA21/form-alert3.html">Пример</a>-->
+            <!--</ul>-->
+        <!--</section>-->
+
+        <!--<section>-->
+<!--<pre class="html size-XXS"><code>&lt;body onload="initApp()"&gt;-->
+
+<!--<h1>Tooltip Example 1</h1>-->
+<!--<h2>Create Account</h2>-->
+<!--<div class="text">-->
+    <!--&lt;label for="first">First Name:</label>-->
+
+    <!--&lt;input type="text" id="first" name="first" size="20"-->
+      <!--onmouseover="tooltipShow(event, this, 'tp1');"-->
+      <!--onfocus="tooltipShow(event, this, 'tp1');"-->
+      <!--aria-describedby="tp1"-->
+      <!--aria-required="false"/>-->
+
+    <!--<div id="tp1" role="tooltip" aria-hidden="true">Your first name is optional. </div>-->
+<!--</div></code></pre>-->
+        <!--</section>-->
+
+        <!--<section>-->
+            <!--<h3>Надежность</h3>-->
+            <!--<p>Обеспечьте максимальную совместимость контента с существующими и разрабатываемыми пользовательскими приложениями, включая ассистивные технологии.</p>-->
+        <!--</section>-->
+
+
+        <section>
+            <h2>Инструменты разработчика</h2>
+        </section>
+
+        <section>
+            <h3>Заголовки и структура</h3>
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/web-developer/">Firefox Web Developer Toolbar</a>
+            <img  src="img/firefox-toolbar-navigate.png" height="400"><br>
+            <a href="http://webaim.org/techniques/semanticstructure/">Semantic Structure from WebAIM</a>
+        </section>
+        <section>
+            <h3>Заголовки и структура</h3>
+            <a href="https://addons.mozilla.org/en-US/firefox/addon/web-developer/">Firefox Web Developer Toolbar</a>
+            <img  src="img/firefox-toolbar-outline.png" height="400"><br>
+            <a href="http://webaim.org/techniques/semanticstructure/">Semantic Structure from WebAIM</a>
+        </section>
+
+        <section>
+            <a href="https://chrome.google.com/webstore/detail/accessibility-developer-t/fpkknkljclfencbdbgkenhalefipecmb?hl=en"><h4>Chrome Accessibility Developer Tools</h4></a>
+            <img  src="img/chrome-a11y-extension.jpg" height="400"><br>
+            <a href="https://github.com/addyosmani/a11y">npm</a>
+        </section>
+
+        <section>
+            <a href="https://yandex.ru/">Demo: audit</a>
+        </section>
+
+        <section>
+            <h2>Опыт</h2>
+        </section>
+
+        <section>
+            <a href="https://yandex.ru" target="_blank">Demo: Орфографическая ошибка</a>
+        </section>
+
+        <section>
+            <a href="https://yandex.ru" target="_blank">Demo: captcha</a>
+        </section>
+        <section>
+            <h2>Минус</h2>
+            <img src="img/minus.png">
+        </section>
+
+        <!--<section>-->
+            <!--<h3>Невизуальный дизайн</h3>-->
+<!--<pre><code>&lt;body>-->
+    <!--<div role="banner">-->
+        <!--<div role="search"></div>-->
+    <!--</div>-->
+    <!--<div role="navigation"></div>-->
+    <!--<div role="main">-->
+        <!--<div role="complementary" aria-label="Информация 1">-->
+            <!--<h2>Один блок информации</h2>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div role="contentinfo"></div>-->
+<!--&lt;/body></code></pre>-->
+        <!--</section>-->
+
+        <section>
+            <h3>А зачем всё это?</h3>
+            <!--<img src="img/a11y.jpg" style="vertical-align: top;">-->
+            <!--<ul>-->
+                <!--<li class="fragment plus">Моральная</li>-->
+                <!--<li class="fragment plus">Финансовая</li>-->
+                <!--<li class="fragment plus">Юридическая</li>-->
+            <!--</ul>-->
+        </section>
+
+        <section>
+            <h2>Спасибо!</h2>
+            <a href="https://developer.mozilla.org/en-US/docs/Web/Accessibility">MDN Accessibility</a><br>
+            <a href="https://www.w3.org/TR/wai-aria/">WAI–ARIA</a><br>
+            <a href="https://www.w3.org/Translations/WCAG20-ru/#text-equiv">WCAG-2.0(Ru)</a><br>
+            <a href="https://www.w3.org/WAI/ER/tools/">Web Accessibility Evaluation Tools</a><br>
+            <a href="https://www.youtube.com/watch?v=vWveRBWNVWI">Introduction to accessibility mechanics</a><br>
+            <a href="http://snook.ca/technical/colour_contrast/colour.html#fg=33FF33,bg=604633">Colour Contrast Check</a>
+        </section>
+        <!--<section data-state="lastslide">-->
+            <!--<h4>Домашнее задание</h4>-->
+            <!--<svg style="display: block; margin: 0 auto" width="418" height="340" id="girl">-->
+                <!--<filter id="filter123">-->
+                    <!--<fecomponenttransfer>-->
+                        <!--<feFuncR id="feFuncR" type="linear" slope="1" intercept="0"/>-->
+                        <!--<feFuncG type="linear" slope="1"/>-->
+                        <!--<feFuncB type="linear" slope="1"/>-->
+                        <!--<feFuncA type="identity"/>-->
+                    <!--</fecomponenttransfer>-->
+                <!--</filter>-->
+                <!--<image filter="url(#filter123)" xmlns:xlink="http://www.w3.org/1999/xlink"-->
+                       <!--xlink:href="/webdev-slides/18-svg/img/girl.jpg" width="100%" height="100%"></image>-->
+            <!--</svg>-->
+            <!--<audio src="audio/dub.mp3" id="dub" loop></audio>-->
+            <!--<a class="fragment"-->
+               <!--href="https://github.com/urfu-2015/webdev-tasks-7">github.com/urfu-2015/webdev-tasks-7</a>-->
+        <!--</section>-->
+
+
+    </div>
+</div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: true,
+        slideNumber: true,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'slide',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                async: true,
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+
+    Chart.defaults.global.defaultFontColor = "#fff";
+    Chart.defaults.global.defaultFontSize = 20;
+
+    var ctxPiechartInerface = document.getElementById("piechart-inerface").getContext("2d");
+    var ctxPiechartSR = document.getElementById("piechart-sr").getContext("2d");
+    var ctxPiechartBrowsers = document.getElementById("piechart-browsers").getContext("2d");
+    var ctxPiechartOS = document.getElementById("piechart-os").getContext("2d");
+    var ctxPiechartMobileOS = document.getElementById("piechart-mibile-os").getContext("2d");
+    var ctxPiechartMobileOSPr = document.getElementById("piechart-mibile-os-programm").getContext("2d");
+    var dataInterfaces = {
+        labels: ["Скринридеры", "Увеличение экрана", "Брайлевский дисплей"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [94.4, 10.9, 9.8]
+            }
+        ]
+    };
+
+    var dataSR = {
+        labels: ["JAWS", "NVDA", "VoiceOver", "Other"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [52.5, 37.6, 4.6, 4.6]
+            }
+        ]
+    };
+
+    var dataBR = {
+        labels: ["MozilaFirefox", "IE", "Safari", "Google Chrome", "Яндекс.Браузер"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [51.4, 33.3, 5.4, 4.4, 2.2]
+            }
+        ]
+    };
+
+    var dataOS = {
+        labels: ["Windows", "Linux", "Mac Os"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [97.3, 6.8, 5.6]
+            }
+        ]
+    };
+    var dataMobOS = {
+        labels: ["Android", "IOS", "Symbian", "Other"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [77.9, 32.9, 20.8, 0.8]
+            }
+        ]
+    };
+
+    var dataMobOSPr = {
+        labels: ["TalkBack", "VoiceOver", "Mobile Speak", "Talks"],
+        datasets: [
+            {
+                label: "На 13 ноября 2015",
+                fill: false,
+                backgroundColor: "rgba(30,136,229,1)",
+                borderDashOffset: 0.0,
+                pointBorderColor: "rgba(75,192,192,1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "rgba(75,192,192,1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHitRadius: 10,
+                data: [70.8, 31.7, 27.34, 11]
+            }
+        ]
+    };
+
+    new Chart(ctxPiechartInerface, {
+        type: 'bar',
+        data: dataInterfaces
+    });
+    new Chart(ctxPiechartSR, {
+        type: 'bar',
+        data: dataSR
+    });
+    new Chart(ctxPiechartBrowsers, {
+        type: 'bar',
+        data: dataBR
+    });
+    new Chart(ctxPiechartOS, {
+        type: 'bar',
+        data: dataOS
+    });
+    new Chart(ctxPiechartMobileOS, {
+        type: 'bar',
+        data: dataMobOS
+    });
+
+    new Chart(ctxPiechartMobileOSPr, {
+        type: 'bar',
+        data: dataMobOSPr
+    });
+
+    var options = {
+      useEasing : true,
+      useGrouping : true,
+      separator : ',',
+      decimal : '.',
+      prefix : '',
+      suffix : ''
+    };
+    var demo = new CountUp('countAll', 0, 285000000, 0, 4, options);
+    var demoPart = new CountUp('countPart', 0, 39000000, 0, 2, options);
+
+    Reveal.addEventListener('countup', function () {
+        demo.start();
+        demoPart.start();
+    }, false);
+</script>
+</body>
+</html>
