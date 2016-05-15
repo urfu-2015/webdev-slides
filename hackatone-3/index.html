@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Хакатон #3</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/yandex.css" id="theme">
+    <link rel="stylesheet" href="../lib/css/zenburn.css">
+    <link rel="stylesheet" href="./css/user.css">
+</head>
+<body class="yandex"><div class="reveal"><div class="slides">
+
+<section>
+    <pre class="flat">
+        <span class="grey">FROM</span> yandex.ru/mentors
+
+        <span class="grey">ENV</span> LOCATION="yandex"
+
+        <span class="grey">COPY</span> notebooks /meeting-room
+        <span class="grey">COPY</span> some-food /kitchen
+
+        <span class="grey">RUN</span> apt-get update &amp;&amp; \
+            apt-get install <span class="red" style="font-weight: bold; font-size: 1.2em">hackatone@3.0</span>
+
+        <span class="grey">RUN</span> chmod 1777 /kitchen
+
+        <span class="grey">USER</span> student
+
+        <span class="grey">CMD</span> [ "sh", "/bin/hackatone/start.sh" ]
+    </pre>
+</section>
+
+<section>
+    <img src="img/04.jpg" width=200 height=150>
+    <img src="img/05.jpg" width=200 height=150>
+    <img src="img/06.jpg" width=200 height=150>
+    <h4 class="green">Сервис «Фотоквест»</h4>
+    <img src="img/01.jpg" width=200 height=150>
+    <img src="img/02.jpg" width=200 height=150>
+    <img src="img/03.jpg" width=200 height=150>
+</section>
+
+<section>
+    <h4 class="green">Три этапа – три дня</h4>
+    <ol>
+        <li class="left">Инфраструктура, регистрация, авторизация, список квестов</li>
+        <li class="left">Создание квестов и комменты</li>
+        <li class="left"><span class="fragment highlight init_visible">Прохождение квестов и лайки</span></li>
+    </ol>
+</section>
+
+<section>
+    <h4 class="green">2 этап</h4>
+    <p class="pros left">Создание квеста: форма + загрузка фоток</p>
+    <p class="pros left">Редактирование и удаление квеста</p>
+    <p class="pros left">Страница квеста с фотками для игроков</p>
+    <p class="red fragment">Технический долг</p>
+</section>
+
+<section>
+    <h4 class="green">3 этап</h4>
+    <p class="pros left">Прохождение квеста</p>
+    <p class="pros left fragment">Лайки <img height=55 style="vertical-align: middle; position: relative;top: -10px;" src="img/like.png"></p>
+    <p class="pros left fragment">Сортировка квестов по лайкам</p>
+    <p class="pros left fragment">Покрытие тестами и документация</p>
+    <div class="fragment">
+        <p class="left question">Статистика</p>
+        <p class="left question">Поиск квестов по названию</p>
+        <p class="left question">Комментарии к фоткам</p>
+    </div>
+</section>
+
+<section>
+    <h4>Самое важное – <span class="red">чекин по геолокации</span></h4>
+</section>
+
+<section>
+    <h4 class="green">Технологии</h4>
+    <p><a href="https://github.com/manuelbieh/Geolib">Geolib</a></p>
+    <pre class="flat"><code class="javascript">        geolib.getDistance(
+            {latitude: 51.5103, longitude: 7.49347},
+            {latitude: 52.5103, longitude: 8.49347}
+        )
+    </pre></code>
+</section>
+
+<section>
+    <h4 class="green">Регламент</h4>
+    <p><span class="red">8</span> часов + 🍴</p>
+</section>
+
+<section data-background="img/go.jpg"></section>
+
+</div></div>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.js"></script>
+<script>
+    Reveal.initialize({
+        controls: false,
+        progress: false,
+        slideNumber: false,
+        history: true,
+        center: true,
+        hideAddressBar: true,
+        transition: 'none',
+        dependencies: [
+            {
+                src: '../plugin/highlight/highlight.js',
+                condition: function () {
+                    return Boolean(document.querySelector('pre code'));
+                },
+                callback: function () {
+                    hljs.configure({
+                        languages: ['javascript']
+                    })
+                    hljs.initHighlightingOnLoad();
+                }
+            }
+        ]
+    });
+</script>
+</body>
+</html>
